@@ -1,2 +1,2 @@
-# Erp-of-loads
-Web app type of ERP to loads and storage
+# Erp-of-loans
+Web app type of ERP to loans and storage
