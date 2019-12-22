@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ERP_SPARTAN.Data;
 using ERP_SPARTAN.Extensions;
+using Commons.Others;
 
 namespace ERP_SPARTAN
 {
@@ -37,6 +38,7 @@ namespace ERP_SPARTAN
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -48,6 +50,9 @@ namespace ERP_SPARTAN
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            DataSeederService.SeedRolesAndUsers(app);
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
