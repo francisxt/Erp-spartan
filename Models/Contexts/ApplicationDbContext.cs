@@ -14,6 +14,15 @@ namespace Models.Contexts
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+        }
+
         public DbSet<User> ApplicationUsers { get; set; }
+        public DbSet<Article> Articles { get; set; }
+        public DbSet<Client> SubClients { get; set; }
+        public DbSet<ClientUser> ClientUsers { get; set; }
+        public DbSet<Movement> Movements { get; set; }
     }
 }

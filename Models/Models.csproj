@@ -5,7 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Enums\" />
+    <Compile Remove="Contexts\Migrations\20191221204253_user.cs" />
+    <Compile Remove="Contexts\Migrations\20191221204253_user.Designer.cs" />
+    <Compile Remove="Contexts\Migrations\20191221212648_AddingPrincipalsModels.cs" />
+    <Compile Remove="Contexts\Migrations\20191221212648_AddingPrincipalsModels.Designer.cs" />
+    <Compile Remove="Contexts\Migrations\20191221212808_AddingPrincipalsModels.cs" />
+    <Compile Remove="Contexts\Migrations\20191221212808_AddingPrincipalsModels.Designer.cs" />
+    <Compile Remove="Contexts\Migrations\20191221213614_AddingPrincipalsModels.cs" />
+    <Compile Remove="Contexts\Migrations\20191221213614_AddingPrincipalsModels.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
