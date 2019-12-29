@@ -46,11 +46,13 @@ namespace ERP_SPARTAN.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
+            [Display(Name = "Correo")]
+            [Required(ErrorMessage = "El campo {0} es requerido")]
             [EmailAddress]
             public string Email { get; set; }
 
-            [Required]
+            [Display(Name = "Contraseña")]
+            [Required(ErrorMessage = "El campo {0} es requerido")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
