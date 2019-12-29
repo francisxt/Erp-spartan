@@ -16,12 +16,13 @@ namespace ERP_SPARTAN.Extensions
          => services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         public static void AddNewIdentityConfiguration(this IServiceCollection services)
-            => services.AddDefaultIdentity<User>(options => {
+            => services.AddDefaultIdentity<User>(options =>
+            {
                 options.Password.RequireDigit = false;
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
                 options.User.RequireUniqueEmail = true;
                 options.Password.RequireNonAlphanumeric = false;
-            }).AddEntityFrameworkStores<ApplicationDbContext>();
+            }).AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
     }
 }
