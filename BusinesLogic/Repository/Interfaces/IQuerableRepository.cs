@@ -9,7 +9,7 @@ namespace BusinesLogic.Repository.Interfaces
 {
     public interface IQuerableRepository<TEntity> where TEntity : class
     {
-        Task<IEnumerable<TEntity>> GetAll();
+        IQueryable<TEntity> GetAll();
         Task<TEntity> GetById(Guid id);
         IQueryable<TEntity> Filter(Expression<Func<TEntity, bool>> expression);
     }

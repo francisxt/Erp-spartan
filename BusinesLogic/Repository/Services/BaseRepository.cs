@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BusinesLogic.Repository.Services
 {
-    public class BaseRepository<TEntity> : IBaseRepository<TEntity>, IQuerableRepository<TEntity> where TEntity : class
+    public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
         private readonly ApplicationDbContext _dbContext;
         public BaseRepository(ApplicationDbContext dbContext) => _dbContext = dbContext;
@@ -22,7 +22,7 @@ namespace BusinesLogic.Repository.Services
 
         public IQueryable<TEntity> Filter(Expression<Func<TEntity, bool>> expression) => _dbContext.Set<TEntity>().Where(expression);
 
-        public async Task<IEnumerable<TEntity>> GetAll() => await _dbContext.Set<TEntity>().ToListAsync();
+        public IQueryable<TEntity> GetAll() => _dbContext.Set<TEntity>().AsQueryable();
 
         public async Task<TEntity> GetById(Guid id) => await _dbContext.Set<TEntity>().FindAsync(id);
 

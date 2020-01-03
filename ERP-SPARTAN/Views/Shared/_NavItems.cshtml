@@ -1,0 +1,29 @@
+﻿@using System.Security.Claims
+
+@{switch (User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value)
+    {
+        case nameof(RolsAuthorization.Admin):
+            <li class="nav-item active">
+                <a class="nav-link" asp-action="Index" asp-controller="Home">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-action="Index" asp-controller="ClientUser">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Clientes</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-action="Index" asp-controller="Rol">
+                    <i class="fas fa-fw fa-user-secret"></i>
+                    <span>Roles</span>
+                </a>
+            </li>
+            break;
+        default:
+            <div></div>
+            break;
+    }
+}

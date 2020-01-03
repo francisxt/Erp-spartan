@@ -32,7 +32,9 @@ namespace ERP_SPARTAN
             services.ConfigureDbContexts(Configuration);
             services.AddNewIdentityConfiguration();
             services.AddControllersWithViews();
-            services.AddRazorPages().AddRazorRuntimeCompilation();
+            services.ImplementServices();
+            services.AddRazorPages().AddRazorRuntimeCompilation().AddSessionStateTempDataProvider();
+            services.AddSession();
 
         }
 
@@ -56,12 +58,11 @@ namespace ERP_SPARTAN
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

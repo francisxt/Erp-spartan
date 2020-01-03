@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using BusinesLogic.Interfaces;
+using BusinesLogic.Services;
+using BusinesLogic.UnitOfWork;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,5 +27,10 @@ namespace ERP_SPARTAN.Extensions
                 options.User.RequireUniqueEmail = true;
                 options.Password.RequireNonAlphanumeric = false;
             }).AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+        public static void ImplementServices(this IServiceCollection services)
+        {
+            services.AddTransient<IRoleService, RoleService>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+        } 
     }
 }
