@@ -10,7 +10,7 @@ using Models.Enums;
 
 namespace ERP_SPARTAN.Controllers
 {
-    [Authorize(Roles = nameof(RolsAuthorization.Admin))]
+    [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
     public class HomeController : Controller
     {
         public IActionResult Index()

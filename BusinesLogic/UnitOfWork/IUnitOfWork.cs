@@ -12,6 +12,7 @@ namespace BusinesLogic.UnitOfWork
     {
         IBaseRepository<Client> ClientService { get; }
         IClientUserService ClientUserService { get; }
+        IUserService UserService { get; }
 
         Task Commit();
     }

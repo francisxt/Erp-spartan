@@ -13,9 +13,9 @@ namespace ERP_SPARTAN.Extensions
     /// </summary>
     public abstract class BaseController  : Controller
     {
-        public void BasicNotification(string message, NotificationType type)
+        public void BasicNotification(string message, NotificationType type , string title = "")
         {
-            if (!string.IsNullOrEmpty(message)) TempData["notification"] = $@"Swal.fire('{message}','{type.ToString()}')";
+            if (!string.IsNullOrEmpty(message)) TempData["notification"] = $@"Swal.fire('{title}','{message}','{type.ToString().ToLower()}')";
         }
     }
 }

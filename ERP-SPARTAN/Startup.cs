@@ -30,6 +30,7 @@ namespace ERP_SPARTAN
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureDbContexts(Configuration);
+            services.AddSettingsModels(Configuration);
             services.AddNewIdentityConfiguration();
             services.AddControllersWithViews();
             services.ImplementServices();

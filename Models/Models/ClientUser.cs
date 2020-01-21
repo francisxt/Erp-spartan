@@ -8,9 +8,10 @@ namespace Models.Models
     public class ClientUser : CommonsProperty
     {
         public string EnterpriseName { get; set; }
-        [Required]
         public string UserId { get; set; }
         public User User { get; set; }
+        [Required]
+        public string CreatedBy { get; set; }
         public IEnumerable<Client> SubClients { get; set; }
     }
 }

@@ -16,8 +16,11 @@ namespace BusinesLogic.Services
         private readonly ApplicationDbContext _dbContext;
         public ClientUserService(ApplicationDbContext dbContext) : base(dbContext) => _dbContext = dbContext;
 
-        public async Task<IEnumerable<ClientUser>> GetAllWithRelationships()  
-            => await GetAll().Include(x => x.User).ToListAsync();
-        
+        public async Task<IEnumerable<ClientUser>> GetAllWithRelationships(string UserId)
+            => await GetAll().Where(x => x.CreatedBy == UserId).Include(x => x.User).ToListAsync();
+        public async Task<ClientUser> GetByIdWithRelationships(Guid id)
+            => await _dbContext.ClientUsers.Include(x => x.User).SingleOrDefaultAsync(x => x.Id == id);
+
+
     }
 }

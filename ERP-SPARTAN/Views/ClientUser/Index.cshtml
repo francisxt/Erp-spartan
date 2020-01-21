@@ -25,6 +25,9 @@
                 <thead>
                     <tr>
                         <th>Nombre</th>
+                        <th>Numero</th>
+                        <th>Correo</th>
+
                         <th>Opciones</th>
                     </tr>
                 </thead>
@@ -33,7 +36,16 @@
                     {
 
                         <tr>
-                            <td>@client.User.Name</td>
+                            <td>@client.User.Name @client.User.LastName</td>
+                            <td>@client.User.PhoneNumber</td>
+                            <td>@client.User.Email</td>
+                            <td>
+                                <div>
+                                    <a asp-action="GetById" asp-route-id="@client.Id" class="btn acent-background"><i class="far fa-eye text-white"></i></a>
+                                    <button class="btn acent-background"><i class="far fa-trash-alt text-white"></i></button>
+                                    <button class="btn acent-background"><i class="fas fa-ban text-white"></i></button>
+                                </div>
+                            </td>
                         </tr>
                     }
                 </tbody>

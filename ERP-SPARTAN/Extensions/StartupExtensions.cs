@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Models.Contexts;
 using Models.Models;
+using Models.Settings;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,6 +18,11 @@ namespace ERP_SPARTAN.Extensions
     {
         public static void ConfigureDbContexts(this IServiceCollection services , IConfiguration configuration)
          => services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+
+        public static void AddSettingsModels(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<DefaultValue>(configuration.GetSection(nameof(DefaultValue)));
+        }
 
         public static void AddNewIdentityConfiguration(this IServiceCollection services)
             => services.AddDefaultIdentity<User>(options =>

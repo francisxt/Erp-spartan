@@ -7,3 +7,7 @@
 $(document).ready(function () {
     $('.data-table').DataTable();
 });
+
+
+
+$('#phoneNumber').mask('000-000-0000');

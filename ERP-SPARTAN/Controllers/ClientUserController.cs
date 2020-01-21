@@ -9,8 +9,11 @@ using ERP_SPARTAN.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Models.Enums;
 using Models.Models;
+using Models.Settings;
+using Models.ViewModels.ClientUsers;
 
 namespace ERP_SPARTAN.Controllers
 {
@@ -18,36 +21,81 @@ namespace ERP_SPARTAN.Controllers
     public class ClientUserController : BaseController
     {
         private readonly IUnitOfWork _service;
-        UserManager<User> _userManager;
-        public ClientUserController(IUnitOfWork clientUserService, UserManager<User> userManager)
+        private readonly DefaultValue _settings;
+        private readonly UserManager<User> _userManager;
+        public ClientUserController(IUnitOfWork clientUserService, UserManager<User> userManager, IOptions<DefaultValue> options)
         {
             _service = clientUserService;
             _userManager = userManager;
+            _settings = options.Value;
         }
-        public async Task<IActionResult> Index() => View(await _service.ClientUserService.GetAllWithRelationships());
+        public async Task<IActionResult> Index() => View(await _service.ClientUserService.GetAllWithRelationships(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value));
 
         [HttpGet]
         public IActionResult Create() => View();
         [HttpPost]
-        public async Task<IActionResult> Create(User client)
+        public async Task<IActionResult> Create(CreateUserViewModel client)
         {
-            //for implements
-            var result = await _userManager.CreateAsync(new User { });
-            if (result.Succeeded)
+            client.Rol = User.IsInRole(nameof(RolsAuthorization.ClientsUser)) ? RolsAuthorization.Client : client.Rol;
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                var result = await _userManager.CreateAsync(new User
                 {
-                    if (await _service.ClientUserService.Add(new ClientUser { }))
+                    Name = client.Name,
+                    UserName = client.Email,
+                    LastName = client.LastName,
+                    Email = client.Email,
+                    PhoneNumber = client.PhoneNumber
+                }, _settings.Password);
+                if (result.Succeeded)
+                {
+                    var user = await _userManager.FindByNameAsync(client.Email);
+                    if (await _service.ClientUserService.Add(new ClientUser
                     {
-                        BasicNotification("Cliente Agregado!", NotificationType.success);
-                        return RedirectToAction(nameof(Index));
+                        UserId = user.Id,
+                        CreatedBy = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value
+                    }))
+                    {
+                        var resultRol = await _userManager.AddToRoleAsync(user, nameof(RolsAuthorization.ClientsUser));
+                        if (resultRol.Succeeded)
+                        {
+                            BasicNotification("Cliente Agregado!", NotificationType.success);
+                            return RedirectToAction(nameof(Index));
+                        }
                     }
                     BasicNotification("Ocurrió un error, no se pudo guardar el cliente", NotificationType.error);
                     return View(client);
                 }
-            }           
+                else
+                {
+                    ModelState.AddModelError(nameof(client.Email), "Error ya existe un cliente con el correo " + client.Email);
+                }
+            }
+
             return View(client);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetById(Guid id) => View(await _service.ClientUserService.GetByIdWithRelationships(id));
+
+        [HttpPost]
+        public async Task<IActionResult> Update(ClientUser model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (await _service.UserService.Update(model.User))
+                {
+                    BasicNotification("Cliente actualizado", NotificationType.success);
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    BasicNotification("Intente de nuevo, una de las causas es que ya exista alguien con este correo intente con otro",
+                        NotificationType.error, "Lo sentimos no se pudo actualizar");
+                }
+
+            }
+            return View(nameof(GetById),model);
+        }
     }
 }

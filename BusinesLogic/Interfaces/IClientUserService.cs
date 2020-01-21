@@ -13,6 +13,7 @@ namespace BusinesLogic.Interfaces
 {
     public interface IClientUserService : IBaseRepository<ClientUser>
     {
-        Task<IEnumerable<ClientUser>> GetAllWithRelationships();
+        Task<IEnumerable<ClientUser>> GetAllWithRelationships(string UserId);
+        Task<ClientUser> GetByIdWithRelationships(Guid id);
     }
 }
