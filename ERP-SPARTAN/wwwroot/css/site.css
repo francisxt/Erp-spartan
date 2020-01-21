@@ -2,20 +2,46 @@
 for details on configuring this project to bundle and minify static web assets. */
 
 
+.acent-color {
+    color: #673AB7 !important;
+}
 
-/**
-    Base colors :
-    ACENT = #673AB7
-    ACENTDARK = #512DA8
-    BACKGRAUND = #FFFFFF
-    OTHER = #536DFE
-*/
+.acent-background {
+    background: #673AB7 !important;
+}
 
+.btn {
+    border: none !important;
+}
+
+.btn-primary {
+    background: #673AB7 !important;
+}
+.btn-radius {
+    border-radius: 40px !important;
+}
+
+div.dataTables_wrapper div.dataTables_filter input {
+    border: solid 1px #673AB7 !important;
+    border-radius: 32px !important;
+    text-align: center;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    border: 2px solid #673AB7 !important;
+    background: #fff !important;
+    border-radius: 23px !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+
+    border-radius: 23px !important;
+}
 
 a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+    color: #fff;
 }
 
 /* Provide sufficient contrast against white background */
