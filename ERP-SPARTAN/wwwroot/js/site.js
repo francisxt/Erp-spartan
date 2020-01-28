@@ -11,3 +11,5 @@ $(document).ready(function () {
 
 
 $('#phoneNumber').mask('000-000-0000');
+$('.decimal').mask("#,##0.00", { reverse: true });
+

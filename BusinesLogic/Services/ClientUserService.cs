@@ -19,8 +19,14 @@ namespace BusinesLogic.Services
         public async Task<IEnumerable<ClientUser>> GetAllWithRelationships(string UserId)
             => await GetAll().Where(x => x.CreatedBy == UserId).Include(x => x.User).ToListAsync();
         public async Task<ClientUser> GetByIdWithRelationships(Guid id)
-            => await _dbContext.ClientUsers.Include(x => x.User).SingleOrDefaultAsync(x => x.Id == id);
+            => await _dbContext.ClientUsers.Include(x => x.User)
+                    .Include(x => x.Movements).SingleOrDefaultAsync(x => x.Id == id);
 
-
+        public async Task<bool> SoftRemove(Guid id)
+        {
+            var model = await GetById(id);
+            model.State = Models.Enums.State.Removed;
+            return await Update(model);
+        }
     }
 }

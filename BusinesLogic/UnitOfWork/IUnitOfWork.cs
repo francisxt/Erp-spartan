@@ -10,10 +10,10 @@ namespace BusinesLogic.UnitOfWork
 {
     public interface IUnitOfWork
     {
-        IBaseRepository<Client> ClientService { get; }
+        IMovementService MovementsService { get; }
         IClientUserService ClientUserService { get; }
         IUserService UserService { get; }
-
+        IHomeService HomeService { get; }
         Task Commit();
     }
 }

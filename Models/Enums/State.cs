@@ -8,6 +8,10 @@ namespace Models.Enums
     {
         Active,
         Removed,
-        Blocked
+        Blocked,
+
+        #region For Movements
+        Payment
+        #endregion
     }
 }

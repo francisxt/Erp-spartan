@@ -12,8 +12,8 @@ namespace Models.Models
         [Display(Name = "Descripción")]
         public string Description { get; set; }
         [Required]
-        public Guid ClientId { get; set; }
-        public Client Client { get; set; }
+        public Guid ClientUserId { get; set; }
+        public ClientUser Client { get; set; }
         [Required(ErrorMessage = "EL CAMPO Monto ES REQUERIDO")]
         [Display(Name = "Monto")]
         [Column(TypeName = "decimal(18,2)")]

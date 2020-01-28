@@ -14,16 +14,20 @@ namespace BusinesLogic.UnitOfWork
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _context;
-        private BaseRepository<Client> _clientService;
         private ClientUserService _clientUserService;
         private UserService _userService;
+        private MovementService _movementsService;
+        private HomeService _homeService;
+
 
         public UnitOfWork(ApplicationDbContext context) => _context = context;
-        public IBaseRepository<Client> ClientService => _clientService ?? (_clientService = new BaseRepository<Client>(_context));
-
         public IClientUserService ClientUserService => _clientUserService ?? (_clientUserService = new ClientUserService(_context));
 
         public IUserService UserService => _userService ?? (_userService = new UserService(_context));
+
+        public IMovementService MovementsService => _movementsService ?? (_movementsService = new MovementService(_context));
+
+        public IHomeService HomeService => _homeService ?? (_homeService = new HomeService(_context)); 
 
         async Task IUnitOfWork.Commit() => await _context.SaveChangesAsync();
     }
