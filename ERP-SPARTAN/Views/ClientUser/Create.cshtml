@@ -35,8 +35,10 @@
             {
                 <div class="form-group">
                     <label class="control-label">Rol</label>
-                    <select asp-for="Rol" asp-items="Html.GetEnumSelectList<RolsAuthorization>()" class="form-control">
-                        <option value="" selected></option>
+                    <select asp-for="Rol" class="form-control">
+                        <option value="" selected>Elija una opción</option>
+                        <option value="@RolsAuthorization.ClientsUser">Cliente</option>
+                        <option value="@RolsAuthorization.Admin" >Admin</option>
                     </select>
                     <span asp-validation-for="Rol" class="text-danger"></span>
                 </div>

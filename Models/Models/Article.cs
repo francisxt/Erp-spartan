@@ -11,9 +11,8 @@ namespace Models.Models
         [Required(ErrorMessage = "EL CAMPO {0} ES REQUERIDO")]
         [Display(Name = "Nombre o Descripción")]
         public string Description { get; set; }
-        [Required]
-        public Guid ClientUserId { get; set; }
-        public ClientUser ClientUser { get; set; }
+        public string UserId { get; set; }
+        public virtual User User { get; set; }
         [Required]
         public string Code { get; set; }
         [Required]

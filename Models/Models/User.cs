@@ -12,6 +12,7 @@ namespace Models.Models
     {
         public DateTime CreateAt { get; set; } = DateTime.Now;
         public DateTime UpdateAt { get; set; }
+        public State State { get; set; } = State.Active;
         [Required]
         public string LastName { get; set; }
         [Required]

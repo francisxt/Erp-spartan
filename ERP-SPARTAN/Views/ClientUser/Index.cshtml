@@ -27,23 +27,32 @@
                         <th>Nombre</th>
                         <th>Numero</th>
                         <th>Correo</th>
-
+                        <th>Estado</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var client in Model)
                     {
-
                         <tr>
                             <td>@client.User.Name @client.User.LastName</td>
                             <td>@client.User.PhoneNumber</td>
                             <td>@client.User.Email</td>
                             <td>
+                                @{
+                                    var state = client.User.State == State.Active ? "Activo" : "Bloqueado";
+                                }
+                                @state
+                            </td>
+                            <td>
                                 <div>
                                     <a asp-action="GetById" asp-route-id="@client.Id" class="btn acent-background"><i class="far fa-eye text-white"></i></a>
-                                    <button class="btn acent-background"><i class="far fa-trash-alt text-white"></i></button>
-                                    <button class="btn acent-background"><i class="fas fa-ban text-white"></i></button>
+                                    <button class="btn acent-background" onclick="ShowSweetConfirmRemoveDialog('@client.Id','ClientUser','Remove')"><i class="far fa-trash-alt text-white"></i></button>
+                                    <button class="btn acent-background" onclick="ShowSweetConfirmEnableOrDisableUser('@client.UserId','ClientUser','LockOrUnlockUser')"><i class="fas fa-ban text-white"></i></button>
+                                    @if (User.IsInRole(nameof(RolsAuthorization.ClientsUser)))
+                                    {
+                                        <a asp-action="GetByClientUser" asp-controller="Movement" asp-route-id="@client.Id" class="btn acent-background text-white"><i class="fas fa-money-bill-alt"></i></a>
+                                    }
                                 </div>
                             </td>
                         </tr>
@@ -54,3 +63,4 @@
     </div>
 </div>
 <partial name="_NotificationPartial" />
+<script src="~/js/Shared/httpRequest.js" asp-append-version="true"></script>

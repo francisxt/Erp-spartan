@@ -29,7 +29,9 @@ namespace ERP_SPARTAN.Controllers
             _userManager = userManager;
             _settings = options.Value;
         }
-        public async Task<IActionResult> Index() => View(await _service.ClientUserService.GetAllWithRelationships(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value));
+        public async Task<IActionResult> Index()
+            => View(await _service.ClientUserService
+                .GetAllWithRelationships(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value));
 
         [HttpGet]
         public IActionResult Create() => View();
@@ -76,7 +78,12 @@ namespace ERP_SPARTAN.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetById(Guid id) => View(await _service.ClientUserService.GetByIdWithRelationships(id));
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var model = await _service.ClientUserService.GetByIdWithRelationships(id);
+            if (model != null) return View(model);
+            return new NotFoundView();
+        }
 
         [HttpPost]
         public async Task<IActionResult> Update(ClientUser model)
@@ -88,14 +95,30 @@ namespace ERP_SPARTAN.Controllers
                     BasicNotification("Cliente actualizado", NotificationType.success);
                     return RedirectToAction(nameof(Index));
                 }
-                else
-                {
-                    BasicNotification("Intente de nuevo, una de las causas es que ya exista alguien con este correo intente con otro",
-                        NotificationType.error, "Lo sentimos no se pudo actualizar");
-                }
-
+                BasicNotification("Intente de nuevo, una de las causas es que ya exista alguien con este correo intente con otro",
+                         NotificationType.error, "Lo sentimos no se pudo actualizar");
+                return RedirectToAction(nameof(Index));
             }
-            return View(nameof(GetById),model);
+            return View(nameof(GetById), model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Remove(Guid id)
+        {
+            var user = await _service.ClientUserService.GetById(id);
+            if (user == null) return NotFound();
+            if (await _service.UserService.LockAndUnlockUser(user.UserId))
+            {
+                if (await _service.ClientUserService.SoftRemove(id)) return Ok(true);
+            }
+            return BadRequest();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LockOrUnlockUser(string id)
+        {
+            if (await _service.UserService.LockAndUnlockUser(id)) return Ok(true);
+            return BadRequest();
         }
     }
 }

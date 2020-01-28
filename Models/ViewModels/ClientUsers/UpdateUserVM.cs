@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Models.ViewModels.ClientUsers
 {
-    public class UpdateUserViewModel
+    public class UpdateUserVM
     {
         public User User { get; set; }
         public ClientUser ClientUser { get; set; }

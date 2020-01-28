@@ -1,15 +1,11 @@
 ﻿@model Models.Models.ClientUser
 @inject IOptions<Models.Settings.DefaultValue> options
-@{
-    ViewData["Title"] = "GetById";
-}
-
 
 <div class="row">
     <div class="col">
         <div class="row justify-content-center">
             <div class="col-sm-12 text-center">
-                <img style="" src="@options.Value.Avatar@Model.User.FullName" alt="@Model.User.FullName .png" class="img-thumbnail text-center">
+                <img style="" src="@options.Value.Avatar@Model.User.UserName" alt="@Model.User.UserName .png" class="img-thumbnail text-center">
                 <p class="font-weight-light">@Model.User.FullName <br />@Model.EnterpriseName <br />Creado el : @Model.CreateAt.ToShortDateString()</p>
             </div>
             <div class="col-xs-12 col-sm-6">

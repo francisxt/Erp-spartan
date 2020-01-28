@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Models.Contexts;
 
 namespace ERP_SPARTAN.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200121193914_AddingStateOfUser")]
+    partial class AddingStateOfUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -231,6 +233,9 @@ namespace ERP_SPARTAN.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("ClientUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -254,14 +259,48 @@ namespace ERP_SPARTAN.Data.Migrations
                     b.Property<DateTime>("UpdateAt")
                         .HasColumnType("datetime2");
 
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientUserId");
+
+                    b.ToTable("Articles");
+                });
+
+            modelBuilder.Entity("Models.Models.Client", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ClientUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IdentificationCard")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdateAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClientUserId");
+
                     b.HasIndex("UserId");
 
-                    b.ToTable("Articles");
+                    b.ToTable("SubClients");
                 });
 
             modelBuilder.Entity("Models.Models.ClientUser", b =>
@@ -305,7 +344,7 @@ namespace ERP_SPARTAN.Data.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("ClientUserId")
+                    b.Property<Guid>("ClientId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreateAt")
@@ -325,7 +364,7 @@ namespace ERP_SPARTAN.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientUserId");
+                    b.HasIndex("ClientId");
 
                     b.ToTable("Movements");
                 });
@@ -407,6 +446,21 @@ namespace ERP_SPARTAN.Data.Migrations
 
             modelBuilder.Entity("Models.Models.Article", b =>
                 {
+                    b.HasOne("Models.Models.ClientUser", "ClientUser")
+                        .WithMany()
+                        .HasForeignKey("ClientUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.Models.Client", b =>
+                {
+                    b.HasOne("Models.Models.ClientUser", "ClientUser")
+                        .WithMany("SubClients")
+                        .HasForeignKey("ClientUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Models.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
@@ -421,9 +475,9 @@ namespace ERP_SPARTAN.Data.Migrations
 
             modelBuilder.Entity("Models.Models.Movement", b =>
                 {
-                    b.HasOne("Models.Models.ClientUser", "Client")
+                    b.HasOne("Models.Models.Client", "Client")
                         .WithMany("Movements")
-                        .HasForeignKey("ClientUserId")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
