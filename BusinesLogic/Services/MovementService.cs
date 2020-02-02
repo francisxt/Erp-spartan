@@ -40,6 +40,7 @@ namespace BusinesLogic.Services
             var model = await GetAll().Where(x => x.ClientUserId == id && x.State == State.Active).ToListAsync();
             model.ForEach(x =>
             {
+                x.UpdateAt = DateTime.Now;
                 x.State = State.Payment;
             });
             _dbContext.UpdateRange(model);

@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Article>
+
+
+<div class="container-fluid">
+
+    <div class="row justify-content-between">
+        <div class="col-xs-11 ">
+
+            <h1><i class="fas fa-boxes"></i> Inventario</h1>
+        </div>
+
+        <div class="col-xs-1">
+            <a asp-action="Create" asp-controller="Inventary"  class="btn btn-primary btn-radius">Nuevo</a>
+        </div>
+        <div class="col-12">
+        </div>
+    </div>
+
+</div>
+<hr />
+
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered data-table" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Codigo</th>
+                        <th>Precio</th>
+                        <th>Precio de compra</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Description</td>
+                            <td>@item.Code</td>
+                            <td>@item.Price</td>
+                            <td>@item.PriceForShop</td>
+                            <td>
+                                <div>
+                                    <a asp-action="Update" class="btn btn-sm btn-primary text-white" asp-route-Id="@item.Id"><i class="far fa-eye text-white"></i></a>
+                                    <button class="btn btn-sm btn-primary text-white" onclick="ShowSweetConfirmRemoveDialog('@item.Id','Inventary','Remove',)"><i class="fa fa-trash text-white"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<partial name="_NotificationPartial" />
+<script src="~/js/Shared/httpRequest.js" asp-append-version="true"></script>

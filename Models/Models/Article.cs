@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Commons.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -14,7 +15,7 @@ namespace Models.Models
         public string UserId { get; set; }
         public virtual User User { get; set; }
         [Required]
-        public string Code { get; set; }
+        public string Code { get; set; } = $"{nameof(Code)}{StringHelper.GetRandomCode(5)}";
         [Required]
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
