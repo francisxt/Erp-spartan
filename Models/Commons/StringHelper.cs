@@ -13,7 +13,7 @@ namespace Commons.Helpers
         /// <returns>string</returns>
         public static string GetRandomCode(int length)
         {
-            if (length <= 10) return Guid.NewGuid().ToString("X").Substring(0, length).ToUpper();
+            if (length <= 10) return Guid.NewGuid().ToString().Substring(0, length).ToUpper();
             return string.Empty;
         }
     }

@@ -18,6 +18,7 @@ namespace BusinesLogic.UnitOfWork
         private UserService _userService;
         private MovementService _movementsService;
         private HomeService _homeService;
+        private InventaryService _inventoryService;
 
 
         public UnitOfWork(ApplicationDbContext context) => _context = context;
@@ -27,7 +28,9 @@ namespace BusinesLogic.UnitOfWork
 
         public IMovementService MovementsService => _movementsService ?? (_movementsService = new MovementService(_context));
 
-        public IHomeService HomeService => _homeService ?? (_homeService = new HomeService(_context)); 
+        public IHomeService HomeService => _homeService ?? (_homeService = new HomeService(_context));
+
+        public IInventaryService InventaryService => _inventoryService ?? (_inventoryService = new InventaryService(_context));
 
         async Task IUnitOfWork.Commit() => await _context.SaveChangesAsync();
     }

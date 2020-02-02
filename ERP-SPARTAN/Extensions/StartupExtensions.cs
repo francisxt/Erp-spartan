@@ -33,6 +33,7 @@ namespace ERP_SPARTAN.Extensions
                 options.User.RequireUniqueEmail = true;
                 options.Password.RequireNonAlphanumeric = false;
             }).AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+
         public static void ImplementServices(this IServiceCollection services)
         {
             services.AddTransient<IRoleService, RoleService>();

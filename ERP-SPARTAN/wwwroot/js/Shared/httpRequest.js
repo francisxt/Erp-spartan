@@ -33,7 +33,7 @@ const ShowSweetConfirmRemoveDialog = (id, controller, action, text = "esta opera
     });
 };
 
-const ShowSweetConfirmEnableOrDisableUser = (id, controller, action, text = "esta operación no puede ser revertida", title = "Seguro que deseas realizar esta operación?") => {
+const ShowSweetConfirmEnableOrDisableUser = (id, controller, action, text = "", title = "Seguro que deseas bloquear o desbloquaear al usuario?") => {
     Swal.fire({
         title: title,
         text: text,

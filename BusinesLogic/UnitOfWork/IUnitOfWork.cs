@@ -14,6 +14,7 @@ namespace BusinesLogic.UnitOfWork
         IClientUserService ClientUserService { get; }
         IUserService UserService { get; }
         IHomeService HomeService { get; }
+        IInventaryService InventaryService { get; }
         Task Commit();
     }
 }
