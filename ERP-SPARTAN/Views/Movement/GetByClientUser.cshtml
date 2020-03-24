@@ -7,11 +7,11 @@
     <div class="row">
         <div class="col-12">
             <div class="row ">
-                <div class="col-2 text-center">
-                    <img style="" src="@options.Value.Avatar@Model.Client.User.UserName" alt="@Model.Client.User.UserName .png" class="img-thumbnail text-center">
+                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 text-center">
+                    <img src="@options.Value.Avatar@Model.Client.User.UserName" alt="@Model.Client.User.UserName .png" class="img-thumbnail text-center">
                     <p class="font-weight-light text-center">@Model.Client.User.FullName <br />Creado el : @Model.Client.CreateAt.ToShortDateString()</p>
                 </div>
-                <div class="col-4">
+                <div class="col-sm-12 col-lg-4 col-xl-4 col-sm-4">
                     <h2>Cliente</h2>
                     <form class="form-group" action="#" method="post">
                         <div asp-validation-summary="All"></div>
@@ -35,7 +35,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="col-4 mt-2">
+                <div class="col-sm-12 col-lg-4 col-xl-4 col-sm-4 mt-2">
                     <h2>Resumen</h2>
                     <div class="form-group">
                         <div class="form-group">

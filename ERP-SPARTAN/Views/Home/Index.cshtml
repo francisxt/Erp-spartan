@@ -79,7 +79,7 @@
                 </div>
             </div>*@
 
-        <div class="col-xl-3 col-sm-6 mb-3">
+        @*<div class="col-xl-3 col-sm-6 mb-3">
             <div class="card text-white bg-primary o-hidden h-100">
                 <div class="card-body">
                     <div class="card-body-icon">
@@ -94,7 +94,7 @@
                     </span>
                 </a>
             </div>
-        </div>
+        </div>*@
     }
 
     @if (User.IsInRole(nameof(RolsAuthorization.Client)))
@@ -103,8 +103,8 @@
             <div class="container">
                 <img src="~/img/svg/account.png" width="500" class="text-center img-fluid mx-auto d-block" style="align-items:center;align-items:center" />
                 <h5 class="text-center">
-                    Bienvenido, @User.Identity?.Name si quieres ver tu cuenta pulsa el siguiente botón
-                    <a class="btn btn-primary btn-sm ml-2" asp-controller="ClientUser" asp-action="GetMyClientAccount" asp-route-userName="@User.Identity.Name" >Cuenta</a>
+                    Bienvenido, @User.Identity?.Name si quieres ver tu cuenta pulsa el siguiente botón <br />
+                    <a class="btn btn-primary btn-lg mt-3" asp-controller="ClientUser" asp-action="GetMyClientAccount" asp-route-userName="@User.Identity.Name" >Cuenta</a>
                 </h5>
             </div>
         </div>
