@@ -50,14 +50,18 @@
                             <label>Pagos</label>
                             <input disabled name="" asp-for="Payments" class="form-control" />
                         </div>
+                     
                         <div class="form-group">
-                            <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal">Nueva Operación</button>
-                            @if (Model.Debs > 0)
+                            @if (User.IsInRole(nameof(RolsAuthorization.ClientsUser)))
                             {
-                                <button onclick="PayAll('@Model.Client.Id')" class="btn btn-primary btn-sm">Saldar</button>
+                                <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal">Nueva Operación</button>
+                                @if (Model.Debs > 0)
+                                {
+                                    <button onclick="PayAll('@Model.Client.Id')" class="btn btn-primary btn-sm">Saldar</button>
+                                }
                             }
-                            <button onclick="window.print()" class="btn btn-primary btn-sm">Inprimir</button>
-                        </div>
+                                <button onclick="window.print()" class="btn btn-primary btn-sm">Inprimir</button>
+                            </div>
                     </div>
                 </div>
             </div>

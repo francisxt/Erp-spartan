@@ -84,6 +84,7 @@ namespace ERP_SPARTAN.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByNameAsync(Input.Email);
+                if (user == null) return Page();
                 if (user.State == Models.Enums.State.Blocked)
                 {
                     ModelState.AddModelError(string.Empty, "Usuario desabilitado o eliminado");
@@ -108,7 +109,7 @@ namespace ERP_SPARTAN.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Credenciales invalidas intente de nuevo");
                     return Page();
                 }
             }

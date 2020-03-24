@@ -23,7 +23,6 @@ namespace ERP_SPARTAN.Controllers
             return View();
         }
 
-        [Authorize(Roles = nameof(RolsAuthorization.ClientsUser))]
         [HttpGet]
         public async Task<IActionResult> GetByClientUser(Guid id)
         {
@@ -77,6 +76,7 @@ namespace ERP_SPARTAN.Controllers
             return BadRequest();
         }
 
+  
 
     }
 }

@@ -13,7 +13,7 @@ using Models.Enums;
 
 namespace ERP_SPARTAN.Controllers
 {
-    [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
+    [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser)+ "," + nameof(RolsAuthorization.Client))]
     public class HomeController : Controller
     {
         private readonly IUnitOfWork _service;

@@ -17,7 +17,7 @@ namespace ERP_SPARTAN.Extensions
     public static class StartupExtensions
     {
         public static void ConfigureDbContexts(this IServiceCollection services , IConfiguration configuration)
-         => services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+         => services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")),ServiceLifetime.Transient);
 
         public static void AddSettingsModels(this IServiceCollection services, IConfiguration configuration)
         {

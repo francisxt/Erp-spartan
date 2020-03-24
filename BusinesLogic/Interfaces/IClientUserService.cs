@@ -16,5 +16,6 @@ namespace BusinesLogic.Interfaces
         Task<IEnumerable<ClientUser>> GetAllWithRelationships(string UserId);
         Task<ClientUser> GetByIdWithRelationships(Guid id);
         Task<bool> SoftRemove(Guid id);
+        Task<ClientUser> GetClientByUserId(string userId);
     }
 }

@@ -17,7 +17,7 @@ using Models.ViewModels.ClientUsers;
 
 namespace ERP_SPARTAN.Controllers
 {
-    [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
+    [Authorize]
     public class ClientUserController : BaseController
     {
         private readonly IUnitOfWork _service;
@@ -29,12 +29,17 @@ namespace ERP_SPARTAN.Controllers
             _userManager = userManager;
             _settings = options.Value;
         }
+        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
+
         public async Task<IActionResult> Index()
             => View(await _service.ClientUserService
                 .GetAllWithRelationships(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value));
+        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
 
         [HttpGet]
         public IActionResult Create() => View();
+        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
+
         [HttpPost]
         public async Task<IActionResult> Create(CreateUserViewModel client)
         {
@@ -58,7 +63,7 @@ namespace ERP_SPARTAN.Controllers
                         CreatedBy = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value
                     }))
                     {
-                        var resultRol = await _userManager.AddToRoleAsync(user, nameof(RolsAuthorization.ClientsUser));
+                        var resultRol = await _userManager.AddToRoleAsync(user, client.Rol.ToString());
                         if (resultRol.Succeeded)
                         {
                             BasicNotification("Cliente Agregado!", NotificationType.success);
@@ -77,13 +82,16 @@ namespace ERP_SPARTAN.Controllers
             return View(client);
         }
 
+        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser) + "," + nameof(RolsAuthorization.Client))]
+
         [HttpGet]
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<IActionResult> GetById(Guid id)   
         {
             var model = await _service.ClientUserService.GetByIdWithRelationships(id);
             if (model != null) return View(model);
             return new NotFoundView();
         }
+        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
 
         [HttpPost]
         public async Task<IActionResult> Update(ClientUser model)
@@ -101,6 +109,7 @@ namespace ERP_SPARTAN.Controllers
             }
             return View(nameof(GetById), model);
         }
+        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
 
         [HttpPost]
         public async Task<IActionResult> Remove(Guid id)
@@ -113,12 +122,24 @@ namespace ERP_SPARTAN.Controllers
             }
             return BadRequest();
         }
+        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
 
         [HttpPost]
         public async Task<IActionResult> LockOrUnlockUser(string id)
         {
             if (await _service.UserService.LockAndUnlockUser(id)) return Ok(true);
             return BadRequest();
+        }
+
+        [Authorize(Roles = nameof(RolsAuthorization.Client))]
+        [HttpGet]
+        public async Task<IActionResult> GetMyClientAccount(string UserName)
+        {
+            var user = await _userManager.FindByNameAsync(UserName);
+            if (user == null) return NotFound();
+            var client = await _service.ClientUserService.GetClientByUserId(user.Id);
+            if (client == null) return NotFound();
+            return RedirectToAction(nameof(MovementController.GetByClientUser),"Movement", new { Id = client.Id });
         }
     }
 }

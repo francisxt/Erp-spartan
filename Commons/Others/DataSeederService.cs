@@ -51,8 +51,10 @@ namespace Commons.Others
                 };
 
                 var result = _userManager.CreateAsync(user, "admin1234");
-                _dbContext.ApplicationUsers.Add(user);
-                if (_dbContext.SaveChanges() > 0)
+                var r = user;
+                _dbContext.ApplicationUsers.Add(r);
+                var saved = _dbContext.SaveChanges() > 0;
+                if (saved)
                 {
                     var role = _dbContext.Roles.FirstOrDefault(x => x.Name.Equals(nameof(RolsAuthorization.Admin)));
                     _dbContext.UserRoles.Add(new IdentityUserRole<string> { RoleId = role.Id, UserId = user.Id });
