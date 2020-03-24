@@ -28,5 +28,10 @@ namespace BusinesLogic.Services
             model.State = Models.Enums.State.Removed;
             return await Update(model);
         }
+
+        public async Task<ClientUser> GetClientByUserId(string id)
+            => await _dbContext.ClientUsers.FirstOrDefaultAsync(x => x.UserId == id);
+
+
     }
 }
