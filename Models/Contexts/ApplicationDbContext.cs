@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Models.Models;
+using Models.Models.Accounting;
 
 namespace Models.Contexts
 {
@@ -21,9 +22,18 @@ namespace Models.Contexts
             builder.Entity<Movement>().HasQueryFilter(x => x.State != Enums.State.Removed && x.State != Enums.State.Payment);
         }
 
-        public DbSet<User> ApplicationUsers { get; set; }
-        public DbSet<Article> Articles { get; set; }
+        #region HiAccounting
         public DbSet<ClientUser> ClientUsers { get; set; }
         public DbSet<Movement> Movements { get; set; }
+        public DbSet<Enterprise> Enterprises { get; set; }
+        #endregion
+
+        #region HIInventaty
+        public DbSet<Article> Articles { get; set; }
+        #endregion
+
+        #region Users
+        public DbSet<User> ApplicationUsers { get; set; }
+        #endregion
     }
 }

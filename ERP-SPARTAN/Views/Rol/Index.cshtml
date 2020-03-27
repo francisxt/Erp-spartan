@@ -37,16 +37,8 @@
 
                         <tr>
                             <td>@rol.Name</td>
-                            @if (RolHelper.IsRolCreatedByApp(rol.Name))
-                            {
-                                <td>No editable</td>
-                            }
-                            else
-                            {
-                                <td>
-                                    <button>x</button>
-                                </td>
-                            }
+
+                            <td>No editable</td>
                         </tr>
                     }
                 </tbody>

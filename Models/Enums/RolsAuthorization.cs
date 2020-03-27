@@ -7,7 +7,12 @@ namespace Models.Enums
     public enum RolsAuthorization
     {
         Admin,
+        #region HiAccounting
         ClientsUser,
-        Client
+        Client,
+        #endregion
+        #region HIInventory
+        HiInventory
+        #endregion
     }
 }

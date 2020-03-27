@@ -1,4 +1,5 @@
 ﻿using BusinesLogic.Interfaces;
+using BusinesLogic.Interfaces.HiAccouting;
 using BusinesLogic.Repository.Interfaces;
 using Models.Models;
 using System;
@@ -15,6 +16,7 @@ namespace BusinesLogic.UnitOfWork
         IUserService UserService { get; }
         IHomeService HomeService { get; }
         IInventaryService InventaryService { get; }
+        IEnterpriseService EnterpriseService { get; }
         Task Commit();
     }
 }

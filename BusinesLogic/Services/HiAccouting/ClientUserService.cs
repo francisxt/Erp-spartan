@@ -16,10 +16,17 @@ namespace BusinesLogic.Services
         private readonly ApplicationDbContext _dbContext;
         public ClientUserService(ApplicationDbContext dbContext) : base(dbContext) => _dbContext = dbContext;
 
-        public async Task<IEnumerable<ClientUser>> GetAllWithRelationships(string UserId)
-            => await GetAll().Where(x => x.CreatedBy == UserId).Include(x => x.User).ToListAsync();
+        public async Task<IEnumerable<ClientUser>> GetAllWithRelationships(string userId, Guid? enterpriseId)
+        {
+            var result = GetAll().Where(x => x.CreatedBy == userId);
+            if (enterpriseId != null) result = result.Where(x => x.EnterpriseId == enterpriseId.Value);
+            result = result.Include(x => x.Enterprise).Include(x => x.User);
+            return await result.ToListAsync();
+        }
+
         public async Task<ClientUser> GetByIdWithRelationships(Guid id)
             => await _dbContext.ClientUsers.Include(x => x.User)
+            .Include(x => x.Enterprise)
                     .Include(x => x.Movements).SingleOrDefaultAsync(x => x.Id == id);
 
         public async Task<bool> SoftRemove(Guid id)
