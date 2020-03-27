@@ -1,0 +1,16 @@
+﻿@model Models.Models.Accounting.Enterprise
+
+@{
+    ViewData["Title"] = "Remove";
+}
+
+<h1>Eliminar @Model.Name</h1>
+<h3>Seguro que desea eliminarla , si lo elimina los clientes que tiene esta empresa tambien seran eliminados</h3>
+<div>
+    <hr />
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Eliminar" class="btn btn-danger" /> 
+        <a asp-action="Index" class="btn btn-dark">Volver</a>
+    </form>
+</div>

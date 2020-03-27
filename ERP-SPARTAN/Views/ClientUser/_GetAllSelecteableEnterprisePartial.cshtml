@@ -1,0 +1,13 @@
+﻿@model IEnumerable<Models.Models.Accounting.Enterprise>
+
+
+<div class="form-group">
+    <select class="form-control m-1" name="enterpriseId" >
+        <option value=""selected>Todas las empresas</option>
+        @foreach (var item in Model)
+        {
+            <option value="@item.Id">@item.Name</option>
+        }
+    </select>
+    <button class="btn btn-primary m-1"><i class="fa fa-search"></i></button>
+</div>

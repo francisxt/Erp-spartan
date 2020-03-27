@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Models.Contexts;
 
 namespace ERP_SPARTAN.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200326003821_AddingEnterprise")]
+    partial class AddingEnterprise
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -250,14 +252,9 @@ namespace ERP_SPARTAN.Data.Migrations
                     b.Property<DateTime>("UpdateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Enterprises");
+                    b.ToTable("Enterprise");
                 });
 
             modelBuilder.Entity("Models.Models.Article", b =>
@@ -440,13 +437,6 @@ namespace ERP_SPARTAN.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Models.Models.Accounting.Enterprise", b =>
-                {
-                    b.HasOne("Models.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Models.Models.Article", b =>

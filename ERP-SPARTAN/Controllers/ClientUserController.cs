@@ -14,6 +14,7 @@ using Models.Enums;
 using Models.Models;
 using Models.Settings;
 using Models.ViewModels.ClientUsers;
+using Models.ViewModels.HiAccounting.ClientUsers;
 
 namespace ERP_SPARTAN.Controllers
 {
@@ -29,17 +30,25 @@ namespace ERP_SPARTAN.Controllers
             _userManager = userManager;
             _settings = options.Value;
         }
-        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
 
-        public async Task<IActionResult> Index()
-            => View(await _service.ClientUserService
-                .GetAllWithRelationships(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value));
         [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
+        public async Task<IActionResult> Index(Guid? enterpriseId)
+        {
+            var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            var clients = await _service.ClientUserService.GetAllWithRelationships(userId,enterpriseId);
+            var enterprises = await _service.EnterpriseService.GetList(userId);
+            return View(new AllClientUsersVM { Clients = clients , Enterprises = enterprises });
+        }
 
+        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
         [HttpGet]
-        public IActionResult Create() => View();
-        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
+        public async Task<IActionResult> Create()
+        {
+            var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            return View(new CreateUserViewModel { Enterprises = await _service.EnterpriseService.GetList(userId) });
+        }
 
+        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
         [HttpPost]
         public async Task<IActionResult> Create(CreateUserViewModel client)
         {
@@ -60,7 +69,8 @@ namespace ERP_SPARTAN.Controllers
                     if (await _service.ClientUserService.Add(new ClientUser
                     {
                         UserId = user.Id,
-                        CreatedBy = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value
+                        CreatedBy = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value,
+                        EnterpriseId = client.EnterpriseId
                     }))
                     {
                         var resultRol = await _userManager.AddToRoleAsync(user, client.Rol.ToString());
@@ -85,7 +95,7 @@ namespace ERP_SPARTAN.Controllers
         [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser) + "," + nameof(RolsAuthorization.Client))]
 
         [HttpGet]
-        public async Task<IActionResult> GetById(Guid id)   
+        public async Task<IActionResult> GetById(Guid id)
         {
             var model = await _service.ClientUserService.GetByIdWithRelationships(id);
             if (model != null) return View(model);
@@ -139,7 +149,7 @@ namespace ERP_SPARTAN.Controllers
             if (user == null) return NotFound();
             var client = await _service.ClientUserService.GetClientByUserId(user.Id);
             if (client == null) return NotFound();
-            return RedirectToAction(nameof(MovementController.GetByClientUser),"Movement", new { Id = client.Id });
+            return RedirectToAction(nameof(MovementController.GetByClientUser), "Movement", new { Id = client.Id });
         }
     }
 }
