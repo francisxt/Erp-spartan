@@ -13,6 +13,6 @@ namespace BusinesLogic.Interfaces
         /// </summary>
         /// <param name="id">USER ID</param>
         /// <returns></returns>
-        HomeVM Get(string id);
+        Task<HomeVM> Get(string id);
     }
 }
