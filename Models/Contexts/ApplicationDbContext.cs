@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Models.Models;
 using Models.Models.Accounting;
+using Models.Models.HiAccounting;
+using Models.Models.HiAccounting.Debs;
 
 namespace Models.Contexts
 {
@@ -23,10 +25,16 @@ namespace Models.Contexts
         }
 
         #region HiAccounting
-        public DbSet<ClientUser> ClientUsers { get; set; }
         public DbSet<Movement> Movements { get; set; }
         public DbSet<Enterprise> Enterprises { get; set; }
         #endregion
+
+        #region HiLoans
+        public DbSet<Loan> Loans { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<Deb> Debs { get; set; }
+        #endregion
+
 
         #region HIInventaty
         public DbSet<Article> Articles { get; set; }
@@ -34,6 +42,7 @@ namespace Models.Contexts
 
         #region Users
         public DbSet<User> ApplicationUsers { get; set; }
+        public DbSet<ClientUser> ClientUsers { get; set; }
         #endregion
     }
 }

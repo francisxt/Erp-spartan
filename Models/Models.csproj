@@ -13,6 +13,8 @@
     <Compile Remove="Contexts\Migrations\20191221212808_AddingPrincipalsModels.Designer.cs" />
     <Compile Remove="Contexts\Migrations\20191221213614_AddingPrincipalsModels.cs" />
     <Compile Remove="Contexts\Migrations\20191221213614_AddingPrincipalsModels.Designer.cs" />
+    <Compile Remove="Contexts\Migrations\20200404223757_AddingLoans.cs" />
+    <Compile Remove="Contexts\Migrations\20200404223757_AddingLoans.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

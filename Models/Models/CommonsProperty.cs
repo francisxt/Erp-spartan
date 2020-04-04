@@ -14,9 +14,9 @@ namespace Models.Models
         public State State { get; set; } = State.Active;
 
         [NotMapped]
-        public string CreatedAtStr => CreateAt.ToShortDateString();
+        public string CreatedAtStr => CreateAt.ToString("dd/MM/yyyy");
         [NotMapped]
-        public string UpdatedAtStr => UpdateAt.ToShortDateString();
+        public string UpdatedAtStr => UpdateAt.ToString("dd/MM/yyyy");
 
     }
 }

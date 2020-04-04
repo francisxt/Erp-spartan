@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ERP_SPARTAN.Extensions
@@ -17,6 +18,12 @@ namespace ERP_SPARTAN.Extensions
         public void BasicNotification(string message, NotificationType type , string title = "")
         {
              TempData["notification"] = $@"Swal.fire('{title}','{message}','{type.ToString().ToLower()}')";
+        }
+
+        public string GetUserLoggedId()
+        {
+            if (!User.Identity.IsAuthenticated) return null;
+            return User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
         }
     }
     /// <summary>

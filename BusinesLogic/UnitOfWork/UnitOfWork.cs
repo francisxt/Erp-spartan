@@ -4,10 +4,12 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinesLogic.Interfaces;
 using BusinesLogic.Interfaces.HiAccouting;
+using BusinesLogic.Interfaces.HiLoans;
 using BusinesLogic.Repository.Interfaces;
 using BusinesLogic.Repository.Services;
 using BusinesLogic.Services;
 using BusinesLogic.Services.HiAccouting;
+using BusinesLogic.Services.HiLoans;
 using Models.Contexts;
 using Models.Models;
 
@@ -22,10 +24,12 @@ namespace BusinesLogic.UnitOfWork
         private HomeService _homeService;
         private InventaryService _inventoryService;
         private EnterpriseService _enterpriseService;
+        private LoanService _loanService;
         public UnitOfWork(ApplicationDbContext context) => _context = context;
 
 
-        #region HIAccounting 
+        #region HILoans 
+        public ILoanService LoanService => _loanService ?? (_loanService = new LoanService(_context));
         public IClientUserService ClientUserService => _clientUserService ?? (_clientUserService = new ClientUserService(_context));
         public IMovementService MovementsService => _movementsService ?? (_movementsService = new MovementService(_context));
         public IEnterpriseService EnterpriseService => _enterpriseService ?? (_enterpriseService = new EnterpriseService(_context));
@@ -38,6 +42,8 @@ namespace BusinesLogic.UnitOfWork
         #region Shared
         public IUserService UserService => _userService ?? (_userService = new UserService(_context));
         public IHomeService HomeService => _homeService ?? (_homeService = new HomeService(_context));
+
+
         async Task IUnitOfWork.Commit() => await _context.SaveChangesAsync();
         #endregion
 
