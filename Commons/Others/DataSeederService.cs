@@ -31,6 +31,8 @@ namespace Commons.Others
                             new IdentityRole { Name = nameof(RolsAuthorization.Client) , NormalizedName = nameof(RolsAuthorization.Client) },
                             new IdentityRole { Name = nameof(RolsAuthorization.ClientsUser) , NormalizedName = nameof(RolsAuthorization.ClientsUser) },                    
                             new IdentityRole { Name = nameof(RolsAuthorization.HiInventory) , NormalizedName = nameof(RolsAuthorization.HiInventory) },
+                            new IdentityRole { Name = nameof(RolsAuthorization.HILoans) , NormalizedName = nameof(RolsAuthorization.HILoans) },
+
                     };
                 _dbContext.Roles.AddRange(roleList);
                 _dbContext.SaveChanges();

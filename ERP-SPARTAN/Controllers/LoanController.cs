@@ -2,7 +2,9 @@
 using ERP_SPARTAN.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Models.Enums;
 using Models.Models.HiAccounting;
 using System;
 using System.Linq;
@@ -11,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace ERP_SPARTAN.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = nameof(RolsAuthorization.HILoans))]
     public class LoanController : BaseController
     {
         private readonly IUnitOfWork _service;
@@ -19,23 +21,30 @@ namespace ERP_SPARTAN.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Index()
-            => View(await _service.LoanService.Filter(x => x.UserId == GetUserLoggedId()).ToListAsync());
+            => View(await _service.LoanService.GetAllWithRelationShip(GetUserLoggedId()));
 
         [HttpGet]
-        public IActionResult Create() => View();
+        public async Task<IActionResult> Create()
+        {
+            var result = await _service.ClientUserService.GetAllWithRelationships(GetUserLoggedId(), null);
+            ViewBag.Clients = result.Select(x => new SelectListItem { Text = x.User.FullName, Value = x.Id.ToString() });
+            return View();
+        }
 
         [HttpPost]
         public async Task<IActionResult> Create(Loan model)
         {
             model.UserId = GetUserLoggedId();
+            var clients = await _service.ClientUserService.GetAllWithRelationships(GetUserLoggedId(), null);
+            ViewBag.Clients = clients.Select(x => new SelectListItem { Text = x.User.FullName, Value = x.Id.ToString() });
             if (!ModelState.IsValid) return View(model);
             var result = await _service.LoanService.Add(model);
             if (!result)
             {
-                BasicNotification("Lo sentimos, Intente de nuevo", Models.Enums.NotificationType.error);
+                BasicNotification("Lo sentimos, Intente de nuevo", NotificationType.error);
                 return View(model);
             }
-            BasicNotification("Agregado correctamente", Models.Enums.NotificationType.success);
+            BasicNotification("Agregado correctamente", NotificationType.success);
             return RedirectToAction(nameof(Index));
         }
 

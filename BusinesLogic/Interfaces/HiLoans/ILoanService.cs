@@ -3,10 +3,12 @@ using Models.Models.HiAccounting;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BusinesLogic.Interfaces.HiLoans
 {
     public interface ILoanService : IBaseRepository<Loan>
     {
+        Task<IEnumerable<Loan>> GetAllWithRelationShip(string userId);
     }
 }

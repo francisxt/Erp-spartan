@@ -12,7 +12,7 @@ using Models.ViewModels.ClientUsers;
 
 namespace ERP_SPARTAN.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = nameof(RolsAuthorization.ClientsUser))]
     public class MovementController : BaseController
     {
         private readonly IUnitOfWork _service;

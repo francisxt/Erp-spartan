@@ -36,8 +36,28 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" asp-action="Index" asp-controller="Loan">
+                <a class="nav-link" asp-action="Index" asp-controller="Enterprise">
+                    <i class="fas fa-fw fa-building"></i>
+                    <span>Empresas</span>
+                </a>
+            </li>
+            break;
+        case nameof(RolsAuthorization.HILoans):
+            <li class="nav-item active">
+                <a class="nav-link" asp-action="Index" asp-controller="Home">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-action="Index" asp-controller="ClientUser">
                     <i class="fas fa-fw fa-users"></i>
+                    <span>Clientes</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-action="Index" asp-controller="Loan">
+                    <i class="fa fa-hand-holding-usd"></i>
                     <span>Prestamos</span>
                 </a>
             </li>
@@ -47,12 +67,14 @@
                     <span>Empresas</span>
                 </a>
             </li>
-            @*<li class="nav-item">
-                    <a class="nav-link" asp-action="Index" asp-controller="Inventary">
-                        <i class="fas fa-boxes"></i>
-                        <span>Inventario</span>
-                    </a>
-                </li>*@
+            break;
+        case nameof(RolsAuthorization.HiInventory):
+            <li class="nav-item">
+                <a class="nav-link" asp-action="Index" asp-controller="Inventary">
+                    <i class="fas fa-boxes"></i>
+                    <span>Inventario</span>
+                </a>
+            </li>
             break;
         default:
             <div></div>

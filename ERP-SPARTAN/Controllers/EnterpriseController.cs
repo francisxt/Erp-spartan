@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using BusinesLogic.UnitOfWork;
+using Commons.Others;
 using ERP_SPARTAN.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ using Models.Models.Accounting;
 
 namespace ERP_SPARTAN.Controllers
 {
-    [Authorize(Roles = nameof(RolsAuthorization.ClientsUser))]
+    [Authorize(Roles = ControllersRol.EnterPrise)]
     public class EnterpriseController : BaseController
     {
         private readonly IUnitOfWork _services;

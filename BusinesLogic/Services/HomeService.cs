@@ -17,6 +17,7 @@ namespace BusinesLogic.Services
 
         public async Task<HomeVM> Get(string id)
         {
+            /// TODO: RESOLVER PARA LOS PRESTAMOS
             var clients = await _dbContext.ClientUsers.Include(x => x.Movements).Where(x => x.CreatedBy == id).ToListAsync();
             decimal totalOfDebs = 0;
             foreach (var item in clients)

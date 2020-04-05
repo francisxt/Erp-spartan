@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using BusinesLogic.Interfaces;
 using BusinesLogic.UnitOfWork;
+using Commons.Others;
 using ERP_SPARTAN.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -31,7 +32,7 @@ namespace ERP_SPARTAN.Controllers
             _settings = options.Value;
         }
 
-        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
+        [Authorize(Roles = ControllersRol.ClientUser)]
         public async Task<IActionResult> Index(Guid? enterpriseId)
         {
             var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
@@ -40,7 +41,7 @@ namespace ERP_SPARTAN.Controllers
             return View(new AllClientUsersVM { Clients = clients , Enterprises = enterprises });
         }
 
-        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
+        [Authorize(Roles = ControllersRol.ClientUser)]
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -48,7 +49,7 @@ namespace ERP_SPARTAN.Controllers
             return View(new CreateUserViewModel { Enterprises = await _service.EnterpriseService.GetList(userId) });
         }
 
-        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
+        [Authorize(Roles = ControllersRol.ClientUser)]
         [HttpPost]
         public async Task<IActionResult> Create(CreateUserViewModel client)
         {
@@ -92,7 +93,7 @@ namespace ERP_SPARTAN.Controllers
             return View(client);
         }
 
-        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser) + "," + nameof(RolsAuthorization.Client))]
+        [Authorize(Roles = ControllersRol.ClientUser + "," + nameof(RolsAuthorization.Client))]
 
         [HttpGet]
         public async Task<IActionResult> GetById(Guid id)
@@ -101,7 +102,7 @@ namespace ERP_SPARTAN.Controllers
             if (model != null) return View(model);
             return new NotFoundView();
         }
-        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
+        [Authorize(Roles = ControllersRol.ClientUser)]
 
         [HttpPost]
         public async Task<IActionResult> Update(ClientUser model)
@@ -119,7 +120,7 @@ namespace ERP_SPARTAN.Controllers
             }
             return View(nameof(GetById), model);
         }
-        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
+        [Authorize(Roles = ControllersRol.ClientUser)]
 
         [HttpPost]
         public async Task<IActionResult> Remove(Guid id)
@@ -132,7 +133,7 @@ namespace ERP_SPARTAN.Controllers
             }
             return BadRequest();
         }
-        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
+        [Authorize(Roles = ControllersRol.ClientUser)]
 
         [HttpPost]
         public async Task<IActionResult> LockOrUnlockUser(string id)
@@ -151,5 +152,10 @@ namespace ERP_SPARTAN.Controllers
             if (client == null) return NotFound();
             return RedirectToAction(nameof(MovementController.GetByClientUser), "Movement", new { Id = client.Id });
         }
+
+        [HttpGet]
+        public async Task<PartialViewResult> GetAllOptionsClients() 
+            => PartialView("_ClientOptionsPartial", await _service.ClientUserService.GetAllWithRelationships(GetUserLoggedId(), null));
+        
     }
 }
