@@ -7,6 +7,7 @@ using Models.Models;
 using Models.Models.Accounting;
 using Models.Models.HiAccounting;
 using Models.Models.HiAccounting.Debs;
+using Models.Models.Shared;
 
 namespace Models.Contexts
 {
@@ -22,7 +23,15 @@ namespace Models.Contexts
             base.OnModelCreating(builder);
             builder.Entity<ClientUser>().HasQueryFilter(x => x.State != Enums.State.Removed);
             builder.Entity<Movement>().HasQueryFilter(x => x.State != Enums.State.Removed && x.State != Enums.State.Payment);
+            builder.Entity<Payment>().HasQueryFilter(x => x.State != Enums.State.Removed);
+            builder.Entity<Loan>().HasQueryFilter(x => x.State != Enums.State.Removed);
+            builder.Entity<Deb>().HasQueryFilter(x => x.State != Enums.State.Removed);
         }
+
+        #region Shared
+        public DbSet<Alert> Alerts { get; set; }
+        #endregion
+
 
         #region HiAccounting
         public DbSet<Movement> Movements { get; set; }

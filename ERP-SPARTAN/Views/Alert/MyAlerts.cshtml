@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Models.Models.Shared.Alert>
+
+@{
+    ViewData["Title"] = "MyAlerts";
+}
+
+<div class="row justify-content-center">
+    <div class="col-12">
+        <h1><i class="fa fa-bell"></i> Mis Alertas</h1>
+        <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">List group item heading</h5>
+                    <small class="text-muted">3 days ago</small>
+                </div>
+                <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                <small class="text-muted">Donec id elit non mi porta.</small>
+            </a>
+            @foreach (var item in Model)
+            {
+                <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">@item.Title</h5>
+                        <small>fecha : @item.CreatedAtStr</small>
+                    </div>
+                    <p class="mb-1">@item.Text</p>
+                    <small>La administracción</small>
+                </a>
+            }
+        </div>
+    </div>
+</div>

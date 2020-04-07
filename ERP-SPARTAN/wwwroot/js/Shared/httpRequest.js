@@ -5,8 +5,10 @@
  * @param {any} action,
  * @param {any} text,
  * @param {any} title,
+ * @param {any} redirection,
+ * 
  */
-const ShowSweetConfirmRemoveDialog = (id, controller, action, text = "esta operación no puede ser revertida", title = "Seguro que desea eliminarlo?") => {
+const ShowSweetConfirmRemoveDialog = (id, controller, action, text = "esta operación no puede ser revertida", title = "Seguro que desea eliminarlo?",redirection = "") => {
     Swal.fire({
         title: title,
         text: text,
@@ -23,7 +25,10 @@ const ShowSweetConfirmRemoveDialog = (id, controller, action, text = "esta opera
             }).then((response) => {
                 if (response.status === 200) {
                     Swal.fire("Removido con exito", '', 'success').then(result => {
-                        location.reload();
+                        if (redirection === "") location.reload();
+                        else {
+                            location.href = redirection;
+                        }
                     });
                 } else {
                     Swal.fire("Ocurrio un error", "intente de nuevo", 'error');

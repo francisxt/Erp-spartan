@@ -1,0 +1,79 @@
+﻿@model Models.Models.HiAccounting.Loan
+
+@{
+    ViewData["Title"] = "GetById";
+}
+
+<h1 class="mb-5">DETALLE DEL PRESTAMO</h1>
+
+<div class="row">
+    <div class="col-12 col-sm-12 col-md-12">
+        <div >
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                    <div class="form-group">
+                        <label asp-for="InitialCapital" class="control-label">Capital Inicial</label>
+                        <input asp-for="InitialCapital" disabled class="form-control" />
+                        <span asp-validation-for="InitialCapital" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                    <div class="form-group">
+                        <label asp-for="AmortitationType" class="control-label">Tipo de Amortización</label>
+                        <select asp-for="AmortitationType" disabled asp-items="Html.GetEnumSelectList<Models.Enums.HiAccounting.AmortitationType>()" class="form-control"></select>
+                        <span asp-validation-for="AmortitationType" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                    <div class="form-group">
+                        <label asp-for="PaymentModality" class="control-label">Modalidad de pago</label>
+                        <select asp-for="PaymentModality" disabled asp-items="Html.GetEnumSelectList<Models.Enums.HiAccounting.PaymentModality>()" class="form-control"></select>
+                        <span asp-validation-for="PaymentModality" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                    <div class="form-group">
+                        <label asp-for="Interest" class="control-label">Tasa de interes %</label>
+                        <input asp-for="Interest" disabled class="form-control" />
+                        <span asp-validation-for="Interest" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                    <div class="form-group">
+                        <label asp-for="ClientUserId" class="control-label">Cliente</label>
+                        <input value="@Model.ClientUser.User.FullName" class="form-control" disabled name="name" value="" />
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                    <div class="form-group">
+                        <label asp-for="ClientUserId" class="control-label">Numero</label>
+                        <input value="@Model.ClientUser.User.PhoneNumber" class="form-control" disabled name="name" value="" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-sm btn-dark text-white" onclick="window.print()">Imprimir</button>
+                <button class="btn btn-sm btn-info">Nuevo pago</button>
+                <button class="btn btn-sm btn-danger" onclick="ShowSweetConfirmRemoveDialog('@Model.Id','/Loan','Remove','Esta operación no puede ser revertida','Esta seguro?','/Loan/Index',)">Cancelar prestamo</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-12 col-md-12">
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">PAGOS</a>
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">DEUDAS</a>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">Listado de pagos</div>
+            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">Listado de deudas</div>
+        </div>
+    </div>
+</div>
+<script src="~/js/Shared/httpRequest.js" asp-append-version="true"></script>

@@ -48,5 +48,20 @@ namespace ERP_SPARTAN.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var result = await _service.LoanService.GetByIdWithRelationships(id);
+            if (result == null) new NotFoundView();
+            return View(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Remove(Guid id)
+        {
+            var result = await _service.LoanService.SoftRemove(id);
+            if (!result) return BadRequest();
+            return Ok(result);
+        }
     }
 }

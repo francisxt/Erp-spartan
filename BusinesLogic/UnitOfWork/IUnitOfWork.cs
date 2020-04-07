@@ -1,4 +1,5 @@
 ﻿using BusinesLogic.Interfaces;
+using BusinesLogic.Interfaces.Alerts;
 using BusinesLogic.Interfaces.HiAccouting;
 using BusinesLogic.Interfaces.HiLoans;
 using BusinesLogic.Repository.Interfaces;
@@ -19,6 +20,8 @@ namespace BusinesLogic.UnitOfWork
         IInventaryService InventaryService { get; }
         IEnterpriseService EnterpriseService { get; }
         ILoanService LoanService { get; }
+        IAlertService AlertService { get; }
+
         Task Commit();
     }
 }

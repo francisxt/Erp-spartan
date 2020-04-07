@@ -5,6 +5,7 @@ using Models.ViewModels.Home;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,19 +18,25 @@ namespace BusinesLogic.Services
 
         public async Task<HomeVM> Get(string id)
         {
-            /// TODO: RESOLVER PARA LOS PRESTAMOS
-            var clients = await _dbContext.ClientUsers.Include(x => x.Movements).Where(x => x.CreatedBy == id).ToListAsync();
+            var clients = await _dbContext.ClientUsers.Include(x => x.Movements)
+                .Where(x => x.CreatedBy == id).ToListAsync();
+            var loans = await _dbContext.Loans.Include(x => x.Debs)
+                .Where(x => x.UserId == id).ToListAsync();
+          
             decimal totalOfDebs = 0;
-            foreach (var item in clients)
-            {
-                totalOfDebs += item.Movements.Sum(x => x.Amount);
-            }
+            decimal totalLoans = 0;
+            foreach (var item in clients) totalOfDebs += item.Movements.Sum(x => x.Amount);
+            foreach (var item in loans) totalLoans += item.Debs.Sum(x => x.Amount);
+
+
             return new HomeVM
             {
                 Clients = _dbContext.ClientUsers.Count(x => x.CreatedBy == id),
                 Articles = _dbContext.Articles.Count(x => x.UserId == id),
                 Enterprices = _dbContext.Enterprises.Count(x => x.UserId == id),
-                TotalOfDebs = totalOfDebs
+                TotalOfDebs = totalOfDebs,
+                TotalOfLoansDebs = totalOfDebs,
+                TotalOfLoans = loans.Count()
             };
         }
     }

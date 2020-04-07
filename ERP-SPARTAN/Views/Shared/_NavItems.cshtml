@@ -1,14 +1,23 @@
 ﻿@using System.Security.Claims
 
+
+<li class="nav-item active">
+    <a class="nav-link" asp-action="Index" asp-controller="Home">
+        <i class="fas fa-fw fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+    </a>
+</li>
+<li class="nav-item active">
+    <a class="nav-link" asp-action="MyAlerts" asp-controller="Alert">
+        <i class="fas fa-fw fa-bell"></i>
+        <span>Alertas</span>
+    </a>
+</li>
+
 @{switch (User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value)
     {
         case nameof(RolsAuthorization.Admin):
-            <li class="nav-item active">
-                <a class="nav-link" asp-action="Index" asp-controller="Home">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
+
             <li class="nav-item">
                 <a class="nav-link" asp-action="Index" asp-controller="ClientUser">
                     <i class="fas fa-fw fa-users"></i>
@@ -23,12 +32,6 @@
             </li>
             break;
         case nameof(RolsAuthorization.ClientsUser):
-            <li class="nav-item active">
-                <a class="nav-link" asp-action="Index" asp-controller="Home">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
             <li class="nav-item">
                 <a class="nav-link" asp-action="Index" asp-controller="ClientUser">
                     <i class="fas fa-fw fa-users"></i>
@@ -43,12 +46,6 @@
             </li>
             break;
         case nameof(RolsAuthorization.HILoans):
-            <li class="nav-item active">
-                <a class="nav-link" asp-action="Index" asp-controller="Home">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
             <li class="nav-item">
                 <a class="nav-link" asp-action="Index" asp-controller="ClientUser">
                     <i class="fas fa-fw fa-users"></i>
@@ -81,3 +78,4 @@
             break;
     }
 }
+

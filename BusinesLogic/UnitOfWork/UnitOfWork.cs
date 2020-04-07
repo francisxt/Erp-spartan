@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using BusinesLogic.Interfaces;
+using BusinesLogic.Interfaces.Alerts;
 using BusinesLogic.Interfaces.HiAccouting;
 using BusinesLogic.Interfaces.HiLoans;
 using BusinesLogic.Repository.Interfaces;
 using BusinesLogic.Repository.Services;
 using BusinesLogic.Services;
+using BusinesLogic.Services.Alerts;
 using BusinesLogic.Services.HiAccouting;
 using BusinesLogic.Services.HiLoans;
 using Models.Contexts;
@@ -25,6 +27,8 @@ namespace BusinesLogic.UnitOfWork
         private InventaryService _inventoryService;
         private EnterpriseService _enterpriseService;
         private LoanService _loanService;
+        private AlertService _alertService;
+
         public UnitOfWork(ApplicationDbContext context) => _context = context;
 
 
@@ -43,6 +47,7 @@ namespace BusinesLogic.UnitOfWork
         public IUserService UserService => _userService ?? (_userService = new UserService(_context));
         public IHomeService HomeService => _homeService ?? (_homeService = new HomeService(_context));
 
+        public IAlertService AlertService => _alertService ?? (_alertService = new AlertService(_context));
 
         async Task IUnitOfWork.Commit() => await _context.SaveChangesAsync();
         #endregion

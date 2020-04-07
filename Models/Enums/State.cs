@@ -11,7 +11,10 @@ namespace Models.Enums
         Blocked,
 
         #region For Movements
-        Payment
+        Payment,
+        #endregion
+        #region FOR ALERTS
+        View
         #endregion
     }
 }
