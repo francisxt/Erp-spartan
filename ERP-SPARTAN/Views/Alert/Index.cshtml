@@ -1,7 +1,47 @@
-﻿
+﻿@model IEnumerable<Alert>
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1><i class="fa fa-bell"></i> Alertas</h1>
 
+<a asp-action="Create" class="btn btn-primary btn-sm">Nueva</a>
+<div class="row mt-3">
+    <div class="col-12">
+        <div class="table-responsive">
+            <table class="table table-bordered data-table" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Mensaje</th>
+                        <th>Mensaje</th>
+                        <th>Cliente</th>
+                        <th>Estado</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var alert in Model)
+                    {
+                        <tr>
+                            <td>@alert.CreatedAtStr</td>
+                            <td>@alert.Title</td>
+                            <td>@alert.Text</td>
+                            <td>@alert.User.FullName @alert.User.UserName</td>
+                            <td>
+                                @alert.StateStr
+                            </td>
+                            <td>
+                                <div>
+                                    <button class="btn acent-background" onclick="ShowSweetConfirmRemoveDialog('@alert.Id','Alert','Remove')"><i class="far fa-trash-alt text-white"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="~/js/Shared/httpRequest.js" asp-append-version="true"></script>
+<partial name="_NotificationPartial" />

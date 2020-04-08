@@ -1,11 +1,13 @@
 ﻿using BusinesLogic.Interfaces;
 using BusinesLogic.Repository.Services;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Models.Contexts;
 using Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,6 +41,21 @@ namespace BusinesLogic.Services
         public async Task<ClientUser> GetClientByUserId(string id)
             => await _dbContext.ClientUsers.FirstOrDefaultAsync(x => x.UserId == id);
 
+        public Task<IEnumerable<ClientUser>> GetAllWithRelationShips()
+        {
+            throw new NotImplementedException();
+        }
 
+        public Task<IEnumerable<ClientUser>> GetAllWithRelationShips(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetListItem(Expression<Func<ClientUser, bool>> filter = null)
+        {
+            var result = _dbContext.ClientUsers.Include(x => x.User).AsQueryable();
+            if (filter != null) result = result.Where(filter);
+            return await result.Select(x => new SelectListItem { Text = $"{x.User.FullName} {x.User.UserName}", Value = x.User.Id }).ToListAsync();
+        }
     }
 }

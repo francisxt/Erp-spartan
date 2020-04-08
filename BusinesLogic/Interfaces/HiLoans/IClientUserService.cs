@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BusinesLogic.Interfaces
 {
-    public interface IClientUserService : IBaseRepository<ClientUser>
+    public interface IClientUserService : IBaseRepository<ClientUser> , IHelperRepository<ClientUser>
     {
         Task<IEnumerable<ClientUser>> GetAllWithRelationships(string userId, Guid? enterpriseId);
         Task<ClientUser> GetByIdWithRelationships(Guid id);

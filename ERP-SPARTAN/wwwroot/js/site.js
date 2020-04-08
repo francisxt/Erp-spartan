@@ -5,7 +5,10 @@
 
 
 $(document).ready(function () {
-    $('.data-table').DataTable({ pageLength : 50 });
+    $('.data-table').DataTable({ pageLength: 50 });
+
+    fetch('/Alert/Quantity').then((result) => result.json()).then((response) => $('#qyt-alert').text(response));
+
 });
 
 

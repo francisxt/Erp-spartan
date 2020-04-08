@@ -1,5 +1,10 @@
 ﻿@using System.Security.Claims
 
+@{
+    var userRole = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value;
+    var alert = userRole == nameof(RolsAuthorization.Admin) ? "Index" : "MyAlerts";
+
+}
 
 <li class="nav-item active">
     <a class="nav-link" asp-action="Index" asp-controller="Home">
@@ -7,14 +12,17 @@
         <span>Dashboard</span>
     </a>
 </li>
-<li class="nav-item active">
-    <a class="nav-link" asp-action="MyAlerts" asp-controller="Alert">
+<li class="nav-item">
+    <a class="nav-link" asp-action="@alert" asp-controller="Alert">
         <i class="fas fa-fw fa-bell"></i>
-        <span>Alertas</span>
+        <span>
+            Alertas
+            <span id="qyt-alert" style="position:initial; font-size:14px;margin:0;" class="badge badge-danger"></span>
+        </span>
     </a>
 </li>
 
-@{switch (User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value)
+@{switch (userRole)
     {
         case nameof(RolsAuthorization.Admin):
 
