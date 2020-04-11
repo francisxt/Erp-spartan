@@ -13,18 +13,17 @@ namespace Models.Models.HiAccounting.Debs
         [Column(TypeName = "decimal(18,2)")]
         public decimal Amount { get; set; }
         [Column(TypeName = "decimal(18,2)")]
-
-        [Required]
-        public decimal PaymentCapital { get; set; }
-        [Column(TypeName = "decimal(18,2)")]
-
         [Required]
         public decimal Interest { get; set; }
-        [Column(TypeName = "decimal(18,2)")]
-
         [Required]
-        public decimal ToPay { get; set; }
+        public double ToPay { get; set; }
+        public int Share { get; set; }
+        public double Amortitation { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal EndBalance { get; set; }
+
         public Guid LoanId { get; set; }
         public Loan Loan { get; set; }
+
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Models.Contexts;
 
 namespace ERP_SPARTAN.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200411175408_AddingMoreFieldsInLoans")]
+    partial class AddingMoreFieldsInLoans
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -342,9 +344,6 @@ namespace ERP_SPARTAN.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("Amortitation")
-                        .HasColumnType("float");
-
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
@@ -354,23 +353,20 @@ namespace ERP_SPARTAN.Data.Migrations
                     b.Property<DateTime>("DateOfPayment")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("EndBalance")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<decimal>("Interest")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("LoanId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Share")
-                        .HasColumnType("int");
+                    b.Property<decimal>("PaymentCapital")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("State")
                         .HasColumnType("int");
 
-                    b.Property<double>("ToPay")
-                        .HasColumnType("float");
+                    b.Property<decimal>("ToPay")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("UpdateAt")
                         .HasColumnType("datetime2");

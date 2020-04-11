@@ -8,7 +8,7 @@
 
 <div class="row">
     <div class="col-12 col-sm-12 col-md-12">
-        <div >
+        <div>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="row">
@@ -46,13 +46,32 @@
                 <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
                     <div class="form-group">
                         <label asp-for="ClientUserId" class="control-label">Cliente</label>
-                        <input value="@Model.ClientUser.User.FullName" class="form-control" disabled name="name" value="" />
+                        <input value="@Model.ClientUser.User.FullName" class="form-control" disabled name="name" />
                     </div>
                 </div>
                 <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
                     <div class="form-group">
                         <label asp-for="ClientUserId" class="control-label">Numero</label>
-                        <input value="@Model.ClientUser.User.PhoneNumber" class="form-control" disabled name="name" value="" />
+                        <input value="@Model.ClientUser.User.PhoneNumber" class="form-control" disabled name="name" />
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                    <div class="form-group">
+                        <label asp-for="ClientUserId" class="control-label">Cuotas</label>
+                        <input value="@Model.Payments.Count() / @Model.Shares" class="form-control" disabled name="name" />
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                    <div class="form-group">
+                        <label asp-for="ClientUserId" class="control-label">Tipo de Tasa</label>
+                        <select asp-for="RateType" class="form-control" disabled asp-items="@Html.GetEnumSelectList<RateType>()">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                    <div class="form-group">
+                        <label   class="control-label">Fecha del contrato</label>
+                        <input asp-for="CreatedAtStr" class="form-control" disabled />
                     </div>
                 </div>
             </div>
@@ -72,7 +91,39 @@
         </nav>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">Listado de pagos</div>
-            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">Listado de deudas</div>
+            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <div class="row container">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered mt-4" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Cuota</th>
+                                        <th>Fecha</th>
+                                        <th>Total a Pagar</th>
+                                        <th>Abono Capital</th>
+                                        <th>Capital Restante</th>
+                                        <th>Interés</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Debs)
+                                    {
+                                        <tr>
+                                            <td>@item.Share</td>
+                                            <td>@item.DateOfPayment.ToString("dd/MM/yyyy")</td>
+                                            <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.ToPay, 2)</td>
+                                            <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Amortitation, 2)</td>
+                                            <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Amount, 2)</td>
+                                            <td><i class="fa fa-dollar-sign"></i> @item.Interest</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

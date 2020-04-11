@@ -38,6 +38,7 @@ namespace ERP_SPARTAN.Controllers
             var clients = await _service.ClientUserService.GetAllWithRelationships(GetUserLoggedId(), null);
             ViewBag.Clients = clients.Select(x => new SelectListItem { Text = x.User.FullName, Value = x.Id.ToString() });
             if (!ModelState.IsValid) return View(model);
+
             var result = await _service.LoanService.Add(model);
             if (!result)
             {

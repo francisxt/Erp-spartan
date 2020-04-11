@@ -1,4 +1,5 @@
 ﻿using Models.Enums.HiAccounting;
+using Models.Enums.HiLoans;
 using Models.Models.HiAccounting.Debs;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,10 @@ namespace Models.Models.HiAccounting
         public decimal InitialCapital { get; set; }
         public AmortitationType AmortitationType { get; set; }
         public PaymentModality PaymentModality { get; set; }
+        public RateType RateType { get; set; }
+        [Required]
+        public int Shares { get; set; }
+
         [Required(ErrorMessage = "Este campo es requerido")]
         public int Interest { get; set; }
         public Guid ClientUserId { get; set; }

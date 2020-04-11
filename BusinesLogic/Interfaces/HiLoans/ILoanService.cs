@@ -1,5 +1,6 @@
 ﻿using BusinesLogic.Repository.Interfaces;
 using Models.Models.HiAccounting;
+using Models.Models.HiAccounting.Debs;
 using System;
 using System.Collections.Generic;
 using System.Text;

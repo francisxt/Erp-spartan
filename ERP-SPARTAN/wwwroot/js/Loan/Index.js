@@ -1,28 +1,27 @@
-﻿
-
-const GetAllClientOptions = async () => {
+﻿const GetAllClientOptions = async () => {
     await fetch("/ClientUser/GetAllOptionsClients").then(response => response.text()).then((result) => { console.log(result); });
 };
 
- 
+
 Date.prototype.addDays = function (days) {
     var date = new Date(this.valueOf());
     date.setDate(date.getDate() + days);
     return date;
-}
+};
+
 Date.prototype.addMonth = function (CantMonth) {
     var date = new Date(this.valueOf());
-    date.setMonth(date.getMonth() + CantMonth)
+    date.setMonth(date.getMonth() + CantMonth);
     return date;
-}
+};
 
 Date.prototype.toDateInputValue = (function () {
     var local = new Date(this);
     local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
     return local.toJSON().slice(0, 10);
 });
-    $('#fechaPrestamo').val(new Date().toDateInputValue());
 
+$('#fechaPrestamo').val(new Date().toDateInputValue());
 
 function getValues() {
 
@@ -61,6 +60,7 @@ function getValues() {
         div.innerHTML += "Please Check your inputs and retry - invalid values.";
     }
 }
+
 function calAmort(balance, interestRate, paymentModality, cuotas, amortitationTypevalue, typeOfTasa) {
     let arrayobjectAmortizacion = [];
     switch (amortitationTypevalue) {
@@ -76,11 +76,12 @@ function calAmort(balance, interestRate, paymentModality, cuotas, amortitationTy
     }
     return arrayobjectAmortizacion;
 }
+
 function calAmortCuotaFija(balance, interestRate, cuotas, paymentModality, typeOfTasa) {
     var arrayAmortizaion = [];
     var monthlyRate = interestRate;
 
-    if (typeOfTasa == enumTypeOfTasa.ANUAL) {
+    if (typeOfTasa === enumTypeOfTasa.ANUAL) {
         monthlyRate = interestRate / 12;
     }
     var dateNextPayment = new Date();
@@ -104,7 +105,7 @@ function calAmortCuotaFija(balance, interestRate, cuotas, paymentModality, typeO
         //display the month number in col 1 using the loop count variable
         Amortizacion.Cuota = count + 1;
         //Amortizacion.Date = hoy.addMonth(Amortizacion.Period).toJSON()
-        dateNextPayment = addDateToAmortizacion(dateNextPayment, paymentModality)
+        dateNextPayment = addDateToAmortizacion(dateNextPayment, paymentModality);
         Amortizacion.Date = FormatDate(dateNextPayment);
 
         //code for displaying in loop balance
@@ -154,16 +155,16 @@ function addDateToAmortizacion(datevalue, paymentModality) {
     return date;
 }
 
-
 function validateInputs(value) {
     //some code here to validate inputs
-    if ((value == null) || (value == "")) {
+    if ((value === null) || (value === "")) {
         return false;
     }
     else {
         return true;
     }
 }
+
 function MakeTable(data, idElementoPadre) {
     let padre = document.getElementById(idElementoPadre);
     padre.innerHTML = "";
@@ -193,6 +194,7 @@ function MakeTable(data, idElementoPadre) {
         tbody.appendChild(tr);
     });
 }
+
 function AgregarColumnas(Columnas) {
     resultado = "";
     for (const prop in Columnas) {
@@ -200,6 +202,7 @@ function AgregarColumnas(Columnas) {
     }
     return resultado;
 }
+
 function AgregarFilas(Filas) {
     resultado = "";
     for (const prop in Filas) {
@@ -207,14 +210,16 @@ function AgregarFilas(Filas) {
     }
     return resultado;
 }
+
 function FormatMoney(money) {
     return new Intl.NumberFormat().format(money.toFixed(2));
 }
+
 function FormatDate(date) {
 
-    const ye = new Intl.DateTimeFormat('es', { year: 'numeric' }).format(date)
-    const mo = new Intl.DateTimeFormat('es', { month: 'short' }).format(date)
-    const da = new Intl.DateTimeFormat('es', { day: '2-digit' }).format(date)
+    const ye = new Intl.DateTimeFormat('es', { year: 'numeric' }).format(date);
+    const mo = new Intl.DateTimeFormat('es', { month: 'short' }).format(date);
+    const da = new Intl.DateTimeFormat('es', { day: '2-digit' }).format(date);
 
     return `${da}-${mo}-${ye}`;
 }
