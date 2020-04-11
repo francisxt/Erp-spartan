@@ -4,9 +4,7 @@ const GetAllClientOptions = async () => {
     await fetch("/ClientUser/GetAllOptionsClients").then(response => response.text()).then((result) => { console.log(result); });
 };
 
-//$(document).ready(function () {
-//    $('#fechaPrestamo').val(new Date().toDateInputValue());
-//});​
+ 
 Date.prototype.addDays = function (days) {
     var date = new Date(this.valueOf());
     date.setDate(date.getDate() + days);
@@ -24,3 +22,199 @@ Date.prototype.toDateInputValue = (function () {
     return local.toJSON().slice(0, 10);
 });
     $('#fechaPrestamo').val(new Date().toDateInputValue());
+
+
+function getValues() {
+
+    //button click gets values from inputs
+    const balance = parseFloat(document.getElementById("amount").value);
+    const interestRate =
+        parseFloat(document.getElementById("interest").value / 100.0);
+    const cuotas =
+        document.getElementById("cuotas").value;
+    const typeOfTasa = parseInt(document.getElementById("typeOfTasa").value);
+
+    const amortitationTypevalue = parseInt(document.getElementById("amortitationType").value);
+
+    const paymentModality = parseInt(document.getElementById("paymentModality").value);
+
+    //set the div string
+    var div = document.getElementById("Result");
+
+    //in case of a re-calc, clear out the div!
+    div.innerHTML = "";
+
+    //validate inputs - display error if invalid, otherwise, display table
+    var balVal = validateInputs(balance);
+    var intrVal = validateInputs(interestRate);
+
+    if (balVal && intrVal) {
+
+        //Returns div string if inputs are valid
+
+        let arrayAmortizacion = calAmort(balance, interestRate, paymentModality, cuotas, amortitationTypevalue, typeOfTasa);
+        MakeTable(arrayAmortizacion, 'Result');
+        // console.log(arrayAmortizacion);
+    }
+    else {
+        //returns error if inputs are invalid
+        div.innerHTML += "Please Check your inputs and retry - invalid values.";
+    }
+}
+function calAmort(balance, interestRate, paymentModality, cuotas, amortitationTypevalue, typeOfTasa) {
+    let arrayobjectAmortizacion = [];
+    switch (amortitationTypevalue) {
+        case amortitationType.CUOTAFIJA:
+            //Execute logic CUOTAFIJA
+            arrayobjectAmortizacion = calAmortCuotaFija(balance, interestRate, cuotas, paymentModality, typeOfTasa);
+            break;
+        case amortitationType.INTERESFIJO:
+        //Execute logic INTERESFIJO
+        case amortitationType.CAPITALFINAL:
+        //Execute logic CAPITALFINAL
+
+    }
+    return arrayobjectAmortizacion;
+}
+function calAmortCuotaFija(balance, interestRate, cuotas, paymentModality, typeOfTasa) {
+    var arrayAmortizaion = [];
+    var monthlyRate = interestRate;
+
+    if (typeOfTasa == enumTypeOfTasa.ANUAL) {
+        monthlyRate = interestRate / 12;
+    }
+    var dateNextPayment = new Date();
+
+    var payment = balance * (monthlyRate / (1 - Math.pow(
+        1 + monthlyRate, -cuotas)));
+    /**
+     * Loop that calculates the monthly Loan amortization amounts then adds 
+     * them to the return string 
+     */
+    for (var count = 0; count < cuotas; ++count) {
+        let Amortizacion = { Cuota: "", Date: "", Balance: 0, Interest: 0, Payment: 0, Amortizacion: 0, Endbalance: 0 }
+        //in-loop interest amount holder
+        var interest = 0;
+
+        //in-loop monthly principal amount holder
+        var monthlyPrincipal = 0;
+
+        //start a new table row on each loop iteration
+
+        //display the month number in col 1 using the loop count variable
+        Amortizacion.Cuota = count + 1;
+        //Amortizacion.Date = hoy.addMonth(Amortizacion.Period).toJSON()
+        dateNextPayment = addDateToAmortizacion(dateNextPayment, paymentModality)
+        Amortizacion.Date = FormatDate(dateNextPayment);
+
+        //code for displaying in loop balance
+        Amortizacion.Balance = FormatMoney(balance);
+
+        //calc the in-loop interest amount and display
+        interest = balance * monthlyRate;
+        Amortizacion.Interest = FormatMoney(interest);
+
+        //calc the in-loop monthly principal and display
+        monthlyPrincipal = payment - interest;
+        Amortizacion.Amortizacion = FormatMoney(monthlyPrincipal);
+
+        Amortizacion.Endbalance = FormatMoney((balance - monthlyPrincipal));
+        Amortizacion.Payment = FormatMoney(payment);
+
+
+        //update the balance for each loop iteration
+        balance = balance - monthlyPrincipal;
+        arrayAmortizaion.push(Amortizacion);
+    }
+    //Final piece added to return string before returning it - closes the table
+    //returns the concatenated string to the page
+    return arrayAmortizaion;
+}
+
+function addDateToAmortizacion(datevalue, paymentModality) {
+    let date = new Date(datevalue);
+    switch (paymentModality) {
+        case enumPaymentModality.DIARIO:
+            //Execute logic enumPaymentModality.DIARIO
+            date = date.addDays(1);
+            break;
+        case enumPaymentModality.SEMANAL:
+            //Execute logic enumPaymentModality.SEMANAL
+            date = date.addDays(7);
+            break;
+        case enumPaymentModality.MENSUAL:
+            //Execute logic  enumPaymentModality.MENSUAL
+            date = date.addMonth(1);
+            break;
+        case enumPaymentModality.ANUAL:
+            //Execute logic  enumPaymentModality.ANUAL
+            date = date.addMonth(12);
+            break;
+    }
+    return date;
+}
+
+
+function validateInputs(value) {
+    //some code here to validate inputs
+    if ((value == null) || (value == "")) {
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+function MakeTable(data, idElementoPadre) {
+    let padre = document.getElementById(idElementoPadre);
+    padre.innerHTML = "";
+    let childTable = `
+   <table  id ="tableData" class="table table-hover"  >
+      <thead>
+           <tr>
+             <th> Periodo</th>
+             <th> Fecha</th>
+             <th> Balance</th>
+             <th> Interes</th>
+             <th> Pago</th>
+             <th> Amortización</th>
+             <th> Balance final</th>
+
+           </tr>
+       </thead> <tbody id="ExportedTableFromObject"></tbody>
+    </table>`;
+    padre.innerHTML = childTable;
+    let tbody = document.getElementById("ExportedTableFromObject");
+    data.forEach(element => {
+        let tr = document.createElement("tr");
+        tr.innerHTML +=
+            `
+              ${AgregarFilas(element)}
+                `;
+        tbody.appendChild(tr);
+    });
+}
+function AgregarColumnas(Columnas) {
+    resultado = "";
+    for (const prop in Columnas) {
+        resultado += `<th>${prop}</th>`;
+    }
+    return resultado;
+}
+function AgregarFilas(Filas) {
+    resultado = "";
+    for (const prop in Filas) {
+        resultado += `<th style="font-weight:500; color:#626567; font-size:15px;">${Filas[prop]}</th>`;
+    }
+    return resultado;
+}
+function FormatMoney(money) {
+    return new Intl.NumberFormat().format(money.toFixed(2));
+}
+function FormatDate(date) {
+
+    const ye = new Intl.DateTimeFormat('es', { year: 'numeric' }).format(date)
+    const mo = new Intl.DateTimeFormat('es', { month: 'short' }).format(date)
+    const da = new Intl.DateTimeFormat('es', { day: '2-digit' }).format(date)
+
+    return `${da}-${mo}-${ye}`;
+}
