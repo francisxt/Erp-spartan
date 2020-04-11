@@ -23,6 +23,11 @@
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Quantity"></label>
+                <input asp-for="Quantity" type="number" class="form-control decimal" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="PriceForShop">Precio de compra</label>
                 <input asp-for="PriceForShop" class="form-control decimal" />
                 <span asp-validation-for="PriceForShop" class="text-danger"></span>

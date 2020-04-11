@@ -4,9 +4,23 @@
 // Write your JavaScript code.
 
 
-$(document).ready(function () {
-    $('.data-table').DataTable({ pageLength: 50 });
+$(document).ready(() => {
+    $('.data-table').DataTable({
+        pageLength: 50,
+        "language": {
+            "info":"Mostrando _START_ de _TOTAL_ resultados",
+            "zeroRecords": "No encontramos resultados",
+            "infoEmpty":"No hay datos",
+            "search": "Buscar",
+            "lengthMenu":"Mostrar _MENU_ resultados",
+            "paginate": {
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
+        }
+    });
 
+    //Get all actives alerts
     fetch('/Alert/Quantity').then((result) => result.json()).then((response) => $('#qyt-alert').text(response));
 
 });

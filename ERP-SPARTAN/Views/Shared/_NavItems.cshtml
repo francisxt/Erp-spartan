@@ -2,6 +2,7 @@
 
 @{
     var userRole = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value;
+    var roles = User.Claims.Where(x => x.Type == ClaimTypes.Role).ToList();
     var alert = userRole == nameof(RolsAuthorization.Admin) ? "Index" : "MyAlerts";
 
 }
@@ -13,7 +14,7 @@
     </a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" asp-action="@alert" asp-controller="Alert">
+    <a class="nav-link nav-link-hovered" asp-action="@alert" asp-controller="Alert">
         <i class="fas fa-fw fa-bell"></i>
         <span>
             Alertas
@@ -27,13 +28,13 @@
         case nameof(RolsAuthorization.Admin):
 
             <li class="nav-item">
-                <a class="nav-link" asp-action="Index" asp-controller="ClientUser">
+                <a class="nav-link nav-link-hovered" asp-action="Index" asp-controller="ClientUser">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Clientes</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" asp-action="Index" asp-controller="Rol">
+                <a class="nav-link nav-link-hovered " asp-action="Index" asp-controller="Rol">
                     <i class="fas fa-fw fa-user-secret"></i>
                     <span>Roles</span>
                 </a>
@@ -41,49 +42,55 @@
             break;
         case nameof(RolsAuthorization.ClientsUser):
             <li class="nav-item">
-                <a class="nav-link" asp-action="Index" asp-controller="ClientUser">
+                <a class="nav-link nav-link-hovered" asp-action="Index" asp-controller="ClientUser">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Clientes</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" asp-action="Index" asp-controller="Enterprise">
+                <a class="nav-link nav-link-hovered" asp-action="Index" asp-controller="Enterprise">
                     <i class="fas fa-fw fa-building"></i>
                     <span>Empresas</span>
-                </a>
-            </li>
-            break;
-        case nameof(RolsAuthorization.HILoans):
-            <li class="nav-item">
-                <a class="nav-link" asp-action="Index" asp-controller="ClientUser">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>Clientes</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-action="Index" asp-controller="Loan">
-                    <i class="fa fa-hand-holding-usd"></i>
-                    <span>Prestamos</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-action="Index" asp-controller="Enterprise">
-                    <i class="fas fa-fw fa-building"></i>
-                    <span>Empresas</span>
-                </a>
-            </li>
-            break;
-        case nameof(RolsAuthorization.HiInventory):
-            <li class="nav-item">
-                <a class="nav-link" asp-action="Index" asp-controller="Inventary">
-                    <i class="fas fa-boxes"></i>
-                    <span>Inventario</span>
                 </a>
             </li>
             break;
         default:
             <div></div>
             break;
+    }
+    if (roles.Where(x => x.Value == nameof(RolsAuthorization.HiInventory)).Any())
+    {
+        <li class="nav-item">
+            <a class="nav-link nav-link-hovered" asp-action="Index" asp-controller="Inventary">
+                <i class="fas fa-boxes"></i>
+                <span>Inventario</span>
+            </a>
+        </li>
+    }
+    if (roles.Where(x => x.Value == nameof(RolsAuthorization.HILoans)).Any())
+    {
+        if (userRole != nameof(RolsAuthorization.ClientsUser))
+        {
+            <li class="nav-item">
+                <a class="nav-link nav-link-hovered" asp-action="Index" asp-controller="Enterprise">
+                    <i class="fas fa-fw fa-building"></i>
+                    <span>Empresas</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link nav-link-hovered" asp-action="Index" asp-controller="ClientUser">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Clientes</span>
+                </a>
+            </li>
+        }
+
+        <li class="nav-item">
+            <a class="nav-link nav-link-hovered" asp-action="Index" asp-controller="Loan">
+                <i class="fa fa-hand-holding-usd"></i>
+                <span>Prestamos</span>
+            </a>
+        </li>
     }
 }
 

@@ -28,6 +28,7 @@ namespace BusinesLogic.UnitOfWork
         private EnterpriseService _enterpriseService;
         private LoanService _loanService;
         private AlertService _alertService;
+        private RoleService _roleService;
 
         public UnitOfWork(ApplicationDbContext context) => _context = context;
 
@@ -48,6 +49,8 @@ namespace BusinesLogic.UnitOfWork
         public IHomeService HomeService => _homeService ?? (_homeService = new HomeService(_context));
 
         public IAlertService AlertService => _alertService ?? (_alertService = new AlertService(_context));
+
+        public IRoleService RoleService => _roleService ?? (_roleService = new RoleService(_context));
 
         async Task IUnitOfWork.Commit() => await _context.SaveChangesAsync();
         #endregion

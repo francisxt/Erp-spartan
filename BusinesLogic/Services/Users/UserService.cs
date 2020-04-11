@@ -1,4 +1,5 @@
 ﻿using BusinesLogic.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Models.Contexts;
@@ -69,5 +70,18 @@ namespace BusinesLogic.Services
         }
 
         public async Task<IEnumerable<User>> Users() => await _dbContext.ApplicationUsers.ToListAsync();
+
+        public async Task<bool> AddToRole(string UserId, string RoleId)
+        {
+            _dbContext.UserRoles.Add(new IdentityUserRole<string> { UserId = UserId, RoleId = RoleId });
+            return await _dbContext.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> RemoveUserRoleAsync(string userId, string RoleName)
+        {
+            var role = await _dbContext.Roles.FirstOrDefaultAsync(x => x.Name.Equals(RoleName));
+            _dbContext.UserRoles.Remove(new IdentityUserRole<string> { UserId = userId, RoleId = role.Id });
+            return await _dbContext.SaveChangesAsync() > 0;
+        }
     }
 }

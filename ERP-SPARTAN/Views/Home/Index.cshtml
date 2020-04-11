@@ -45,7 +45,7 @@
         </div>
     }
 
-    @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
+    @if (User.IsInRole(nameof(RolsAuthorization.HILoans)) || User.IsInRole(nameof(RolsAuthorization.ClientsUser)))
     {
         <div class="col-xl-3 col-sm-6 mb-3">
             <div class="card text-white bg-primary o-hidden h-100">
@@ -79,55 +79,64 @@
                 </a>
             </div>
         </div>
-        <div class="col-xl-3 col-sm-6 mb-3">
-            <div class="card text-white bg-primary o-hidden h-100">
-                <div class="card-body">
-                    <div class="card-body-icon">
-                        <i class="fas fa-fw fa-money-bill"></i>
-                    </div>
-                    <div class="mr-5">@Model.TotalOfLoansDebs En deuda</div>
-                </div>
-                <a class="card-footer text-white clearfix small z-1" asp-action="Index" asp-controller="Loan">
-                    <span class="float-left">Detalle</span>
-                    <span class="float-right">
-                        <i class="fas fa-angle-right"></i>
-                    </span>
-                </a>
-            </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 mb-3">
-            <div class="card text-white bg-primary o-hidden h-100">
-                <div class="card-body">
-                    <div class="card-body-icon">
-                        <i class="fas fa-fw fa-hand-holding-usd"></i>
-                    </div>
-                    <div class="mr-5">@Model.TotalOfLoans Prestamo</div>
-                </div>
-                <a class="card-footer text-white clearfix small z-1" asp-action="Index" asp-controller="Loan">
-                    <span class="float-left">Detalle</span>
-                    <span class="float-right">
-                        <i class="fas fa-angle-right"></i>
-                    </span>
-                </a>
-            </div>
-        </div>
 
-        @*<div class="col-xl-3 col-sm-6 mb-3">
+        if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
+        {
+            <div class="col-xl-3 col-sm-6 mb-3">
                 <div class="card text-white bg-primary o-hidden h-100">
                     <div class="card-body">
                         <div class="card-body-icon">
-                            <i class="fas fas fa-boxes"></i>
+                            <i class="fas fa-fw fa-money-bill"></i>
                         </div>
-                        <div class="mr-5">Articulos @Model.Articles</div>
+                        <div class="mr-5">@Model.TotalOfLoansDebs En deuda</div>
                     </div>
-                    <a class="card-footer text-white clearfix small z-1" href="#">
-                        <span class="float-left">View Details</span>
+                    <a class="card-footer text-white clearfix small z-1" asp-action="Index" asp-controller="Loan">
+                        <span class="float-left">Detalle</span>
                         <span class="float-right">
                             <i class="fas fa-angle-right"></i>
                         </span>
                     </a>
                 </div>
-            </div>*@
+            </div>
+            <div class="col-xl-3 col-sm-6 mb-3">
+                <div class="card text-white bg-primary o-hidden h-100">
+                    <div class="card-body">
+                        <div class="card-body-icon">
+                            <i class="fas fa-fw fa-hand-holding-usd"></i>
+                        </div>
+                        <div class="mr-5">@Model.TotalOfLoans Prestamo</div>
+                    </div>
+                    <a class="card-footer text-white clearfix small z-1" asp-action="Index" asp-controller="Loan">
+                        <span class="float-left">Detalle</span>
+                        <span class="float-right">
+                            <i class="fas fa-angle-right"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+        }
+
+
+        if (User.IsInRole(nameof(RolsAuthorization.ClientsUser)))
+        {
+            <div class="col-xl-3 col-sm-6 mb-3">
+                <div class="card text-white bg-primary o-hidden h-100">
+                    <div class="card-body">
+                        <div class="card-body-icon">
+                            <i class="fas fa-fw fa-money-bill"></i>
+                        </div>
+                        <div class="mr-5">@Model.TotalOfDebs En deuda</div>
+                    </div>
+                    <a class="card-footer text-white clearfix small z-1" asp-action="Index" asp-controller="ClientUser">
+                        <span class="float-left">Detalle</span>
+                        <span class="float-right">
+                            <i class="fas fa-angle-right"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        }
     }
 
     @if (User.IsInRole(nameof(RolsAuthorization.Client)))
@@ -139,6 +148,27 @@
                     Bienvenido, @User.Identity?.Name si quieres ver tu cuenta pulsa el siguiente botón <br />
                     <a class="btn btn-primary btn-lg mt-3" asp-controller="ClientUser" asp-action="GetMyClientAccount" asp-route-userName="@User.Identity.Name">Cuenta</a>
                 </h5>
+            </div>
+        </div>
+    }
+
+
+    @if (User.IsInRole(nameof(RolsAuthorization.HiInventory)))
+    {
+        <div class="col-xl-3 col-sm-6 mb-3">
+            <div class="card text-white bg-primary o-hidden h-100">
+                <div class="card-body">
+                    <div class="card-body-icon">
+                        <i class="fas fas fa-boxes"></i>
+                    </div>
+                    <div class="mr-5">Articulos @Model.Articles</div>
+                </div>
+                <a class="card-footer text-white clearfix small z-1" asp-action="Index" asp-controller="Inventary">
+                    <span class="float-left">Ver</span>
+                    <span class="float-right">
+                        <i class="fas fa-angle-right"></i>
+                    </span>
+                </a>
             </div>
         </div>
     }

@@ -21,6 +21,7 @@ namespace BusinesLogic.UnitOfWork
         IEnterpriseService EnterpriseService { get; }
         ILoanService LoanService { get; }
         IAlertService AlertService { get; }
+        IRoleService RoleService { get; }
 
         Task Commit();
     }

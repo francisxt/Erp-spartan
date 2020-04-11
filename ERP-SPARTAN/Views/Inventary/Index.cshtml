@@ -10,7 +10,7 @@
         </div>
 
         <div class="col-xs-1">
-            <a asp-action="Create" asp-controller="Inventary"  class="btn btn-primary btn-radius">Nuevo</a>
+            <a asp-action="Create" asp-controller="Inventary" class="btn btn-primary btn-radius">Nuevo</a>
         </div>
         <div class="col-12">
         </div>
@@ -28,6 +28,7 @@
                         <th>Nombre</th>
                         <th>Codigo</th>
                         <th>Precio</th>
+                        <th>Cantidad</th>
                         <th>Precio de compra</th>
                         <th>Opciones</th>
                     </tr>
@@ -39,6 +40,7 @@
                             <td>@item.Description</td>
                             <td>@item.Code</td>
                             <td>@item.Price</td>
+                            <td>@item.Quantity</td>
                             <td>@item.PriceForShop</td>
                             <td>
                                 <div>

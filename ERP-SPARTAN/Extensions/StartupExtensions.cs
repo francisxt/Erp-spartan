@@ -36,7 +36,6 @@ namespace ERP_SPARTAN.Extensions
 
         public static void ImplementServices(this IServiceCollection services)
         {
-            services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
         } 
     }

@@ -1,4 +1,5 @@
 ﻿using BusinesLogic.Repository.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Models.Models;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,8 @@ namespace BusinesLogic.Interfaces
         Task<bool> Update(User model);
         Task<bool> LockAndUnlockUser(string id);
         Task<User> GetUserAsync(string id);
-
         Task<IEnumerable<User>> Users();
+        Task<bool> AddToRole(string UserId, string RoleId);
+        Task<bool> RemoveUserRoleAsync(string userId, string RoleName);
     }
 }
