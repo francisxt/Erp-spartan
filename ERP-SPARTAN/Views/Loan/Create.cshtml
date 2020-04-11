@@ -6,62 +6,200 @@
 
 <h1>Nuevo prestamo</h1>
 <hr />
-
 <div class="row">
-    <div class="col-12 col-sm-12 col-md-12">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="row">
-                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
-                    <div class="form-group">
-                        <label asp-for="InitialCapital" class="control-label">Capital Inicial</label>
-                        <input asp-for="InitialCapital" class="form-control" />
-                        <span asp-validation-for="InitialCapital" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
-                    <div class="form-group">
-                        <label asp-for="AmortitationType" class="control-label">Tipo de Amortización</label>
-                        <select asp-for="AmortitationType" asp-items="Html.GetEnumSelectList<Models.Enums.HiAccounting.AmortitationType>()" class="form-control"></select>
-                        <span asp-validation-for="AmortitationType" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
-                    <div class="form-group">
-                        <label asp-for="PaymentModality" class="control-label">Modalidad de pago</label>
-                        <select asp-for="PaymentModality" asp-items="Html.GetEnumSelectList<Models.Enums.HiAccounting.PaymentModality>()" class="form-control"></select>
-                        <span asp-validation-for="PaymentModality" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
+    <div class="container col-lg-8 mr-lg-0 d-flex  flex-wrap">
+        <div class="formulario-Prestamo  col-sm-12">
+            <form>
+                <div class="row mt-2 ">
 
-            <div class="row">
-                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
-                    <div class="form-group">
-                        <label asp-for="Interest" class="control-label">Tasa de interes %</label>
-                        <input asp-for="Interest" class="form-control" />
-                        <span asp-validation-for="Interest" class="text-danger"></span>
+                    <div class="col mt-1">
+                        <div class="form-group">
+                            <label asp-for="PaymentModality" class="control-label">Tipo de amortización</label>
+                            <select asp-for="AmortitationType" id="amortitationType" asp-items="Html.GetEnumSelectList<Models.Enums.HiAccounting.AmortitationType>()" class="form-control"></select>
+                            <span asp-validation-for="AmortitationType" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col mt-1 ">
+                        <div class="form-group">
+                            <label asp-for="ClientUserId" class="control-label">Cliente</label>
+                            <select asp-for="ClientUserId" class="form-control" asp-items="ViewBag.Clients">
+                                <option selected value="">SELECCIONE EL CLIENTE</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
-                    <div class="form-group">
-                        <label asp-for="ClientUserId" class="control-label">Cliente</label>
-                        <select asp-for="ClientUserId" class="form-control" asp-items="ViewBag.Clients">
-                            <option selected value="">SELECCIONE EL CLIENTE</option>
+                <hr />
+                <div class="row mt-2">
+                    <div class="col mt-1 ">
+                        <div class="form-group">
+                            <label asp-for="InitialCapital" class="control-label">Monto</label>
+                            <input id="amount" value="8000000" asp-for="InitialCapital" type="number" class="form-control" />
+                            <span asp-validation-for="InitialCapital" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col mt-1 ">
+                        <div class="form-group">
+                            <label asp-for="Interest" class="control-label">Tasa de interes %</label>
+                            <input id="interest" value="21" asp-for="Interest" type="number" class="form-control" />
+                            <span asp-validation-for="Interest" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col  mt-1 ">
+                        <label>Tipo de tasa</label>
+                        <select class="custom-select" id="typeOfTasa">
+                            <option value="0">Mensual</option>
+                            <option value="1" selected>Anual</option>
                         </select>
                     </div>
                 </div>
-                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                <div class="row mt-2">
+                    <div class="col mt-1 ">
+                        <label>Cuotas</label>
+                        <input class="form-control" id="cuotas" type="number" name="cuotas" />
+                    </div>
+                    <div class="col mt-1 ">
+                        <div class="form-group">
+                            <label asp-for="PaymentModality" class="control-label">Modalidad de pago</label>
+                            <select id="paymentModality" asp-for="PaymentModality" asp-items="Html.GetEnumSelectList<Models.Enums.HiAccounting.PaymentModality>()" class="form-control"></select>
+                            <span asp-validation-for="PaymentModality" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col mt-1 ">
+                        <label>Fecha Contrato</label>
+                        <input id="fechaPrestamo" class="form-control" type="date" name="f_contrato" />
+
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <button type="button" class="btn btn-sm btn-info text-white">Amortization</button>
-                <input type="submit" value="Crear" class="btn btn-sm btn-primary" />
-                <a asp-action="Index" class="btn btn-sm btn-dark">Cancelar</a>
-            </div>
-        </form>
+                <hr />
+
+                <br />
+                <div class="form-group row">
+
+                    @*main_buttons*@
+                    <div class="main_buttons col-6">
+                      
+                        <button type="submit" class="btn  btn-primary">
+                        <i class="fa fa-hand-holding-usd"></i>  Crear prestamo 
+                        </button>
+                        <a asp-action="Index" class="btn btn btn-danger">Cancelar</a>
+                    </div>
+
+                    @*secondary_buttons*@
+                    <div class="secondary_buttons text-right col-6">
+                        <button onclick="getValues()" type="button" class="btn btn btn-success">
+                            <i class="fas fa-table"></i>
+                            Mostrar tabla de amortización
+                        </button>
+                    </div>
+
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <div class="offset-2"></div>
+
+</div>
+<div class="row">
+    <div class="offset-2"></div>
+    <div class="el-cliente col-lg-8 flex-wrap mt-1  text-center ">
+
+        <div id="Result" class="table-wrapper-scroll-y my-custom-scrollbar">
+
+        </div>
     </div>
 </div>
+@*<div class="row">
+        <div class="col-12 col-sm-12 col-md-12">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                        <div class="form-group">
+                            <label asp-for="InitialCapital" class="control-label">Capital Inicial</label>
+                            <input asp-for="InitialCapital" class="form-control" />
+                            <span asp-validation-for="InitialCapital" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                        <div class="form-group">
+                            <label asp-for="AmortitationType" class="control-label">Tipo de Amortización</label>
+                            <select asp-for="AmortitationType" asp-items="Html.GetEnumSelectList<Models.Enums.HiAccounting.AmortitationType>()" class="form-control"></select>
+                            <span asp-validation-for="AmortitationType" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                        <div class="form-group">
+                            <label asp-for="PaymentModality" class="control-label">Modalidad de pago</label>
+                            <select asp-for="PaymentModality" asp-items="Html.GetEnumSelectList<Models.Enums.HiAccounting.PaymentModality>()" class="form-control"></select>
+                            <span asp-validation-for="PaymentModality" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                        <div class="form-group">
+                            <label asp-for="Interest" class="control-label">Tasa de interes %</label>
+                            <input asp-for="Interest" class="form-control" />
+                            <span asp-validation-for="Interest" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                        <div class="form-group">
+                            <label asp-for="ClientUserId" class="control-label">Cliente</label>
+                            <select asp-for="ClientUserId" class="form-control" asp-items="ViewBag.Clients">
+                                <option selected value="">SELECCIONE EL CLIENTE</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-sm btn-info text-white">Amortization</button>
+                    <input type="submit" value="Crear" class="btn btn-sm btn-primary" />
+                    <a asp-action="Index" class="btn btn-sm btn-dark">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>*@
+<script src="~/js/Loan/Index.js" asp-append-version="true"></script>
+<script>
+    let enumPaymentModality = {
+        DIARIO: 0,
+        SEMANAL: 1,
+        MENSUAL: 2,
+        ANUAL: 3
+    }
+    let amortitationType = {
+        CUOTAFIJA: 0,
+        INTERESFIJO: 1,
+        CAPITALFINAL: 2
+    }
+
+    let enumTypeOfTasa = {
+        MENSUAL: 0,
+        ANUAL:1
+
+    }
+  
+
+</script>
 <partial name="_NotificationPartial" />
+
+
+<style>
+    .my-custom-scrollbar {
+        position: relative;
+        height: 500px;
+        overflow: auto;
+    }
+
+    .table-wrapper-scroll-y {
+        display: block;
+    }
+</style>
