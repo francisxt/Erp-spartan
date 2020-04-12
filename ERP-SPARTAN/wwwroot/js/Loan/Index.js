@@ -70,9 +70,12 @@ function calAmort(balance, interestRate, paymentModality, cuotas, amortitationTy
             break;
         case amortitationType.INTERESFIJO:
         //Execute logic INTERESFIJO
+            arrayobjectAmortizacion = calAmortInterestFixed(balance, interestRate, cuotas, paymentModality, typeOfTasa);
+            break
         case amortitationType.CAPITALFINAL:
         //Execute logic CAPITALFINAL
-
+            arrayobjectAmortizacion = calAmortCapitalAlFinal(balance, interestRate, cuotas, paymentModality, typeOfTasa);
+            break
     }
     return arrayobjectAmortizacion;
 }
@@ -129,6 +132,124 @@ function calAmortCuotaFija(balance, interestRate, cuotas, paymentModality, typeO
     }
     //Final piece added to return string before returning it - closes the table
     //returns the concatenated string to the page
+    console.log(arrayAmortizaion);
+    return arrayAmortizaion;
+}
+function calAmortInterestFixed(balance, interestRate, cuotas, paymentModality, typeOfTasa) {
+    var arrayAmortizaion = [];
+    var monthlyRate = interestRate;
+
+    if (typeOfTasa === enumTypeOfTasa.ANUAL) {
+        monthlyRate = interestRate / 12;
+    }
+    var dateNextPayment = new Date();
+    var balanceFixed = balance;
+    //var payment = balance * (monthlyRate / (1 - Math.pow(
+    //    1 + monthlyRate, -cuotas)));
+    var payment = 0;
+    /**
+     * Loop that calculates the monthly Loan amortization amounts then adds 
+     * them to the return string 
+     */
+    for (var count = 0; count < cuotas; ++count) {
+        let Amortizacion = { Cuota: "", Date: "", Balance: 0, Interest: 0, Payment: 0, Amortizacion: 0, Endbalance: 0 }
+        //in-loop interest amount holder
+        var interest = 0;
+
+        //in-loop monthly principal amount holder
+        var monthlyPrincipal = 0;
+
+        //start a new table row on each loop iteration
+
+        //display the month number in col 1 using the loop count variable
+        Amortizacion.Cuota = count + 1;
+        //Amortizacion.Date = hoy.addMonth(Amortizacion.Period).toJSON()
+        dateNextPayment = addDateToAmortizacion(dateNextPayment, paymentModality);
+        Amortizacion.Date = FormatDate(dateNextPayment);
+
+        //code for displaying in loop balance
+        Amortizacion.Balance = FormatMoney(balance);
+        
+        //calc the in-loop interest amount and display
+        interest = balanceFixed * monthlyRate;
+        Amortizacion.Interest = FormatMoney(interest);
+
+        //calc the in-loop monthly principal and display
+        monthlyPrincipal = balanceFixed / cuotas;
+
+
+        Amortizacion.Amortizacion = FormatMoney(monthlyPrincipal); 
+
+        payment = monthlyPrincipal + interest;
+
+        Amortizacion.Endbalance = FormatMoney((balance - monthlyPrincipal));
+
+        Amortizacion.Payment = FormatMoney(payment);
+
+
+        //update the balance for each loop iteration
+        balance = balance - monthlyPrincipal;
+        arrayAmortizaion.push(Amortizacion);
+    }
+    //Final piece added to return string before returning it - closes the table
+    //returns the concatenated string to the page
+    console.log(arrayAmortizaion);
+    return arrayAmortizaion;
+}
+function calAmortCapitalAlFinal(balance, interestRate, cuotas, paymentModality, typeOfTasa) {
+    var arrayAmortizaion = [];
+    var monthlyRate = interestRate;
+
+    if (typeOfTasa === enumTypeOfTasa.ANUAL) {
+        monthlyRate = interestRate / 12;
+    }
+    var dateNextPayment = new Date();
+
+    //var payment = balance * (monthlyRate / (1 - Math.pow(
+    //    1 + monthlyRate, -cuotas)));
+    var payment = 0;
+    /**
+     * Loop that calculates the monthly Loan amortization amounts then adds 
+     * them to the return string 
+     */
+    for (var count = 0; count < cuotas; ++count) {
+        let Amortizacion = { Cuota: "", Date: "", Balance: 0, Interest: 0, Payment: 0, Amortizacion: 0, Endbalance: 0 }
+        //in-loop interest amount holder
+        var interest = 0;
+
+        //in-loop monthly principal amount holder
+        var monthlyPrincipal = 0;
+
+        //start a new table row on each loop iteration
+
+        //display the month number in col 1 using the loop count variable
+        Amortizacion.Cuota = count + 1;
+        //Amortizacion.Date = hoy.addMonth(Amortizacion.Period).toJSON()
+        dateNextPayment = addDateToAmortizacion(dateNextPayment, paymentModality);
+        Amortizacion.Date = FormatDate(dateNextPayment);
+        //calc the in-loop interest amount and display
+        interest = balance * monthlyRate;
+        payment = interest;
+        Amortizacion.Interest = FormatMoney(interest);
+        //code for displaying in loop balance
+        Amortizacion.Balance = FormatMoney(balance);
+        if (count === cuotas - 1) {
+            monthlyPrincipal = balance;
+            payment = balance + interest;
+        }
+        //calc the in-loop monthly principal and display
+        Amortizacion.Amortizacion = FormatMoney(monthlyPrincipal);
+        Amortizacion.Endbalance = FormatMoney((balance - monthlyPrincipal));
+        Amortizacion.Payment = FormatMoney(payment);
+
+
+        //update the balance for each loop iteration
+       // balance = balance - monthlyPrincipal;
+        arrayAmortizaion.push(Amortizacion);
+    }
+    //Final piece added to return string before returning it - closes the table
+    //returns the concatenated string to the page
+    console.log(arrayAmortizaion);
     return arrayAmortizaion;
 }
 
