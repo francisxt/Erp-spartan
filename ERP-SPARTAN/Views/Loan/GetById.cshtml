@@ -124,10 +124,10 @@
                                     <tr>
                                         <th>Cuota</th>
                                         <th>Fecha</th>
-                                        <th>Total a Pagar</th>
-                                        <th>Abono Capital</th>
-                                        <th>Capital Restante</th>
                                         <th>Interés</th>
+                                        <th>Abono Capital</th>
+                                        <th>Total a Pagar</th>
+                                        <th>Capital Restante</th>
                                         <th>Estado</th>
                                         <th>Opciones</th>
                                     </tr>
@@ -142,10 +142,10 @@
                                         <tr class="@bgClass">
                                             <td>@item.Share</td>
                                             <td>@item.DateOfPayment.ToString("dd/MM/yyyy")</td>
-                                            <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.ToPay, 2)</td>
-                                            <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Amortitation, 2)</td>
-                                            <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Amount, 2)</td>
                                             <td><i class="fa fa-dollar-sign"></i> @item.Interest</td>
+                                            <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Amortitation, 2)</td>
+                                            <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.ToPay, 2)</td>
+                                            <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Amount, 2)</td>
                                             <td>@item.StateStr</td>
                                             <td>
                                                 <a asp-action="PaymentDeb"
