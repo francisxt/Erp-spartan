@@ -23,7 +23,6 @@ namespace Models.Contexts
             base.OnModelCreating(builder);
             builder.Entity<ClientUser>().HasQueryFilter(x => x.State != Enums.State.Removed);
             builder.Entity<Movement>().HasQueryFilter(x => x.State != Enums.State.Removed && x.State != Enums.State.Payment);
-            builder.Entity<Payment>().HasQueryFilter(x => x.State != Enums.State.Removed);
             builder.Entity<Loan>().HasQueryFilter(x => x.State != Enums.State.Removed);
             builder.Entity<Deb>().HasQueryFilter(x => x.State != Enums.State.Removed);
         }
@@ -40,7 +39,6 @@ namespace Models.Contexts
 
         #region HiLoans
         public DbSet<Loan> Loans { get; set; }
-        public DbSet<Payment> Payments { get; set; }
         public DbSet<Deb> Debs { get; set; }
         #endregion
 

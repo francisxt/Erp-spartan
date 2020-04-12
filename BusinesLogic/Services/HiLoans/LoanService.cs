@@ -2,6 +2,7 @@
 using BusinesLogic.Repository.Services;
 using Microsoft.EntityFrameworkCore;
 using Models.Contexts;
+using Models.Enums;
 using Models.Enums.HiAccounting;
 using Models.Enums.HiLoans;
 using Models.Models.HiAccounting;
@@ -9,6 +10,7 @@ using Models.Models.HiAccounting.Debs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -36,15 +38,33 @@ namespace BusinesLogic.Services.HiLoans
         public async Task<IEnumerable<Loan>> GetAllWithRelationShip(string userId)
             => await Filter(x => x.UserId == userId)
             .Include(x => x.Debs)
-            .Include(x => x.Payments).Include(x => x.ClientUser)
+            .Include(x => x.ClientUser)
             .ThenInclude(x => x.User).OrderByDescending(x => x.CreateAt).ToListAsync();
 
-        public async Task<Loan> GetByIdWithRelationships(Guid id)
+        public async Task<Loan> GetByIdWithRelationships(Guid id , State state)
         {
-            return await GetAll().Include(x => x.Debs)
-                .Include(x => x.Payments)
-                .Include(x => x.ClientUser)
-                .ThenInclude(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
+            var result = new Loan { };
+            result = await GetAll().Include(x => x.ClientUser).ThenInclude(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
+            result.Debs = await _dbContext.Debs.Where(x => x.LoanId == id && x.State == state).ToListAsync();
+            var pendingsDebs = await _dbContext.Debs.CountAsync(x => x.State == State.Active && x.LoanId == id);
+            var paymentDebs = await _dbContext.Debs.CountAsync(x => x.State == State.Payment && x.LoanId == id);
+            result.SharesStr = $"{paymentDebs} / {pendingsDebs}";
+            return result;
+        }
+
+        public async Task<bool> PaymentDeb(Guid id)
+        {
+            var deb = await _dbContext.Debs.FirstOrDefaultAsync(x => x.Id == id);
+            if(deb.State == State.Active)
+            {
+                deb.State = State.Payment;
+            }
+            else
+            {
+                deb.State = State.Active;
+            }
+            _dbContext.Debs.Update(deb);
+            return await _dbContext.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> SoftRemove(Guid id)

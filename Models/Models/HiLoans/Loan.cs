@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Text;
 
 namespace Models.Models.HiAccounting
@@ -31,6 +32,8 @@ namespace Models.Models.HiAccounting
         public Guid ClientUserId { get; set; }
         public ClientUser ClientUser { get; set; }
         public virtual IEnumerable<Deb> Debs { get; set; }
-        public virtual IEnumerable<Payment> Payments { get; set; }
+
+        [NotMapped]
+        public string SharesStr { get; set; }
     }
 }

@@ -58,7 +58,7 @@
                 <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
                     <div class="form-group">
                         <label asp-for="ClientUserId" class="control-label">Cuotas</label>
-                        <input value="@Model.Payments.Count() / @Model.Shares" class="form-control" disabled name="name" />
+                        <input value="@Model.SharesStr" class="form-control" disabled name="name" />
                     </div>
                 </div>
                 <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
@@ -70,7 +70,7 @@
                 </div>
                 <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
                     <div class="form-group">
-                        <label   class="control-label">Fecha del contrato</label>
+                        <label class="control-label">Fecha del contrato</label>
                         <input asp-for="CreatedAtStr" class="form-control" disabled />
                     </div>
                 </div>
@@ -85,14 +85,30 @@
     <div class="col-12 col-sm-12 col-md-12">
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">PAGOS</a>
-                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">DEUDAS</a>
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="true">DEUDAS</a>
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">Listado de pagos</div>
-            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                 <div class="row container">
+                    <div class="col-md-4 mt-3">
+                        <form asp-action="GetById" method="get">
+                            <input type="hidden" asp-for="Id" />
+                            <select name="stateDeb" class="form-control">
+                                @if (ViewBag.Selected == State.Payment)
+                                {
+                                    <option value="@State.Payment" selected>Pagados</option>
+                                    <option value="@State.Active">Pendiente</option>
+                                }
+                                else
+                                {
+                                    <option value="@State.Payment">Pagados</option>
+                                    <option value="@State.Active" selected>Pendiente</option>
+                                }
+                            </select>
+                            <button class="btn btn-sm btn-success mt-1">Filtrar</button>
+                        </form>
+                    </div>
                     <div class="col-12">
                         <div class="table-responsive">
                             <table class="table table-bordered mt-4" width="100%" cellspacing="0">
@@ -104,18 +120,32 @@
                                         <th>Abono Capital</th>
                                         <th>Capital Restante</th>
                                         <th>Interés</th>
+                                        <th>Estado</th>
+                                        <th>Opciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var item in Model.Debs)
                                     {
-                                        <tr>
+                                        var bgClass = item.State == State.Payment ? "bg-success text-white" : "";
+                                        var bgBtn = item.State == State.Payment ? "btn-danger" : "btn-dark";
+                                        var btnText = item.State == State.Payment ? "Cancelar pago" : "Pagar";
+
+                                        <tr class="@bgClass">
                                             <td>@item.Share</td>
                                             <td>@item.DateOfPayment.ToString("dd/MM/yyyy")</td>
                                             <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.ToPay, 2)</td>
                                             <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Amortitation, 2)</td>
                                             <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Amount, 2)</td>
                                             <td><i class="fa fa-dollar-sign"></i> @item.Interest</td>
+                                            <td>@item.StateStr</td>
+                                            <td>
+                                                <a asp-action="PaymentDeb"
+                                                   asp-route-idDeb="@item.Id"
+                                                   asp-route-idLoan="@Model.Id"
+                                                   class="btn btn-sm @bgBtn"
+                                                   style="cursor:pointer">@btnText</a>
+                                            </td>
                                         </tr>
                                     }
                                 </tbody>
@@ -128,3 +158,4 @@
     </div>
 </div>
 <script src="~/js/Shared/httpRequest.js" asp-append-version="true"></script>
+<partial name="_NotificationPartial" />

@@ -50,9 +50,10 @@ namespace ERP_SPARTAN.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<IActionResult> GetById(Guid id, State stateDeb = State.Active)
         {
-            var result = await _service.LoanService.GetByIdWithRelationships(id);
+            ViewBag.Selected = stateDeb;
+            var result = await _service.LoanService.GetByIdWithRelationships(id, stateDeb);
             if (result == null) new NotFoundView();
             return View(result);
         }
@@ -63,6 +64,15 @@ namespace ERP_SPARTAN.Controllers
             var result = await _service.LoanService.SoftRemove(id);
             if (!result) return BadRequest();
             return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> PaymentDeb(Guid idLoan, Guid idDeb)
+        {
+            var result = await _service.LoanService.PaymentDeb(idDeb);
+            if (!result) BasicNotification("Error intente de nuevo", NotificationType.error);
+            BasicNotification("Acción Realizada", NotificationType.success);
+            return RedirectToAction(nameof(GetById), new { id = idLoan });
         }
     }
 }
