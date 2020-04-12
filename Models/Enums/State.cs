@@ -13,6 +13,7 @@ namespace Models.Enums
 
         #region For Movements
         Payment,
+        All,
         #endregion
         #region FOR ALERTS
         View

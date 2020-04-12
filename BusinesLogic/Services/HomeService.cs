@@ -24,9 +24,9 @@ namespace BusinesLogic.Services
                 .Where(x => x.UserId == id).ToListAsync();
           
             decimal totalOfDebs = 0;
-            decimal totalLoans = 0;
+            decimal totalLoansDebs = 0;
             foreach (var item in clients) totalOfDebs += item.Movements.Sum(x => x.Amount);
-            foreach (var item in loans) totalLoans += item.Debs.Sum(x => x.Amount);
+            foreach (var item in loans) totalLoansDebs += item.Debs.Sum(x => (decimal)x.ToPay);
 
 
             return new HomeVM
@@ -35,7 +35,7 @@ namespace BusinesLogic.Services
                 Articles = _dbContext.Articles.Count(x => x.UserId == id),
                 Enterprices = _dbContext.Enterprises.Count(x => x.UserId == id),
                 TotalOfDebs = totalOfDebs,
-                TotalOfLoansDebs = totalOfDebs,
+                TotalOfLoansDebs = Math.Round(totalLoansDebs,2),
                 TotalOfLoans = loans.Count()
             };
         }

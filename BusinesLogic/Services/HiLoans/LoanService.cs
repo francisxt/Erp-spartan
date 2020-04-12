@@ -45,7 +45,10 @@ namespace BusinesLogic.Services.HiLoans
         {
             var result = new Loan { };
             result = await GetAll().Include(x => x.ClientUser).ThenInclude(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
-            result.Debs = await _dbContext.Debs.Where(x => x.LoanId == id && x.State == state).ToListAsync();
+            
+            if(state == State.All) result.Debs = await _dbContext.Debs.Where(x => x.LoanId == id).ToListAsync();
+            else result.Debs = await _dbContext.Debs.Where(x => x.LoanId == id && x.State == state).ToListAsync();
+
             var pendingsDebs = await _dbContext.Debs.CountAsync(x => x.State == State.Active && x.LoanId == id);
             var paymentDebs = await _dbContext.Debs.CountAsync(x => x.State == State.Payment && x.LoanId == id);
             result.SharesStr = $"{paymentDebs} / {pendingsDebs}";
