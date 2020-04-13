@@ -69,13 +69,13 @@ function calAmort(balance, interestRate, paymentModality, cuotas, amortitationTy
             arrayobjectAmortizacion = calAmortCuotaFija(balance, interestRate, cuotas, paymentModality, typeOfTasa);
             break;
         case amortitationType.INTERESFIJO:
-        //Execute logic INTERESFIJO
+            //Execute logic INTERESFIJO
             arrayobjectAmortizacion = calAmortInterestFixed(balance, interestRate, cuotas, paymentModality, typeOfTasa);
-            break
+            break;
         case amortitationType.CAPITALFINAL:
-        //Execute logic CAPITALFINAL
+            //Execute logic CAPITALFINAL
             arrayobjectAmortizacion = calAmortCapitalAlFinal(balance, interestRate, cuotas, paymentModality, typeOfTasa);
-            break
+            break;
     }
     return arrayobjectAmortizacion;
 }
@@ -96,7 +96,7 @@ function calAmortCuotaFija(balance, interestRate, cuotas, paymentModality, typeO
      * them to the return string 
      */
     for (var count = 0; count < cuotas; ++count) {
-        let Amortizacion = { Cuota: "", Date: "", Balance: 0, Interest: 0, Payment: 0, Amortizacion: 0, Endbalance: 0 }
+        let Amortizacion = { Cuota: "", Date: "", Balance: 0, Interest: 0, Payment: 0, Amortizacion: 0, Endbalance: 0 };
         //in-loop interest amount holder
         var interest = 0;
 
@@ -152,7 +152,7 @@ function calAmortInterestFixed(balance, interestRate, cuotas, paymentModality, t
      * them to the return string 
      */
     for (var count = 0; count < cuotas; ++count) {
-        let Amortizacion = { Cuota: "", Date: "", Balance: 0, Interest: 0, Payment: 0, Amortizacion: 0, Endbalance: 0 }
+        let Amortizacion = { Cuota: "", Date: "", Balance: 0, Interest: 0, Payment: 0, Amortizacion: 0, Endbalance: 0 };
         //in-loop interest amount holder
         var interest = 0;
 
@@ -193,7 +193,6 @@ function calAmortInterestFixed(balance, interestRate, cuotas, paymentModality, t
     }
     //Final piece added to return string before returning it - closes the table
     //returns the concatenated string to the page
-    console.log(arrayAmortizaion);
     return arrayAmortizaion;
 }
 function calAmortCapitalAlFinal(balance, interestRate, cuotas, paymentModality, typeOfTasa) {
@@ -213,7 +212,7 @@ function calAmortCapitalAlFinal(balance, interestRate, cuotas, paymentModality, 
      * them to the return string 
      */
     for (var count = 0; count < cuotas; ++count) {
-        let Amortizacion = { Cuota: "", Date: "", Balance: 0, Interest: 0, Payment: 0, Amortizacion: 0, Endbalance: 0 }
+        let Amortizacion = { Cuota: "", Date: "", Balance: 0, Interest: 0, Payment: 0, Amortizacion: 0, Endbalance: 0 };
         //in-loop interest amount holder
         var interest = 0;
 
