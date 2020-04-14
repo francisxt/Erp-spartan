@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Models.Enums;
 using Models.Models.HiAccounting;
+using Models.ViewModels.HiLoans.Loans;
 using System;
 using System.Linq;
 using System.Security.Claims;
@@ -61,7 +62,7 @@ namespace ERP_SPARTAN.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet]
+        [HttpGet]   
         public async Task<IActionResult> GetMyLoan(Guid id, State stateDeb = State.Active)
         {
             ViewBag.Selected = stateDeb;
@@ -81,12 +82,17 @@ namespace ERP_SPARTAN.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PaymentDeb(Guid idLoan, Guid idDeb , decimal extraMount = 0)
+        public async Task<IActionResult> PaymentDeb(PaymentLoanVM model)
         {
-            var result = await _service.LoanService.PaymentDeb(idDeb,idLoan,extraMount);
+            if(model.ExtraMount > model.AmortizationTotal)
+            {
+                BasicNotification("El monto a abonar es mayor que el abono capital, intente abonar un monto menor", NotificationType.warning, "Error");
+                return RedirectToAction(nameof(GetById), new { id = model.IdLoan });
+            }
+            var result = await _service.LoanService.PaymentDeb(model.IdDeb, model.IdLoan, model.ExtraMount);
             if (!result) BasicNotification("Error intente de nuevo", NotificationType.error);
             BasicNotification("Acción Realizada", NotificationType.success);
-            return RedirectToAction(nameof(GetById), new { id = idLoan });
+            return RedirectToAction(nameof(GetById), new { id = model.IdLoan });
         }
 
         [HttpGet]

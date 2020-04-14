@@ -161,36 +161,38 @@
                                         toPay += (decimal)item.ToPay;
                                         amount = (decimal)item.Amount - amount;
 
-                                        <tr class="@bgClass">
-                                            <td>@item.Share</td>
-                                            <td>@item.DateOfPayment.ToString("dd/MM/yyyy")</td>
-                                            <td><i class="fa fa-dollar-sign"></i> @item.Interest</td>
-                                            <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Amortitation, 2)</td>
-                                            <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.ToPay, 2)</td>
-                                            <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Amount, 2)</td>
-                                            <td><i class="fa fa-dollar-sign"></i> @item.ExtraMountStr</td>
-                                            <td>@item.StateStr</td>
-                                            <td>
-                                                @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
+
+                                    <tr class="@bgClass">
+                                        <td>@item.Share</td>
+                                        <td>@item.DateOfPayment.ToString("dd/MM/yyyy")</td>
+                                        <td><i class="fa fa-dollar-sign"></i> @item.Interest</td>
+                                        <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Amortitation, 2)</td>
+                                        <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.ToPay, 2)</td>
+                                        <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Amount, 2)</td>
+                                        <td><i class="fa fa-dollar-sign"></i> @item.ExtraMountStr</td>
+                                        <td>@item.StateStr</td>
+                                        <td>
+                                            @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
                                                 {
-                                                    <button class="btn btn-sm @bgBtn" onclick="showPaymentDeb('@Model.Id','@item.Id','@item.State')">@btnText</button>
+                                            <button class="btn btn-sm @bgBtn" onclick="showPaymentDeb('@Model.Id', '@item.Id', '@item.State','@Model.SharesStr')">@btnText</button>
                                                 }
-                                            </td>
-                                        </tr>
+                                        </td>
+                                    </tr>
                                     }
                                     <tr class="bg-info text-white">
-                                            <td>#</td>
-                                            <td>Totales</td>
-                                            <td><i class="fa fa-dollar-sign"></i>@interest</td>
-                                            <td><i class="fa fa-dollar-sign"></i>@Math.Round(amortitation,2)</td>
-                                            <td><i class="fa fa-dollar-sign"></i>@Math.Round(toPay,2)</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                        </tr>
+                                        <td>#</td>
+                                        <td>Totales</td>
+                                        <td><i class="fa fa-dollar-sign"></i>@interest</td>
+                                        <td><i class="fa fa-dollar-sign"></i>@Math.Round(amortitation, 2)</td>
+                                        <td><i class="fa fa-dollar-sign"></i>@Math.Round(toPay, 2)</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr>
                                 </tbody>
                             </table>
+                            <input type="hidden" id="amortizationTotal" value="@Math.Round(amortitation, 2)" />
                         </div>
                     </div>
                 </div>

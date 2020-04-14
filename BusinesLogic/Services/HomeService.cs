@@ -20,6 +20,7 @@ namespace BusinesLogic.Services
         {
             var clients = await _dbContext.ClientUsers.Include(x => x.Movements)
                 .Where(x => x.CreatedBy == id).ToListAsync();
+
             var loans = await _dbContext.Loans.Include(x => x.Debs)
                 .Where(x => x.UserId == id).ToListAsync();
           

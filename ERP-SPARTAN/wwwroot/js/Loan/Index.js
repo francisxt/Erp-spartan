@@ -360,16 +360,21 @@ function FormatDate(date) {
  * @param {any} idLoan id del prestamo,
  * @param {any} idDeb id de la deuda,
  * @param {any} isDeb identifica si es de pago o no,
+ * @param {any} restcount coutas restantes,
+ *
  */
-const showPaymentDeb = (idLoan, idDeb, isDeb) => {
+const showPaymentDeb = (idLoan, idDeb, isDeb, restcount) => {
 
-    var checkbox = '';
+    let checkbox = '';
+    let amortizationTotal = $('#amortizationTotal').val();
     //si es 3 es pago
+    //&& Number(restcount) > 2
     if (isDeb !== 'Payment') checkbox = `<input type="checkbox" name="type" onclick="showOrHideElement('extraMount')"> <label>¿Abono extra?</label></br>`;
     const html = `<div class="container"><form class="form-group" action="/Loan/PaymentDeb" method='POST'>
-            <input name="idLoan" value=${idLoan} type="hidden" class="form-control" />
-            <input name="idDeb"  value=${idDeb}  type="hidden" class="form-control" /> ${checkbox}
-            <input name="extraMount" id="extraMount" style="display:none;" type="number" class="form-control" placeholder="digite el monto extra" />
+            <input name="IdLoan" value=${idLoan} type="hidden" class="form-control" />
+            <input name="AmortizationTotal" value=${amortizationTotal} type="hidden" class="form-control" />
+            <input name="IdDeb"  value=${idDeb}  type="hidden" class="form-control" /> ${checkbox}
+            <input name="ExtraMount" id="extraMount" style="display:none;" type="number" class="form-control" placeholder="digite el monto extra" />
             <button class='btn btn-sm btn-primary'>ACEPTAR</button>
             </form></div>`;
 
