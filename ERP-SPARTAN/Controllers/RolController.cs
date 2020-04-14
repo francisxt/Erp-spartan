@@ -22,7 +22,6 @@ namespace ERP_SPARTAN.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            BasicNotification("hi", NotificationType.success);
             return View();
         }
 

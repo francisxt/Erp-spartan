@@ -298,12 +298,12 @@ function MakeTable(data, idElementoPadre) {
    <table  id ="tableData" class="table table-hover"  >
       <thead>
            <tr>
-             <th> Periodo</th>
+             <th> Cuota</th>
              <th> Fecha</th>
-             <th> Balance</th>
+             <th> Capital restante</th>
              <th> Interes</th>
-             <th> Pago</th>
-             <th> Amortización</th>
+             <th> Total a Pagar</th>
+             <th> Abono capital</th>
              <th> Balance final</th>
 
            </tr>
