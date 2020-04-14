@@ -84,7 +84,11 @@
             </div>
             <div class="form-group">
                 <button type="button" class="btn btn-sm btn-dark text-white" onclick="window.print()">Imprimir</button>
-                <button class="btn btn-sm btn-danger" onclick="ShowSweetConfirmRemoveDialog('@Model.Id','/Loan','Remove','Esta operación no puede ser revertida','Esta seguro?','/Loan/Index',)">Cancelar prestamo</button>
+                @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
+                {
+                    <button class="btn btn-sm btn-danger" onclick="ShowSweetConfirmRemoveDialog('@Model.Id','/Loan','Remove','Esta operación no puede ser revertida','Esta seguro?','/Loan/Index',)">Cancelar prestamo</button>
+                    <button type="button" class="btn btn-sm btn-dark text-white" onclick="getAccess('@ViewBag.AccessUrl','@Model.Id')"> Conceder Acceso</button>
+                }
             </div>
         </div>
     </div>
@@ -98,7 +102,7 @@
             <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                 <div class="row container">
                     <div class="col-md-4 mt-3">
-                        <form asp-action="GetById" method="get">
+                        <form asp-action="@ViewBag.Action" method="get">
                             <input type="hidden" asp-for="Id" />
                             <select name="stateDeb" class="form-control">
                                 @if (ViewBag.Selected == State.Payment)

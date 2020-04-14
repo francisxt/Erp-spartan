@@ -13,7 +13,7 @@
             <div class="row mt-2 ">
                 <div class="col-12 col-md-6 mt-1">
                     <div class="form-group">
-                        <label asp-for="PaymentModality" class="control-label">Tipo de amortización</label>
+                        <label asp-for="AmortitationType" class="control-label">Tipo de amortización</label>
                         <select asp-for="AmortitationType" id="amortitationType" asp-items="Html.GetEnumSelectList<Models.Enums.HiAccounting.AmortitationType>()" class="form-control"></select>
                         <span asp-validation-for="AmortitationType" class="text-danger"></span>
                     </div>
@@ -59,7 +59,7 @@
                 <div class="col-12 col-md-4 mt-1 ">
                     <div class="form-group">
                         <label asp-for="PaymentModality" class="control-label">Modalidad de pago</label>
-                        <select id="paymentModality" asp-for="PaymentModality" asp-items="Html.GetEnumSelectList<Models.Enums.HiAccounting.PaymentModality>()" class="form-control"></select>
+                        <select  asp-for="PaymentModality" id="pay" asp-items="Html.GetEnumSelectList<PaymentModality>()" class="form-control"></select>
                         <span asp-validation-for="PaymentModality" class="text-danger"></span>
                     </div>
                 </div>
@@ -79,7 +79,7 @@
                     <a asp-action="Index" class="btn btn btn-danger">Cancelar</a>
                 </div>
                 <div class="secondary_buttons text-right col-6">
-                    <button onclick="getValues()" type="button" class="btn btn btn-success">
+                    <button onclick="GetAmortization()" type="button" class="btn btn btn-success">
                         <i class="fas fa-table"></i>
                         Mostrar tabla de amortización
                     </button>
@@ -90,31 +90,31 @@
 </div>
 <div class="row">
     <div class="el-cliente col-12 flex-wrap mt-1  text-center ">
-        <div id="Result" class="table-wrapper-scroll-y my-custom-scrollbar">
+        <div id="result" class="table-wrapper-scroll-y my-custom-scrollbar">
         </div>
     </div>
 </div>
 
 <script src="~/js/Loan/Index.js" asp-append-version="true"></script>
 <script>
-    let enumPaymentModality = {
-        DIARIO: 0,
-        SEMANAL: 1,
-        QUINCENAL: 2,
-        MENSUAL: 3,
-        ANUAL: 4
-    }
-    let amortitationType = {
-        CUOTAFIJA: 0,
-        INTERESFIJO: 1,
-        CAPITALFINAL: 2
-    }
+    //let enumPaymentModality = {
+    //    DIARIO: 0,
+    //    SEMANAL: 1,
+    //    QUINCENAL: 2,
+    //    MENSUAL: 3,
+    //    ANUAL: 4
+    //}
+    //let amortitationType = {
+    //    CUOTAFIJA: 0,
+    //    INTERESFIJO: 1,
+    //    CAPITALFINAL: 2
+    //}
 
-    let enumTypeOfTasa = {
-        MENSUAL: 0,
-        ANUAL: 1
+    //let enumTypeOfTasa = {
+    //    MENSUAL: 0,
+    //    ANUAL: 1
 
-    }
+    //}
 
 
 </script>

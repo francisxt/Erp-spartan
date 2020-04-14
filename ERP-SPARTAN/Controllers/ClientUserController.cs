@@ -53,7 +53,8 @@ namespace ERP_SPARTAN.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateUserViewModel client)
         {
-            client.Rol = User.IsInRole(nameof(RolsAuthorization.ClientsUser)) ? RolsAuthorization.Client : client.Rol;
+            client.Rol = (User.IsInRole(nameof(RolsAuthorization.ClientsUser)) || 
+                User.IsInRole(nameof(RolsAuthorization.HILoans))) ? RolsAuthorization.Client : client.Rol;
             if (ModelState.IsValid)
             {
                 var result = await _userManager.CreateAsync(new User

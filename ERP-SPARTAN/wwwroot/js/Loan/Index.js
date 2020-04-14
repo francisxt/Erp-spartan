@@ -384,3 +384,50 @@ const showPaymentDeb = (idLoan, idDeb, isDeb) => {
         html: html
     });
 };
+
+/*GET AMORTIZATION**/
+
+const GetAmortization = () => {
+    const InitialCapital = document.getElementById("amount").value;
+    const Interest = document.getElementById("interest").value;
+    const Shares = document.getElementById("cuotas").value;
+    const RateType = document.getElementById("typeOfTasa").value;
+    const AmortitationType = document.getElementById("amortitationType").value;
+    const PayM = document.getElementById("pay").value;
+
+    $('#result').empty();
+    const querystr = `?InitialCapital=${InitialCapital}&ActualCapital=${InitialCapital}&Interest=${Interest}
+                        &Shares=${Shares}&RateType=${RateType}&AmortitationType=${AmortitationType}
+                         &PaymentModality=${PayM}&`;
+    fetch(`/Loan/GetAmortization${querystr}"`).then(result => result.text()).then((response) => {
+        $('#result').html(response);
+    });
+};
+
+const copyValue = (id) => {
+    /* Get the text field */
+    var copyText = document.getElementById('accessLink');
+
+    /* Select the text field */
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+    document.execCommand('copy');
+
+    $('#copyResult').show();
+};
+
+const getAccess = (accesslink, id) => {
+    const html = `<div> <i class='text-muted'>Copie este link de acceso y entregueselo al su cliente:</i>
+<input style='font-size:13px;' class='form-control mt-2 mb-2' value='${accesslink}/${id}' id='accessLink' />
+<button class='btn btn-sm btn-primary' onclick='copyValue("accessLink")'>COPIAR</button></br><span style='display:none;' class='mt-2' id='copyResult'>Copiado</span></div>`;
+    Swal.fire({
+        title: "Nuevo Acceso",
+        icon: 'info',
+        showCancelButton: false,
+        showConfirmButton: false,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Confirmar',
+        html: html
+    });
+};

@@ -12,7 +12,7 @@ using Models.ViewModels.ClientUsers;
 
 namespace ERP_SPARTAN.Controllers
 {
-    [Authorize(Roles = nameof(RolsAuthorization.ClientsUser))]
+    [Authorize]
     public class MovementController : BaseController
     {
         private readonly IUnitOfWork _service;
@@ -23,6 +23,7 @@ namespace ERP_SPARTAN.Controllers
             return View();
         }
 
+        [Authorize(Roles = nameof(RolsAuthorization.Client))]
         [HttpGet]
         public async Task<IActionResult> GetByClientUser(Guid id)
         {
@@ -39,6 +40,7 @@ namespace ERP_SPARTAN.Controllers
             }
             return new NotFoundView();
         }
+        [Authorize(Roles = nameof(RolsAuthorization.ClientsUser))]
 
         [HttpPost]
         public async Task<IActionResult> Create(Movement moviment)
@@ -61,6 +63,7 @@ namespace ERP_SPARTAN.Controllers
             }
             return RedirectToAction(nameof(GetByClientUser), new { id = moviment.ClientUserId });
         }
+        [Authorize(Roles = nameof(RolsAuthorization.ClientsUser))]
 
         [HttpPost]
         public async Task<IActionResult> Remove(Guid id)
@@ -68,6 +71,7 @@ namespace ERP_SPARTAN.Controllers
             if (await _service.MovementsService.SoftDelete(id)) return Ok(true);
             return BadRequest();
         }
+        [Authorize(Roles = nameof(RolsAuthorization.ClientsUser))]
 
         [HttpPost]
         public async Task<IActionResult> PayAll(Guid id)

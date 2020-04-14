@@ -53,10 +53,24 @@ namespace ERP_SPARTAN.Controllers
         public async Task<IActionResult> GetById(Guid id, State stateDeb = State.Active)
         {
             ViewBag.Selected = stateDeb;
+            ViewBag.Action = nameof(GetById);
+            ViewBag.AccessUrl = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/{nameof(Loan)}/{nameof(GetMyLoan)}";
             var result = await _service.LoanService.GetByIdWithRelationships(id, stateDeb);
             if (result == null) new NotFoundView();
             return View(result);
         }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> GetMyLoan(Guid id, State stateDeb = State.Active)
+        {
+            ViewBag.Selected = stateDeb;
+            ViewBag.Action = nameof(GetMyLoan);
+            var result = await _service.LoanService.GetByIdWithRelationships(id, stateDeb);
+            if (result == null) new NotFoundView();
+            return View(nameof(GetById),result);
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Remove(Guid id)
@@ -74,5 +88,10 @@ namespace ERP_SPARTAN.Controllers
             BasicNotification("Acción Realizada", NotificationType.success);
             return RedirectToAction(nameof(GetById), new { id = idLoan });
         }
+
+        [HttpGet]
+        public IActionResult GetAmortization(Loan model)
+            => PartialView("_GetAmortizationPartial", _service.LoanService.GetAmortization(model));
+        
     }
 }

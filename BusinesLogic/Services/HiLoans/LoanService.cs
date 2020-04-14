@@ -54,6 +54,10 @@ namespace BusinesLogic.Services.HiLoans
         public async Task<bool> PaymentDeb(Guid id, Guid idLoan, decimal extraMount)
         {
             var deb = await _dbContext.Debs.FirstOrDefaultAsync(x => x.Id == id);
+            var loan = await _dbContext.Loans.FirstOrDefaultAsync(x => x.Id == idLoan);
+            loan.ActualCapital -= (decimal)deb.Amortitation;
+            _dbContext.Update(loan);
+            await _dbContext.SaveChangesAsync();
             var result = false;
             if (deb.State == State.Active)
             {
@@ -128,7 +132,7 @@ namespace BusinesLogic.Services.HiLoans
             }
             return result;
         }
-        private IEnumerable<Deb> FixedInterestDebs(Loan loan, int count = 0)
+        private IEnumerable<Deb> FixedInterestDebs(Loan loan, DateTime lastDateTime, int count = 0)
         {
             double interest = (double)((decimal)loan.Interest) / 100;
             double monthly = interest;
@@ -145,7 +149,7 @@ namespace BusinesLogic.Services.HiLoans
             if (loan.RateType == RateType.Anual) monthly = interest / 12;
             var result = new List<Deb>();
      
-            var nextPayment = DateTime.Now;
+            var nextPayment = lastDateTime;
             int debNumber = count;
             for (int i = 0; i < shares; i++)
             {
@@ -171,7 +175,7 @@ namespace BusinesLogic.Services.HiLoans
             }
             return result;
         }
-        private IEnumerable<Deb> CapitalEndDebs(Loan loan, int count = 0)
+        private IEnumerable<Deb> CapitalEndDebs(Loan loan, DateTime lastDateTime, int count = 0)
         {
             double interest = (double)((decimal)loan.Interest) / 100;
             double monthly = interest;
@@ -189,7 +193,7 @@ namespace BusinesLogic.Services.HiLoans
             decimal balance = loan.ActualCapital - LoanDebsamortitation;
             if (loan.RateType == RateType.Anual) monthly = interest / 12;
             var result = new List<Deb>();
-            var nextPayment = DateTime.Now;
+            var nextPayment = lastDateTime;
             int debNumber = count;
             for (int i = 0; i < shares; i++)
             {
@@ -251,9 +255,9 @@ namespace BusinesLogic.Services.HiLoans
             }
             else if (model.AmortitationType == AmortitationType.FixedInterest)
             {
-                debs = FixedInterestDebs(model, count);
+                debs = FixedInterestDebs(model, lastDateTime, count);
             }
-            else debs = CapitalEndDebs(model, count);
+            else debs = CapitalEndDebs(model, lastDateTime ,count);
 
             _dbContext.Debs.AddRange(debs);
             await _dbContext.SaveChangesAsync();
@@ -287,6 +291,21 @@ namespace BusinesLogic.Services.HiLoans
                 }
             }
             return result;
+        }
+
+        public IEnumerable<Deb> GetAmortization(Loan model)
+        {
+            IEnumerable<Deb> debs;
+            if (model.AmortitationType == AmortitationType.Fixedfee)
+            {
+                debs = FixedfeeDebs(model, DateTime.Now);
+            }
+            else if (model.AmortitationType == AmortitationType.FixedInterest)
+            {
+                debs = FixedInterestDebs(model , DateTime.Now);
+            }
+            else debs = CapitalEndDebs(model, DateTime.Now);
+            return debs;
         }
     }
 }
