@@ -106,7 +106,8 @@ namespace BusinesLogic.Services.HiLoans
 
             decimal LoanDebsamortitation = 0;
             if (loan.Debs !=null) {
-                LoanDebsamortitation =(decimal) loan.Debs.FirstOrDefault().Amortitation;
+                if (loan.Debs.Any()) LoanDebsamortitation = (decimal)loan.Debs.FirstOrDefault().Amortitation;
+
             }
 
             decimal balance = loan.ActualCapital - LoanDebsamortitation;
@@ -143,8 +144,11 @@ namespace BusinesLogic.Services.HiLoans
             decimal interestValue = 0;
             if (loan.Debs != null)
             {
-                LoanDebsamortitation = (decimal)loan.Debs.FirstOrDefault().Amortitation;
-                interestValue = loan.Debs.FirstOrDefault().Interest;
+                if (loan.Debs.Any())
+                {
+                    LoanDebsamortitation = (decimal)loan.Debs.FirstOrDefault().Amortitation;
+                    interestValue = loan.Debs.FirstOrDefault().Interest;
+                }
             }
             decimal balanceFixed = loan.ActualCapital-LoanDebsamortitation;
             decimal balance = loan.ActualCapital-LoanDebsamortitation;
@@ -187,9 +191,10 @@ namespace BusinesLogic.Services.HiLoans
             decimal interestValue = 0;
             if (loan.Debs != null)
             {
-                LoanDebsamortitation = (decimal)loan.Debs.FirstOrDefault().Amortitation;
-                 interestValue = loan.Debs.FirstOrDefault().Interest;
-
+                if (loan.Debs.Any()) {
+                    LoanDebsamortitation = (decimal)loan.Debs.FirstOrDefault().Amortitation;
+                    interestValue = loan.Debs.FirstOrDefault().Interest;
+                }
             }
 
             decimal balance = loan.ActualCapital - LoanDebsamortitation;
