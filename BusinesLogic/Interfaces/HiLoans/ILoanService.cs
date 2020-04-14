@@ -15,7 +15,6 @@ namespace BusinesLogic.Interfaces.HiLoans
         Task<IEnumerable<Loan>> GetAllWithRelationShip(string userId);
         Task<Loan> GetByIdWithRelationships(Guid id, State state);
         Task<bool> SoftRemove(Guid id);
-
-        Task<bool> PaymentDeb(Guid id);
+        Task<bool> PaymentDeb(Guid id, Guid idLoan, decimal extraMount);
     }
 }

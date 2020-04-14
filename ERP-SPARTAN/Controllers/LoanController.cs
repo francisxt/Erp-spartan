@@ -66,10 +66,10 @@ namespace ERP_SPARTAN.Controllers
             return Ok(result);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> PaymentDeb(Guid idLoan, Guid idDeb)
+        [HttpPost]
+        public async Task<IActionResult> PaymentDeb(Guid idLoan, Guid idDeb , decimal extraMount = 0)
         {
-            var result = await _service.LoanService.PaymentDeb(idDeb);
+            var result = await _service.LoanService.PaymentDeb(idDeb,idLoan,extraMount);
             if (!result) BasicNotification("Error intente de nuevo", NotificationType.error);
             BasicNotification("Acción Realizada", NotificationType.success);
             return RedirectToAction(nameof(GetById), new { id = idLoan });

@@ -30,3 +30,17 @@ $(document).ready(() => {
 $('#phoneNumber').mask('000-000-0000');
 $('.decimal').mask("#,##0.00", { reverse: true });
 
+
+/**
+ * Muestra o oculta un elemento 
+ * @param {any} elementId id del elemento
+ */
+const showOrHideElement = (elementId) => {
+    var element = $(`#${elementId}`);
+    if (element.is(':visible')) {
+        element.hide();
+    } else {
+        element.show();
+    }
+};
+

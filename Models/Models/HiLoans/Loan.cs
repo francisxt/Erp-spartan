@@ -21,6 +21,11 @@ namespace Models.Models.HiAccounting
         [Column(TypeName = "decimal(18,2)")]
         [Required(ErrorMessage = "Este campo es requerido")]
         public decimal InitialCapital { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        [Required(ErrorMessage = "Este campo es requerido")]
+        public decimal ActualCapital { get; set; }
+
         public AmortitationType AmortitationType { get; set; }
         public PaymentModality PaymentModality { get; set; }
         public RateType RateType { get; set; }

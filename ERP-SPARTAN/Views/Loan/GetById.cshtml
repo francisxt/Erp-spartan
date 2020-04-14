@@ -12,21 +12,28 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="row">
-                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                <div class="col-12 col-sm-12 col-md-3 col-xl-3 col-lg-3">
                     <div class="form-group">
                         <label asp-for="InitialCapital" class="control-label">Capital Inicial</label>
                         <input asp-for="InitialCapital" disabled class="form-control" />
                         <span asp-validation-for="InitialCapital" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                <div class="col-12 col-sm-12 col-md-3 col-xl-3 col-lg-3">
+                    <div class="form-group">
+                        <label asp-for="ActualCapital" class="control-label">Capital Actual</label>
+                        <input asp-for="ActualCapital" disabled class="form-control" />
+                        <span asp-validation-for="ActualCapital" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-3 col-xl-3 col-lg-3">
                     <div class="form-group">
                         <label asp-for="AmortitationType" class="control-label">Tipo de Amortización</label>
                         <select asp-for="AmortitationType" disabled asp-items="Html.GetEnumSelectList<Models.Enums.HiAccounting.AmortitationType>()" class="form-control"></select>
                         <span asp-validation-for="AmortitationType" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                <div class="col-12 col-sm-12 col-md-3 col-xl-3 col-lg-3">
                     <div class="form-group">
                         <label asp-for="PaymentModality" class="control-label">Modalidad de pago</label>
                         <select asp-for="PaymentModality" disabled asp-items="Html.GetEnumSelectList<Models.Enums.HiAccounting.PaymentModality>()" class="form-control"></select>
@@ -57,13 +64,13 @@
                 </div>
                 <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
                     <div class="form-group">
-                        <label asp-for="ClientUserId" class="control-label">Cuotas</label>
+                        <label asp-for="SharesStr" class="control-label">Cuotas Restantes</label>
                         <input value="@Model.SharesStr" class="form-control" disabled name="name" />
                     </div>
                 </div>
                 <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
                     <div class="form-group">
-                        <label asp-for="ClientUserId" class="control-label">Tipo de Tasa</label>
+                        <label asp-for="RateType" class="control-label">Tipo de Tasa</label>
                         <select asp-for="RateType" class="form-control" disabled asp-items="@Html.GetEnumSelectList<RateType>()">
                         </select>
                     </div>
@@ -77,7 +84,6 @@
             </div>
             <div class="form-group">
                 <button type="button" class="btn btn-sm btn-dark text-white" onclick="window.print()">Imprimir</button>
-                <button class="btn btn-sm btn-info">Abono extra</button>
                 <button class="btn btn-sm btn-danger" onclick="ShowSweetConfirmRemoveDialog('@Model.Id','/Loan','Remove','Esta operación no puede ser revertida','Esta seguro?','/Loan/Index',)">Cancelar prestamo</button>
             </div>
         </div>
@@ -117,12 +123,6 @@
                             <button class="btn btn-sm btn-success mt-1">Filtrar</button>
                         </form>
                     </div>
-                    <div class="col-md-4 mt-3">
-                        @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
-                        {
-                            <h2 class="text-muted">Total : @Math.Round(Model.Debs.Sum(x => x.ToPay), 2)</h2>
-                        }
-                    </div>
                     <div class="col-12">
                         <div class="table-responsive">
                             <table class="table table-bordered mt-4" width="100%" cellspacing="0">
@@ -134,16 +134,28 @@
                                         <th>Abono Capital</th>
                                         <th>Total a Pagar</th>
                                         <th>Capital Restante</th>
+                                        <th>Monto Extra</th>
                                         <th>Estado</th>
                                         <th>Opciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @{
+                                        decimal interest = 0;
+                                        decimal amortitation = 0;
+                                        decimal toPay = 0;
+                                        decimal amount = 0;
+                                    }
                                     @foreach (var item in Model.Debs)
                                     {
                                         var bgClass = item.State == State.Payment ? "bg-success text-white" : "";
                                         var bgBtn = item.State == State.Payment ? "btn-danger" : "btn-dark";
                                         var btnText = item.State == State.Payment ? "Cancelar pago" : "Pagar";
+
+                                        interest += item.Interest;
+                                        amortitation += (decimal)item.Amortitation;
+                                        toPay += (decimal)item.ToPay;
+                                        amount = (decimal)item.Amount - amount;
 
                                         <tr class="@bgClass">
                                             <td>@item.Share</td>
@@ -152,19 +164,27 @@
                                             <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Amortitation, 2)</td>
                                             <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.ToPay, 2)</td>
                                             <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Amount, 2)</td>
+                                            <td><i class="fa fa-dollar-sign"></i> @item.ExtraMountStr</td>
                                             <td>@item.StateStr</td>
                                             <td>
                                                 @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
                                                 {
-                                                    <a asp-action="PaymentDeb"
-                                                       asp-route-idDeb="@item.Id"
-                                                       asp-route-idLoan="@Model.Id"
-                                                       class="btn btn-sm @bgBtn"
-                                                       style="cursor:pointer">@btnText</a>
+                                                    <button class="btn btn-sm @bgBtn" onclick="showPaymentDeb('@Model.Id','@item.Id','@item.State')">@btnText</button>
                                                 }
                                             </td>
                                         </tr>
                                     }
+                                    <tr class="bg-info text-white">
+                                            <td>#</td>
+                                            <td>Totales</td>
+                                            <td><i class="fa fa-dollar-sign"></i>@interest</td>
+                                            <td><i class="fa fa-dollar-sign"></i>@Math.Round(amortitation,2)</td>
+                                            <td><i class="fa fa-dollar-sign"></i>@Math.Round(toPay,2)</td>
+                                            <td><i class="fa fa-dollar-sign"></i>@Math.Round(amount,2)</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                        </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -174,5 +194,6 @@
         </div>
     </div>
 </div>
+<script src="~/js/Loan/Index.js" asp-append-version="true"></script>
 <script src="~/js/Shared/httpRequest.js" asp-append-version="true"></script>
 <partial name="_NotificationPartial" />

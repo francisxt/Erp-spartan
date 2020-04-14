@@ -15,14 +15,16 @@ Date.prototype.addMonth = function (CantMonth) {
     return date;
 };
 
-Date.prototype.toDateInputValue = (function () {
+Date.prototype.toDateInputValue = function () {
     var local = new Date(this);
     local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
     return local.toJSON().slice(0, 10);
-});
+};
 
 $('#fechaPrestamo').val(new Date().toDateInputValue());
 
+
+/*START CALCULATE DEBS*/
 function getValues() {
 
     //button click gets values from inputs
@@ -122,7 +124,7 @@ function calAmortCuotaFija(balance, interestRate, cuotas, paymentModality, typeO
         monthlyPrincipal = payment - interest;
         Amortizacion.Amortizacion = FormatMoney(monthlyPrincipal);
 
-        Amortizacion.Endbalance = FormatMoney((balance - monthlyPrincipal));
+        Amortizacion.Endbalance = FormatMoney(balance - monthlyPrincipal);
         Amortizacion.Payment = FormatMoney(payment);
 
 
@@ -169,7 +171,7 @@ function calAmortInterestFixed(balance, interestRate, cuotas, paymentModality, t
 
         //code for displaying in loop balance
         Amortizacion.Balance = FormatMoney(balance);
-        
+
         //calc the in-loop interest amount and display
         interest = balanceFixed * monthlyRate;
         Amortizacion.Interest = FormatMoney(interest);
@@ -178,11 +180,11 @@ function calAmortInterestFixed(balance, interestRate, cuotas, paymentModality, t
         monthlyPrincipal = balanceFixed / cuotas;
 
 
-        Amortizacion.Amortizacion = FormatMoney(monthlyPrincipal); 
+        Amortizacion.Amortizacion = FormatMoney(monthlyPrincipal);
 
         payment = monthlyPrincipal + interest;
 
-        Amortizacion.Endbalance = FormatMoney((balance - monthlyPrincipal));
+        Amortizacion.Endbalance = FormatMoney(balance - monthlyPrincipal);
 
         Amortizacion.Payment = FormatMoney(payment);
 
@@ -238,12 +240,12 @@ function calAmortCapitalAlFinal(balance, interestRate, cuotas, paymentModality, 
         }
         //calc the in-loop monthly principal and display
         Amortizacion.Amortizacion = FormatMoney(monthlyPrincipal);
-        Amortizacion.Endbalance = FormatMoney((balance - monthlyPrincipal));
+        Amortizacion.Endbalance = FormatMoney(balance - monthlyPrincipal);
         Amortizacion.Payment = FormatMoney(payment);
 
 
         //update the balance for each loop iteration
-       // balance = balance - monthlyPrincipal;
+        // balance = balance - monthlyPrincipal;
         arrayAmortizaion.push(Amortizacion);
     }
     //Final piece added to return string before returning it - closes the table
@@ -277,7 +279,7 @@ function addDateToAmortizacion(datevalue, paymentModality) {
 
 function validateInputs(value) {
     //some code here to validate inputs
-    if ((value === null) || (value === "")) {
+    if (value === null || value === "") {
         return false;
     }
     else {
@@ -343,3 +345,38 @@ function FormatDate(date) {
 
     return `${da}-${mo}-${ye}`;
 }
+
+
+/*END CALCULATE DEBS*/
+
+
+
+/**
+ * Muestra un mensaje para preguntar si realmente quiere pagar y luego realiza el proceso.
+ * @param {any} idLoan id del prestamo,
+ * @param {any} idDeb id de la deuda,
+ * @param {any} isDeb identifica si es de pago o no,
+ */
+const showPaymentDeb = (idLoan, idDeb, isDeb) => {
+
+    var checkbox = '';
+    //si es 3 es pago
+    if (isDeb !== 'Payment') checkbox = `<input type="checkbox" name="type" onclick="showOrHideElement('extraMount')"> <label>¿Abono extra?</label></br>`;
+    const html = `<div class="container"><form class="form-group" action="/Loan/PaymentDeb" method='POST'>
+            <input name="idLoan" value=${idLoan} type="hidden" class="form-control" />
+            <input name="idDeb"  value=${idDeb}  type="hidden" class="form-control" /> ${checkbox}
+            <input name="extraMount" id="extraMount" style="display:none;" type="number" class="form-control" placeholder="digite el monto extra" />
+            <button class='btn btn-sm btn-primary'>ACEPTAR</button>
+            </form></div>`;
+
+    Swal.fire({
+        title: "¿Seguro que desear realizar esta operación?",
+        icon: 'warning',
+        showCancelButton: false,
+        showConfirmButton: false,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Confirmar',
+        html: html
+    });
+};
