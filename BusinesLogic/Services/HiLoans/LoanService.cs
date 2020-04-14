@@ -98,7 +98,12 @@ namespace BusinesLogic.Services.HiLoans
 
             double shares = (loan.Shares - count);
 
-            decimal balance = loan.ActualCapital;
+            decimal LoanDebsamortitation = 0;
+            if (loan.Debs !=null) {
+                LoanDebsamortitation =(decimal) loan.Debs.FirstOrDefault().Amortitation;
+            }
+
+            decimal balance = loan.ActualCapital - LoanDebsamortitation;
             if (loan.RateType == RateType.Anual) monthly = interest / 12;
             var payment = (double)loan.ActualCapital * (monthly / (1 - Math.Pow(1 + monthly, -shares)));
             var result = new List<Deb>();
@@ -128,16 +133,25 @@ namespace BusinesLogic.Services.HiLoans
             double interest = (double)((decimal)loan.Interest) / 100;
             double monthly = interest;
             int shares = loan.Shares - count;
-            decimal balanceFixed = loan.ActualCapital;
-            decimal balance = loan.ActualCapital;
+            decimal LoanDebsamortitation = 0;
+            decimal interestValue = 0;
+            if (loan.Debs != null)
+            {
+                LoanDebsamortitation = (decimal)loan.Debs.FirstOrDefault().Amortitation;
+                interestValue = loan.Debs.FirstOrDefault().Interest;
+            }
+            decimal balanceFixed = loan.ActualCapital-LoanDebsamortitation;
+            decimal balance = loan.ActualCapital-LoanDebsamortitation;
             if (loan.RateType == RateType.Anual) monthly = interest / 12;
             var result = new List<Deb>();
+     
             var nextPayment = DateTime.Now;
             int debNumber = count;
             for (int i = 0; i < shares; i++)
             {
                 debNumber++;
-                var interestdeb = balanceFixed * (decimal)monthly;
+            //    var interestdeb = balanceFixed * (decimal)monthly;
+                var interestdeb = interestValue == 0 ? (balanceFixed * (decimal)monthly) : interestValue;
                 var monthlyPrincipal = balanceFixed / shares;
                 nextPayment = GetDateOfPayment(loan.PaymentModality, nextPayment);
                 double payment = (double)(monthlyPrincipal + interestdeb);
@@ -162,7 +176,17 @@ namespace BusinesLogic.Services.HiLoans
             double interest = (double)((decimal)loan.Interest) / 100;
             double monthly = interest;
             int shares = loan.Shares - count;
-            decimal balance = loan.ActualCapital;
+            decimal LoanDebsamortitation = 0;
+
+            decimal interestValue = 0;
+            if (loan.Debs != null)
+            {
+                LoanDebsamortitation = (decimal)loan.Debs.FirstOrDefault().Amortitation;
+                 interestValue = loan.Debs.FirstOrDefault().Interest;
+
+            }
+
+            decimal balance = loan.ActualCapital - LoanDebsamortitation;
             if (loan.RateType == RateType.Anual) monthly = interest / 12;
             var result = new List<Deb>();
             var nextPayment = DateTime.Now;
@@ -170,7 +194,7 @@ namespace BusinesLogic.Services.HiLoans
             for (int i = 0; i < shares; i++)
             {
                 debNumber++;
-                var interestdeb = balance * (decimal)monthly;
+                var interestdeb =interestValue==0?  (balance * (decimal)monthly ): interestValue;
                 var payment = interestdeb;
                 decimal monthlyPrincipal = 0;
 
