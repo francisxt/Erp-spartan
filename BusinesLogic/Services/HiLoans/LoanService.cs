@@ -55,8 +55,10 @@ namespace BusinesLogic.Services.HiLoans
         {
             var deb = await _dbContext.Debs.FirstOrDefaultAsync(x => x.Id == id);
             var loan = await _dbContext.Loans.FirstOrDefaultAsync(x => x.Id == idLoan);
-            loan.ActualCapital -= (decimal)deb.Amortitation;
+            
+            loan.ActualCapital = deb.State == State.Active ? loan.ActualCapital - (decimal)deb.Amortitation :  loan.ActualCapital + (decimal) deb.Amortitation;
             _dbContext.Update(loan);
+
             await _dbContext.SaveChangesAsync();
             var result = false;
             if (deb.State == State.Active)
