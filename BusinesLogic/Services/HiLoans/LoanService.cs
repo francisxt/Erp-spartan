@@ -204,12 +204,16 @@ namespace BusinesLogic.Services.HiLoans
                 case PaymentModality.Daily:
                     date = date.AddDays(1);
                     return date;
-                case PaymentModality.Month:
-                    date = date.AddMonths(1);
-                    return date;
                 case PaymentModality.Week:
                     date = date.AddDays(7);
                     return date;
+                case PaymentModality.Biweekly:
+                    date = date.AddDays(15);
+                    return date;
+                case PaymentModality.Month:
+                    date = date.AddMonths(1);
+                    return date;
+         
                 default: return DateTime.Now.AddYears(1);
             }
         }

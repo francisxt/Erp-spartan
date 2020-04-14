@@ -265,6 +265,10 @@ function addDateToAmortizacion(datevalue, paymentModality) {
             //Execute logic enumPaymentModality.SEMANAL
             date = date.addDays(7);
             break;
+        case enumPaymentModality.QUINCENAL:
+            //Execute logic enumPaymentModality.SEMANAL
+            date = date.addDays(15);
+            break;
         case enumPaymentModality.MENSUAL:
             //Execute logic  enumPaymentModality.MENSUAL
             date = date.addMonth(1);

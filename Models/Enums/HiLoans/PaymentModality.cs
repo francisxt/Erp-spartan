@@ -11,6 +11,8 @@ namespace Models.Enums.HiAccounting
         Daily,
         [Display(Name = "SEMANAL")]
         Week,
+        [Display(Name = "QUINCENAL")]
+        Biweekly,
         [Display(Name = "MENSUAL")]
         Month,
         [Display(Name = "ANUAL")]
