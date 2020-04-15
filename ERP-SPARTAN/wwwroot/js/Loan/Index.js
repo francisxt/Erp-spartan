@@ -363,7 +363,7 @@ function FormatDate(date) {
  * @param {any} restcount coutas restantes,
  *
  */
-const showPaymentDeb = (idLoan, idDeb, isDeb, restcount) => {
+const showPaymentDeb = (idLoan, idDeb, isDeb,amortizacion, restcount) => {
 
     let checkbox = '';
     let amortizationTotal = $('#amortizationTotal').val();
@@ -373,6 +373,7 @@ const showPaymentDeb = (idLoan, idDeb, isDeb, restcount) => {
     const html = `<div class="container"><form class="form-group" action="/Loan/PaymentDeb" method='POST'>
             <input name="IdLoan" value=${idLoan} type="hidden" class="form-control" />
             <input name="AmortizationTotal" value=${amortizationTotal} type="hidden" class="form-control" />
+            <input name="Amortization" value=${amortizacion} type="hidden" class="form-control" />
             <input name="IdDeb"  value=${idDeb}  type="hidden" class="form-control" /> ${checkbox}
             <input name="ExtraMount" id="extraMount" style="display:none;" type="number" class="form-control" placeholder="digite el monto extra" />
             <button class='btn btn-sm btn-primary'>ACEPTAR</button>

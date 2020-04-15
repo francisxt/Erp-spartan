@@ -98,19 +98,19 @@ namespace BusinesLogic.Services.HiLoans
         }
 
         private IEnumerable<Deb> FixedfeeDebs(Loan loan, DateTime lastDateTime, int count = 0)
-        {
+            {
             double interest = (double)((decimal)loan.Interest) / 100;
             double monthly = interest;
 
             double shares = (loan.Shares - count);
 
             decimal LoanDebsamortitation = 0;
-            if (loan.Debs !=null) {
-                if (loan.Debs.Any()) LoanDebsamortitation = (decimal)loan.Debs.FirstOrDefault().Amortitation;
+            //if (loan.Debs !=null) {
+            //    if (loan.Debs.Any()) LoanDebsamortitation = (decimal)loan.Debs.FirstOrDefault().Amortitation;
 
-            }
+            //}
 
-            decimal balance = loan.ActualCapital - LoanDebsamortitation;
+            decimal balance = loan.ActualCapital ;
             if (loan.RateType == RateType.Anual) monthly = interest / 12;
             var payment = (double)loan.ActualCapital * (monthly / (1 - Math.Pow(1 + monthly, -shares)));
             var result = new List<Deb>();
@@ -150,8 +150,8 @@ namespace BusinesLogic.Services.HiLoans
                     interestValue = loan.Debs.FirstOrDefault().Interest;
                 }
             }
-            decimal balanceFixed = loan.ActualCapital-LoanDebsamortitation;
-            decimal balance = loan.ActualCapital-LoanDebsamortitation;
+            decimal balanceFixed = loan.ActualCapital;
+            decimal balance = loan.ActualCapital;
             if (loan.RateType == RateType.Anual) monthly = interest / 12;
             var result = new List<Deb>();
      
