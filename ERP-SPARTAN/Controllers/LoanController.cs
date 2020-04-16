@@ -84,7 +84,8 @@ namespace ERP_SPARTAN.Controllers
         [HttpPost]
         public async Task<IActionResult> PaymentDeb(PaymentLoanVM model)
         {
-            if(model.ExtraMount > (model.AmortizationTotal-model.Amortization))
+            var total =Math.Abs( model.AmortizationTotal - model.Amortization);
+            if (model.ExtraMount > total)
             {
                 BasicNotification("El monto a abonar es mayor que el capital actual, intente abonar un monto menor", NotificationType.warning, "Error");
                 return RedirectToAction(nameof(GetById), new { id = model.IdLoan });

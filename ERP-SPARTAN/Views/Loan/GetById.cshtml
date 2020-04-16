@@ -105,23 +105,30 @@
                         <form asp-action="@ViewBag.Action" method="get">
                             <input type="hidden" asp-for="Id" />
                             <select name="stateDeb" class="form-control">
+                                @{
+                                   
+
+                                }
                                 @if (ViewBag.Selected == State.Payment)
                                 {
                                     <option value="@State.Payment" selected>Pagados</option>
                                     <option value="@State.Active">Pendiente</option>
                                     <option value="@State.All">Todo</option>
+
                                 }
                                 else if (ViewBag.Selected == State.Active)
                                 {
                                     <option value="@State.Payment">Pagados</option>
                                     <option value="@State.Active" selected>Pendiente</option>
                                     <option value="@State.All">Todo</option>
+
                                 }
                                 else
                                 {
                                     <option value="@State.Payment">Pagados</option>
                                     <option value="@State.Active">Pendiente</option>
                                     <option value="@State.All" selected>Todo</option>
+                                 
                                 }
                             </select>
                             <button class="btn btn-sm btn-success mt-1">Filtrar</button>
@@ -149,12 +156,24 @@
                                         decimal amortitation = 0;
                                         decimal toPay = 0;
                                         decimal amount = 0;
+                                        Guid lastDebPaid = new Guid();
+                                        Guid NextDebToPay = new Guid();
+                                        if (Model.Debs.Any())
+                                        {
+                                   
+                                                var debsToPay = Model.Debs.Where(x => x.State == State.Active).ToList();
+                                                NextDebToPay = debsToPay.Any() == true ? debsToPay.FirstOrDefault().Id : new Guid();
+
+                                                var debsPaid = Model.Debs.Where(x => x.State == State.Payment).ToList();
+                                                lastDebPaid = debsPaid.Any() == true ? debsPaid.LastOrDefault().Id : new Guid();
+                                        }
+
                                     }
                                     @foreach (var item in Model.Debs)
                                     {
                                         var bgClass = item.State == State.Payment ? "bg-success text-white" : "";
-                                        var bgBtn = item.State == State.Payment ? "btn-danger" : "btn-dark";
-                                        var btnText = item.State == State.Payment ? "Cancelar pago" : "Pagar";
+                                        var bgBtn = item.State == State.Payment ? "btn-danger" : "btn-success";
+                                        var btnText = item.State == State.Payment ? "Cancelar pago" : "Pagar cuota";
 
                                         interest += item.Interest;
                                         amortitation += (decimal)item.Amortitation;
@@ -162,22 +181,26 @@
                                         amount = (decimal)item.Amount - amount;
 
 
-                                    <tr class="@bgClass">
-                                        <td>@item.Share</td>
-                                        <td>@item.DateOfPayment.ToString("dd/MM/yyyy")</td>
-                                        <td><i class="fa fa-dollar-sign"></i> @item.Interest</td>
-                                        <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Amortitation, 2)</td>
-                                        <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.ToPay, 2)</td>
-                                        <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Amount, 2)</td>
-                                        <td><i class="fa fa-dollar-sign"></i> @item.ExtraMountStr</td>
-                                        <td>@item.StateStr</td>
-                                        <td>
-                                            @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
+                                        <tr class="@bgClass">
+                                            <td>@item.Share</td>
+                                            <td>@item.DateOfPayment.ToString("dd/MM/yyyy")</td>
+                                            <td><i class="fa fa-dollar-sign"></i> @item.Interest</td>
+                                            <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Amortitation, 2)</td>
+                                            <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.ToPay, 2)</td>
+                                            <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Amount, 2)</td>
+                                            <td><i class="fa fa-dollar-sign"></i> @item.ExtraMountStr</td>
+                                            <td>@item.StateStr</td>
+                                            <td>
+                                                @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
                                                 {
-                                            <button class="btn btn-sm @bgBtn" onclick="showPaymentDeb('@Model.Id', '@item.Id', '@item.State','@item.Amortitation','@Model.SharesStr')">@btnText</button>
+                                                    if (item.Id == lastDebPaid || item.Id == NextDebToPay)
+                                                    {
+                                                        <button class="btn btn-sm @bgBtn" onclick="showPaymentDeb('@Model.Id', '@item.Id', '@item.State','@item.Amortitation','@Model.SharesStr')">@btnText</button>
+
+                                                    }
                                                 }
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
                                     }
                                     <tr class="bg-info text-white">
                                         <td>#</td>
