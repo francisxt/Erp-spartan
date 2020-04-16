@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BusinesLogic.Interfaces.HiAccouting
 {
-    public interface IEnterpriseService : IBaseRepository<Enterprise>
+    public interface IEnterpriseService : IBaseRepository<Enterprise> , IHelperRepository<Enterprise>
     {
         Task<IEnumerable<Enterprise>> GetList(string userId);
     }

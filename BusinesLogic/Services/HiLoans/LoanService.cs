@@ -31,11 +31,21 @@ namespace BusinesLogic.Services.HiLoans
             return result;
         }
 
-        public async Task<IEnumerable<Loan>> GetAllWithRelationShip(string userId)
-            => await Filter(x => x.UserId == userId)
-            .Include(x => x.Debs)
-            .Include(x => x.ClientUser)
-            .ThenInclude(x => x.User).OrderByDescending(x => x.CreateAt).ToListAsync();
+        public async Task<IEnumerable<Loan>> GetAllWithRelationShip(string userId, Guid? idEnterprise = null)
+        {
+            var result = Filter(x => x.UserId == userId).Include(x => x.Debs)
+                .Include(x => x.ClientUser.Enterprise)
+                .Include(x => x.ClientUser)
+                .ThenInclude(x => x.User)
+            .AsQueryable();
+
+            if (idEnterprise != null)
+            {
+                result = result.Where(x => x.ClientUser.EnterpriseId == idEnterprise);
+            }
+
+            return await result.OrderByDescending(x => x.CreateAt).ToListAsync();
+        }
 
         public async Task<Loan> GetByIdWithRelationships(Guid id, State state)
         {
@@ -55,8 +65,8 @@ namespace BusinesLogic.Services.HiLoans
         {
             var deb = await _dbContext.Debs.FirstOrDefaultAsync(x => x.Id == id);
             var loan = await _dbContext.Loans.FirstOrDefaultAsync(x => x.Id == idLoan);
-            
-            loan.ActualCapital = deb.State == State.Active ? loan.ActualCapital - (decimal)deb.Amortitation :  loan.ActualCapital + (decimal) deb.Amortitation;
+
+            loan.ActualCapital = deb.State == State.Active ? loan.ActualCapital - (decimal)deb.Amortitation : loan.ActualCapital + (decimal)deb.Amortitation;
             _dbContext.Update(loan);
 
             await _dbContext.SaveChangesAsync();
@@ -98,19 +108,19 @@ namespace BusinesLogic.Services.HiLoans
         }
 
         private IEnumerable<Deb> FixedfeeDebs(Loan loan, DateTime lastDateTime, int count = 0)
-            {
+        {
             double interest = (double)((decimal)loan.Interest) / 100;
             double monthly = interest;
 
             double shares = (loan.Shares - count);
 
-            decimal LoanDebsamortitation = 0;
+            //decimal LoanDebsamortitation = 0;
             //if (loan.Debs !=null) {
             //    if (loan.Debs.Any()) LoanDebsamortitation = (decimal)loan.Debs.FirstOrDefault().Amortitation;
 
             //}
 
-            decimal balance = loan.ActualCapital ;
+            decimal balance = loan.ActualCapital;
             if (loan.RateType == RateType.Anual) monthly = interest / 12;
             var payment = (double)loan.ActualCapital * (monthly / (1 - Math.Pow(1 + monthly, -shares)));
             var result = new List<Deb>();
@@ -154,13 +164,13 @@ namespace BusinesLogic.Services.HiLoans
             decimal balance = loan.ActualCapital;
             if (loan.RateType == RateType.Anual) monthly = interest / 12;
             var result = new List<Deb>();
-     
+
             var nextPayment = lastDateTime;
             int debNumber = count;
             for (int i = 0; i < shares; i++)
             {
                 debNumber++;
-            //    var interestdeb = balanceFixed * (decimal)monthly;
+                //    var interestdeb = balanceFixed * (decimal)monthly;
                 var interestdeb = interestValue == 0 ? (balanceFixed * (decimal)monthly) : interestValue;
                 var monthlyPrincipal = balanceFixed / shares;
                 nextPayment = GetDateOfPayment(loan.PaymentModality, nextPayment);
@@ -191,7 +201,8 @@ namespace BusinesLogic.Services.HiLoans
             decimal interestValue = 0;
             if (loan.Debs != null)
             {
-                if (loan.Debs.Any()) {
+                if (loan.Debs.Any())
+                {
                     LoanDebsamortitation = (decimal)loan.Debs.FirstOrDefault().Amortitation;
                     interestValue = loan.Debs.FirstOrDefault().Interest;
                 }
@@ -205,7 +216,7 @@ namespace BusinesLogic.Services.HiLoans
             for (int i = 0; i < shares; i++)
             {
                 debNumber++;
-                var interestdeb =interestValue==0?  (balance * (decimal)monthly ): interestValue;
+                var interestdeb = interestValue == 0 ? (balance * (decimal)monthly) : interestValue;
                 var payment = interestdeb;
                 decimal monthlyPrincipal = 0;
 
@@ -248,7 +259,7 @@ namespace BusinesLogic.Services.HiLoans
                 case PaymentModality.Month:
                     date = date.AddMonths(1);
                     return date;
-         
+
                 default: return DateTime.Now.AddYears(1);
             }
         }
@@ -264,7 +275,7 @@ namespace BusinesLogic.Services.HiLoans
             {
                 debs = FixedInterestDebs(model, lastDateTime, count);
             }
-            else debs = CapitalEndDebs(model, lastDateTime ,count);
+            else debs = CapitalEndDebs(model, lastDateTime, count);
 
             _dbContext.Debs.AddRange(debs);
             await _dbContext.SaveChangesAsync();
@@ -309,7 +320,7 @@ namespace BusinesLogic.Services.HiLoans
             }
             else if (model.AmortitationType == AmortitationType.FixedInterest)
             {
-                debs = FixedInterestDebs(model , DateTime.Now);
+                debs = FixedInterestDebs(model, DateTime.Now);
             }
             else debs = CapitalEndDebs(model, DateTime.Now);
             return debs;

@@ -5,11 +5,25 @@
 
 <div class="row">
     <div class="col-12">
+        <div class="col-md-6 col-12 mb-3">
+            <label class="col-form-label">Empresas</label>
+            <form class="form-group form-inline" asp-action="Index" method="get">
+                <div class="form-group">
+                    <select class="form-control m-1" name="idEnterprise" asp-items="ViewBag.Enterprises">
+                        <option value="" selected>Todas las empresas</option>
+                    </select>
+                    <button class="btn btn-primary m-1"><i class="fa fa-search"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-12">
         <div class="table-responsive">
             <table class="table table-bordered data-table" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>Cliente</th>
+                        <th>Empresa</th>
                         <th>Tasa de interes %</th>
                         <th>Capital Inicial</th>
                         <th>Tipo de amortización</th>
@@ -22,6 +36,7 @@
                     {
                         <tr>
                             <td>@item.ClientUser.User.FullName</td>
+                            <td>@item.ClientUser.Enterprise.Name</td>
                             <td>@item.Interest%</td>
                             <td>@item.InitialCapital</td>
                             <td>@item.AmortitationType.GetDisplayName()</td>

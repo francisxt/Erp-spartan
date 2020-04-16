@@ -21,8 +21,12 @@ namespace ERP_SPARTAN.Controllers
         public LoanController(IUnitOfWork unitOfWork) => _service = unitOfWork;
 
         [HttpGet]
-        public async Task<IActionResult> Index()
-            => View(await _service.LoanService.GetAllWithRelationShip(GetUserLoggedId()));
+        public async Task<IActionResult> Index(Guid? idEnterprise = null)
+        {
+            var userId = GetUserLoggedId();
+            ViewBag.Enterprises = await _service.EnterpriseService.GetListItem(x => x.UserId == userId);
+            return View(await _service.LoanService.GetAllWithRelationShip(userId,idEnterprise));
+        }
 
         [HttpGet]
         public async Task<IActionResult> Create()
@@ -51,7 +55,7 @@ namespace ERP_SPARTAN.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetById(Guid id, State stateDeb = State.Active)
+        public async Task<IActionResult> GetById(Guid id, State stateDeb = State.All)
         {
             ViewBag.Selected = stateDeb;
             ViewBag.Action = nameof(GetById);
@@ -63,7 +67,7 @@ namespace ERP_SPARTAN.Controllers
 
         [AllowAnonymous]
         [HttpGet]   
-        public async Task<IActionResult> GetMyLoan(Guid id, State stateDeb = State.Active)
+        public async Task<IActionResult> GetMyLoan(Guid id, State stateDeb = State.All)
         {
             ViewBag.Selected = stateDeb;
             ViewBag.Action = nameof(GetMyLoan);

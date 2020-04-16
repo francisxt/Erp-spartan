@@ -55,6 +55,7 @@ namespace ERP_SPARTAN.Controllers
         {
             client.Rol = (User.IsInRole(nameof(RolsAuthorization.ClientsUser)) || 
                 User.IsInRole(nameof(RolsAuthorization.HILoans))) ? RolsAuthorization.Client : client.Rol;
+            client.Enterprises = await _service.EnterpriseService.GetList(GetUserLoggedId());
             if (ModelState.IsValid)
             {
                 var result = await _userManager.CreateAsync(new User

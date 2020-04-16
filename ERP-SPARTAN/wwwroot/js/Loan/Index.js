@@ -360,10 +360,10 @@ function FormatDate(date) {
  * @param {any} idLoan id del prestamo,
  * @param {any} idDeb id de la deuda,
  * @param {any} isDeb identifica si es de pago o no,
- * @param {any} restcount coutas restantes,
+ * @param {any} amortizacion amortizacion,
  *
  */
-const showPaymentDeb = (idLoan, idDeb, isDeb,amortizacion, restcount) => {
+const showPaymentDeb = (idLoan, idDeb, isDeb, amortizacion) => {
 
     let checkbox = '';
     let amortizationTotal = $('#amortizationTotal').val();

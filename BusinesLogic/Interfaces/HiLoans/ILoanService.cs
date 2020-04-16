@@ -12,7 +12,7 @@ namespace BusinesLogic.Interfaces.HiLoans
 {
     public interface ILoanService : IBaseRepository<Loan>
     {
-        Task<IEnumerable<Loan>> GetAllWithRelationShip(string userId);
+        Task<IEnumerable<Loan>> GetAllWithRelationShip(string userId, Guid? idEnterprise = null);
         Task<Loan> GetByIdWithRelationships(Guid id, State state);
         Task<bool> SoftRemove(Guid id);
         Task<bool> PaymentDeb(Guid id, Guid idLoan, decimal extraMount);

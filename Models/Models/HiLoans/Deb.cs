@@ -24,7 +24,7 @@ namespace Models.Models.HiAccounting.Debs
 
         public decimal ExtraMount { get; set; }
         public bool IsExtraMount { get; set; } = false;
-
+        public bool AllowPayInterest { get; set; } = false;
         public Guid LoanId { get; set; }
         public Loan Loan { get; set; }
 
