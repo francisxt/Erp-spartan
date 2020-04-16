@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BusinesLogic.UnitOfWork;
+using Commons.Others;
 using ERP_SPARTAN.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,7 @@ namespace ERP_SPARTAN.Controllers
             return View();
         }
 
-        [Authorize(Roles = nameof(RolsAuthorization.Client))]
+        [Authorize(Roles =  ControllersRol.ClientUser +","+ nameof(RolsAuthorization.Client))]
         [HttpGet]
         public async Task<IActionResult> GetByClientUser(Guid id)
         {
