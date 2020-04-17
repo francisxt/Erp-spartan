@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace Commons.Helpers
@@ -15,6 +16,15 @@ namespace Commons.Helpers
         {
             if (length <= 10) return Guid.NewGuid().ToString().Substring(0, length).ToUpper();
             return string.Empty;
+        }
+        public static string FormatDate(DateTime date)
+        {
+            CultureInfo culture = new CultureInfo("es-ES");
+            return date.ToString("dddd, dd MMMM yyyy", culture);
+        }
+        public static string FormatMoney(decimal money)
+        {
+            return String.Format("{0:C}", money);
         }
     }
 }

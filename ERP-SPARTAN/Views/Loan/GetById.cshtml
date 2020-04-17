@@ -141,11 +141,11 @@
                                     <tr>
                                         <th>Cuota</th>
                                         <th>Fecha</th>
+                                        <th>Capital</th>
                                         <th>Interés</th>
-                                        <th>Abono Capital</th>
                                         <th>Total a Pagar</th>
                                         <th>Capital Restante</th>
-                                        <th>Monto Extra</th>
+                                        <th>Abono capital</th>
                                         <th>Estado</th>
                                         <th>Opciones</th>
                                     </tr>
@@ -160,12 +160,12 @@
                                         Guid NextDebToPay = new Guid();
                                         if (Model.Debs.Any())
                                         {
-                                   
-                                                var debsToPay = Model.Debs.Where(x => x.State == State.Active).ToList();
-                                                NextDebToPay = debsToPay.Any() == true ? debsToPay.FirstOrDefault().Id : new Guid();
 
-                                                var debsPaid = Model.Debs.Where(x => x.State == State.Payment).ToList();
-                                                lastDebPaid = debsPaid.Any() == true ? debsPaid.LastOrDefault().Id : new Guid();
+                                            var debsToPay = Model.Debs.Where(x => x.State == State.Active).ToList();
+                                            NextDebToPay = debsToPay.Any() == true ? debsToPay.FirstOrDefault().Id : new Guid();
+
+                                            var debsPaid = Model.Debs.Where(x => x.State == State.Payment).ToList();
+                                            lastDebPaid = debsPaid.Any() == true ? debsPaid.LastOrDefault().Id : new Guid();
                                         }
 
                                     }
@@ -181,38 +181,38 @@
                                         amount = (decimal)item.Amount - amount;
 
 
-                                        <tr class="@bgClass">
-                                            <td>@item.Share</td>
-                                            <td>@item.DateOfPayment.ToString("dd/MM/yyyy")</td>
-                                            <td><i class="fa fa-dollar-sign"></i> @item.Interest</td>
-                                            <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Amortitation, 2)</td>
-                                            <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.ToPay, 2)</td>
-                                            <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Amount, 2)</td>
-                                            <td><i class="fa fa-dollar-sign"></i> @item.ExtraMountStr</td>
-                                            <td>@item.StateStr</td>
-                                            <td>
-                                                @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
+                                    <tr class="@bgClass">
+                                        <td>@item.Share</td>
+                                        <td>@item.DateOfPaymentFormated</td>
+                                        <td>@item.AmortitationFormated</td>
+                                        <td>@item.InterestFormated</td>
+                                        <td>@item.ToPayFormated</td>
+                                        <td>@item.AmountFormated</td>
+                                        <td>@item.ExtraMountStr</td>
+                                        <td>@item.StateStr</td>
+                                        <td>
+                                            @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
+                                            {
+                                                if (item.Id == lastDebPaid || item.Id == NextDebToPay)
                                                 {
-                                                    if (item.Id == lastDebPaid || item.Id == NextDebToPay)
-                                                    {
-                                                        <button class="btn btn-sm @bgBtn" onclick="showPaymentDeb('@Model.Id', '@item.Id', '@item.State','@item.Amortitation')">@btnText</button>
+                                                    <button class="btn btn-sm @bgBtn" onclick="showPaymentDeb('@Model.Id', '@item.Id', '@item.State','@item.Amortitation')">@btnText</button>
 
-                                                    }
                                                 }
-                                            </td>
-                                        </tr>
-                                    }
-                                    <tr class="bg-info text-white">
-                                        <td>#</td>
-                                        <td>Totales</td>
-                                        <td><i class="fa fa-dollar-sign"></i>@interest</td>
-                                        <td><i class="fa fa-dollar-sign"></i>@Math.Round(amortitation, 2)</td>
-                                        <td><i class="fa fa-dollar-sign"></i>@Math.Round(toPay, 2)</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
+                                            }
+                                        </td>
                                     </tr>
+                                    }
+                                <tr class="bg-info text-white">
+                                    <td>#</td>
+                                    <td>Totales</td>
+                                    <td>@String.Format("{0:C}", amortitation)  </td>
+                                    <td>@String.Format("{0:C}", interest) </td>
+                                    <td>@String.Format("{0:C}", toPay)</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
                                 </tbody>
                             </table>
                             <input type="hidden" id="amortizationTotal" value="@Math.Round(amortitation, 2)" />
