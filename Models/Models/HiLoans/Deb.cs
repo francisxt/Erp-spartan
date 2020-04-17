@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Commons.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 using System.Text;
 
 namespace Models.Models.HiAccounting.Debs
@@ -31,7 +33,28 @@ namespace Models.Models.HiAccounting.Debs
         [NotMapped]
         public string StateStr => State == Enums.State.Payment ? "Pagado" : "Pendiente";
         [NotMapped]
-        public string ExtraMountStr => ExtraMount == 0 ? "N/A" : ExtraMount.ToString();  
+        public string ExtraMountStr => ExtraMount == 0 ? "N/A" : ExtraMount.ToString();
+        //Formated property
+        [NotMapped]
+        public string DateOfPaymentFormated => StringHelper.FormatDate(this.DateOfPayment);
 
+        [NotMapped]
+        public string AmountFormated => StringHelper.FormatMoney(this.Amount);
+
+        [NotMapped]
+        public string InterestFormated => StringHelper.FormatMoney(this.Interest);
+
+        [NotMapped]
+        public string ToPayFormated => StringHelper.FormatMoney((decimal)this.ToPay);
+
+        [NotMapped]
+        public string AmortitationFormated => StringHelper.FormatMoney((decimal)this.Amortitation);
+
+        [NotMapped]
+        public string EndBalanceFormated => StringHelper.FormatMoney( this.EndBalance);
+
+        [NotMapped]
+        public string ExtraMountFormated => StringHelper.FormatMoney(this.ExtraMount);
     }
+
 }
