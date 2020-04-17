@@ -18,5 +18,6 @@ namespace Models.Models
         public virtual IEnumerable<Movement> Movements { get; set; }
         public Guid EnterpriseId { get; set; }
         public Enterprise Enterprise { get; set; }
+        public string IdentificationCard { get; set; }
     }
 }

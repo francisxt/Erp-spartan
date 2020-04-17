@@ -15,5 +15,6 @@ namespace Models.ViewModels.ClientUsers
         [Required]
         public Guid EnterpriseId { get; set; }
         public IEnumerable<Enterprise> Enterprises { get; set; }
+        public string IdentificationCard { get; set; }
     }
 }

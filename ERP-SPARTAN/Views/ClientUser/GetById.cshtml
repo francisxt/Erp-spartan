@@ -32,9 +32,19 @@
                         <span asp-validation-for="User.PhoneNumber" class="text-danger"></span>
                     </div>
                     <div class="form-group">
+                        <label asp-for="IdentificationCard">Cedula</label>
+                        <input asp-for="IdentificationCard" class="form-control" />
+                        <span asp-validation-for="IdentificationCard" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
                         <label asp-for="User.Email">Correo</label>
-                        <input asp-for="User.Email" class="form-control" />
+                        <input asp-for="User.Email" class="form-control" disabled />
                         <span asp-validation-for="User.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Enterprise.Name">Empresa</label>
+                        <input asp-for="Enterprise.Name" class="form-control" disabled />
+                        <span asp-validation-for="Enterprise.Name" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <button class="btn btn-primary">Editar</button>

@@ -32,17 +32,39 @@
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label">Correo</label>
-                <input asp-for="Email" class="form-control" required />
+                <input asp-for="Email" class="form-control" required=""
+                       oninvalid="this.setCustomValidity('Campo requerido')"
+                       oninput="setCustomValidity('')" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="IdentificationCard" class="control-label">Cedula</label>
+                @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
+                {
+                    <input asp-for="IdentificationCard" class="form-control"
+                           required=""
+                           oninvalid="this.setCustomValidity('Campo requerido')"
+                           oninput="setCustomValidity('')" />
+                }
+                else
+                {
+                    <input asp-for="IdentificationCard" class="form-control" />
+                }
+            </div>
+            <div class="form-group">
                 <label asp-for="PhoneNumber" class="control-label">Numero</label>
-                <input asp-for="PhoneNumber" id="phoneNumber" class="form-control" required />
+                <input asp-for="PhoneNumber" id="phoneNumber" class="form-control"
+                       required=""
+                       oninvalid="this.setCustomValidity('Campo requerido')"
+                       oninput="setCustomValidity('')" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EnterpriseId">Empresa</label>
-                <select class="form-control" asp-for="EnterpriseId" required>
+                <select class="form-control" asp-for="EnterpriseId"
+                        required=""
+                        oninvalid="this.setCustomValidity('Campo requerido')"
+                        oninput="setCustomValidity('')">
                     <option value="" selected>Seleccione</option>
                     @foreach (var item in Model.Enterprises)
                     {
