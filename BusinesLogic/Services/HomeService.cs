@@ -27,7 +27,7 @@ namespace BusinesLogic.Services
             decimal totalOfDebs = 0;
             decimal totalLoansDebs = 0;
             foreach (var item in clients) totalOfDebs += item.Movements.Sum(x => x.Amount);
-            foreach (var item in loans) totalLoansDebs += item.Debs.Sum(x => (decimal)x.ToPay);
+            foreach (var item in loans) totalLoansDebs += item.ActualCapital;
 
 
             return new HomeVM
