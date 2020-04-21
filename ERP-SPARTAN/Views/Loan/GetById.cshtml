@@ -15,14 +15,14 @@
                 <div class="col-12 col-sm-12 col-md-3 col-xl-3 col-lg-3">
                     <div class="form-group">
                         <label asp-for="InitialCapital" class="control-label">Capital Inicial</label>
-                        <input asp-for="InitialCapital" disabled class="form-control" />
+                        <input asp-for="InitialCapitalFormated" disabled class="form-control" />
                         <span asp-validation-for="InitialCapital" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-12 col-sm-12 col-md-3 col-xl-3 col-lg-3">
                     <div class="form-group">
                         <label asp-for="ActualCapital" class="control-label">Capital Actual</label>
-                        <input asp-for="ActualCapital" disabled class="form-control" />
+                        <input asp-for="ActualCapitalFormated" disabled class="form-control" />
                         <span asp-validation-for="ActualCapital" class="text-danger"></span>
                     </div>
                 </div>
@@ -106,7 +106,7 @@
                             <input type="hidden" asp-for="Id" />
                             <select name="stateDeb" class="form-control">
                                 @{
-                                   
+
 
                                 }
                                 @if (ViewBag.Selected == State.Payment)
@@ -128,7 +128,7 @@
                                     <option value="@State.Payment">Pagados</option>
                                     <option value="@State.Active">Pendiente</option>
                                     <option value="@State.All" selected>Todo</option>
-                                 
+
                                 }
                             </select>
                             <button class="btn btn-sm btn-success mt-1">Filtrar</button>
@@ -174,58 +174,58 @@
                                         var bgClass = item.State == State.Payment ? "bg-success text-white" : "";
                                         var bgBtn = item.State == State.Payment ? "btn-danger" : "btn-success";
                                         var btnText = item.State == State.Payment ? "Cancelar pago" : "Pagar cuota";
-                                        if (item.AllowPayInterest && item.State==State.Active) { bgClass = "bg-warning text-white"; }
+                                        if (item.AllowPayInterest && item.State == State.Active) { bgClass = "bg-warning text-white"; }
                                         interest += item.Interest;
                                         amortitation += (decimal)item.Amortitation;
                                         toPay += (decimal)item.ToPay;
                                         amount = (decimal)item.Amount - amount;
 
 
-                                    <tr class="@bgClass">
-                                        <td>@item.Share</td>
-                                        <td>@item.DateOfPaymentFormated</td>
-                                        <td>@item.AmortitationFormated</td>
-                                        <td>@item.InterestFormated</td>
-                                        <td>@item.ToPayFormated</td>
-                                        <td>@item.AmountFormated</td>
-                                        <td>@item.ExtraMountStr </td>
-                                        @if (item.AllowPayInterest && item.State == State.Active)
-                                        {
-                                            <td>Solo interes</td>
-                                        }
-                                        else
-                                        {
-                                            <td>@item.StateStr</td>
-
-                                        }
-                                        <td>
-                                            @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
+                                        <tr class="@bgClass">
+                                            <td>@item.Share</td>
+                                            <td>@item.DateOfPaymentFormated</td>
+                                            <td>@item.AmortitationFormated</td>
+                                            <td>@item.InterestFormated</td>
+                                            <td>@item.ToPayFormated</td>
+                                            <td>@item.AmountFormated</td>
+                                            <td>@item.ExtraMountStr </td>
+                                            @if (item.AllowPayInterest && item.State == State.Active)
                                             {
-                                                if (item.Id == lastDebPaid || item.Id == NextDebToPay)
+                                                <td>Solo interes</td>
+                                            }
+                                            else
+                                            {
+                                                <td>@item.StateStr</td>
+
+                                            }
+                                            <td>
+                                                @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
                                                 {
-                                                    <button class="btn btn-sm @bgBtn"
-                                                            onclick="showPaymentDeb('@Model.Id', '@item.Id', '@item.State',
+                                                    if (item.Id == lastDebPaid || item.Id == NextDebToPay)
+                                                    {
+                                                        <button class="btn btn-sm @bgBtn"
+                                                                onclick="showPaymentDeb('@Model.Id', '@item.Id', '@item.State',
                                                     '@item.Amortitation','@item.AmortitationFormated', '@item.InterestFormated', '@item.ToPayFormated',
                                                     '@item.DateOfPaymentFormated', '@item.Share')">
-                                                        @btnText
-                                                    </button>
+                                                            @btnText
+                                                        </button>
 
+                                                    }
                                                 }
-                                            }
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
                                     }
-                                <tr class="bg-info text-white">
-                                    <td>#</td>
-                                    <td>Totales</td>
-                                    <td>@String.Format("{0:C}", amortitation)  </td>
-                                    <td>@String.Format("{0:C}", interest) </td>
-                                    <td>@String.Format("{0:C}", toPay)</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                </tr>
+                                    <tr class="bg-info text-white">
+                                        <td>#</td>
+                                        <td>Totales</td>
+                                        <td>@string.Format("{0:C}", amortitation)  </td>
+                                        <td>@string.Format("{0:C}", interest) </td>
+                                        <td>@string.Format("{0:C}", toPay)</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr>
                                 </tbody>
                             </table>
                             <input type="hidden" id="amortizationTotal" value="@Math.Round(amortitation, 2)" />

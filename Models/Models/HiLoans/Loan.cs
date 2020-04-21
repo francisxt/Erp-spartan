@@ -1,4 +1,5 @@
-﻿using Models.Enums.HiAccounting;
+﻿using Commons.Helpers;
+using Models.Enums.HiAccounting;
 using Models.Enums.HiLoans;
 using Models.Models.HiAccounting.Debs;
 using System;
@@ -21,10 +22,16 @@ namespace Models.Models.HiAccounting
         [Column(TypeName = "decimal(18,2)")]
         [Required(ErrorMessage = "Este campo es requerido")]
         public decimal InitialCapital { get; set; }
+        [NotMapped]
+        public string InitialCapitalFormated => StringHelper.FormatMoney(InitialCapital);
+
 
         [Column(TypeName = "decimal(18,2)")]
         [Required(ErrorMessage = "Este campo es requerido")]
         public decimal ActualCapital { get; set; }
+
+        [NotMapped]
+        public string ActualCapitalFormated => StringHelper.FormatMoney(ActualCapital);
 
         public AmortitationType AmortitationType { get; set; }
         public PaymentModality PaymentModality { get; set; }

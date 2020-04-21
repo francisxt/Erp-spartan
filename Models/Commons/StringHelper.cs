@@ -22,9 +22,7 @@ namespace Commons.Helpers
             CultureInfo culture = new CultureInfo("es-ES");
             return date.ToString("dddd, dd MMMM yyyy", culture);
         }
-        public static string FormatMoney(decimal money)
-        {
-            return String.Format("{0:C}", money);
-        }
+        public static string FormatMoney(decimal money) => string.Format("{0:C}", money);
+        
     }
 }

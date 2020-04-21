@@ -36,25 +36,25 @@ namespace Models.Models.HiAccounting.Debs
         public string ExtraMountStr => ExtraMount == 0 ? "N/A" : ExtraMount.ToString();
         //Formated property
         [NotMapped]
-        public string DateOfPaymentFormated => StringHelper.FormatDate(this.DateOfPayment);
+        public string DateOfPaymentFormated => StringHelper.FormatDate(DateOfPayment);
 
         [NotMapped]
-        public string AmountFormated => StringHelper.FormatMoney(this.Amount);
+        public string AmountFormated => StringHelper.FormatMoney(Amount);
 
         [NotMapped]
-        public string InterestFormated => StringHelper.FormatMoney(this.Interest);
+        public string InterestFormated => StringHelper.FormatMoney(Interest);
 
         [NotMapped]
-        public string ToPayFormated => StringHelper.FormatMoney((decimal)this.ToPay);
+        public string ToPayFormated => StringHelper.FormatMoney((decimal)ToPay);
 
         [NotMapped]
-        public string AmortitationFormated => StringHelper.FormatMoney((decimal)this.Amortitation);
+        public string AmortitationFormated => StringHelper.FormatMoney((decimal)Amortitation);
 
         [NotMapped]
-        public string EndBalanceFormated => StringHelper.FormatMoney( this.EndBalance);
+        public string EndBalanceFormated => StringHelper.FormatMoney(EndBalance);
 
         [NotMapped]
-        public string ExtraMountFormated => StringHelper.FormatMoney(this.ExtraMount);
+        public string ExtraMountFormated => StringHelper.FormatMoney(ExtraMount);
     }
 
 }
