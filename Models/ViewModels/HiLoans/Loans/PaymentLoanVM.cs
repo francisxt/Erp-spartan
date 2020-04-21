@@ -10,6 +10,7 @@ namespace Models.ViewModels.HiLoans.Loans
         public Guid IdLoan { get; set; }
         public Guid IdDeb { get; set; }
         public decimal Amortization { get; set; }
+        public bool InterestOnly { get; set; }
         public decimal ExtraMount { get; set; }
     }
 }

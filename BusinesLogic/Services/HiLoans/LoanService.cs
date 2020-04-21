@@ -61,34 +61,46 @@ namespace BusinesLogic.Services.HiLoans
             return result;
         }
 
-        public async Task<bool> PaymentDeb(Guid id, Guid idLoan, decimal extraMount)
+        public async Task<bool> PaymentDeb(Guid id, Guid idLoan, decimal extraMount, bool interestOnly)
         {
             var deb = await _dbContext.Debs.FirstOrDefaultAsync(x => x.Id == id);
             var loan = await _dbContext.Loans.FirstOrDefaultAsync(x => x.Id == idLoan);
+            decimal actualCapital= deb.State == State.Active ? loan.ActualCapital - (decimal)deb.Amortitation : loan.ActualCapital + (decimal)deb.Amortitation;
 
-            loan.ActualCapital = deb.State == State.Active ? loan.ActualCapital - (decimal)deb.Amortitation : loan.ActualCapital + (decimal)deb.Amortitation;
+            if (!interestOnly) {
+                loan.ActualCapital = actualCapital;
+            }
             _dbContext.Update(loan);
-
             await _dbContext.SaveChangesAsync();
             var result = false;
-            if (deb.State == State.Active)
+            if (interestOnly && deb.State!=State.Payment)
             {
-                deb.ExtraMount = extraMount;
-                deb.IsExtraMount = extraMount > 0;
-                deb.State = State.Payment;
+                deb.AllowPayInterest = interestOnly;
                 _dbContext.Debs.Update(deb);
                 await _dbContext.SaveChangesAsync();
+                await RecalculateDebs(idLoan, 0, false, interestOnly);
             }
-            else
-            {
-                var extra = deb.ExtraMount;
-                deb.ExtraMount = 0;
-                deb.IsExtraMount = false;
-                deb.State = State.Active;
-                _dbContext.Debs.Update(deb);
-                await _dbContext.SaveChangesAsync();
-                if (extra > 0) await RecalculateDebs(idLoan, extra, false);
+            else {
+                if (deb.State == State.Active)
+                {
+                    deb.ExtraMount = extraMount;
+                    deb.IsExtraMount = extraMount > 0;
+                    deb.State = State.Payment;
+                    _dbContext.Debs.Update(deb);
+                    await _dbContext.SaveChangesAsync();
+                }
+                else
+                {
+                    var extra = deb.ExtraMount;
+                    deb.ExtraMount = 0;
+                    deb.IsExtraMount = false;
+                    deb.State = State.Active;
+                    _dbContext.Debs.Update(deb);
+                    await _dbContext.SaveChangesAsync();
+                    if (extra > 0) await RecalculateDebs(idLoan, extra, false);
+                }
             }
+         
 
             if (extraMount > 0)
             {
@@ -107,18 +119,19 @@ namespace BusinesLogic.Services.HiLoans
             return await Update(model);
         }
 
-        private IEnumerable<Deb> FixedfeeDebs(Loan loan, DateTime lastDateTime, int count = 0)
+        private IEnumerable<Deb> FixedfeeDebs(Loan loan, DateTime lastDateTime,int count = 0,bool interestonly =false)
         {
             double interest = (double)((decimal)loan.Interest) / 100;
             double monthly = interest;
 
             double shares = (loan.Shares - count);
-
+            bool interestOnly = interestonly;
             //decimal LoanDebsamortitation = 0;
-            //if (loan.Debs !=null) {
-            //    if (loan.Debs.Any()) LoanDebsamortitation = (decimal)loan.Debs.FirstOrDefault().Amortitation;
-
-            //}
+            if (loan.Debs != null)
+            {
+                //if (loan.Debs.Any()) LoanDebsamortitation = (decimal)loan.Debs.FirstOrDefault().Amortitation;
+               // if (loan.Debs.Any()) interestOnly = loan.Debs.FirstOrDefault().AllowPayInterest;
+            }
 
             decimal balance = loan.ActualCapital;
             if (loan.RateType == RateType.Anual) monthly = interest / 12;
@@ -130,7 +143,9 @@ namespace BusinesLogic.Services.HiLoans
             {
                 debNumber++;
                 var interestDeb = balance * (decimal)monthly;
+
                 var deb = new Deb { };
+                if (interestOnly) { deb.AllowPayInterest = interestOnly;interestOnly = false; }
                 deb.Share = debNumber;
                 nextPayment = GetDateOfPayment(loan.PaymentModality, nextPayment);
                 deb.DateOfPayment = nextPayment;
@@ -145,11 +160,12 @@ namespace BusinesLogic.Services.HiLoans
             }
             return result;
         }
-        private IEnumerable<Deb> FixedInterestDebs(Loan loan, DateTime lastDateTime, int count = 0)
+        private IEnumerable<Deb> FixedInterestDebs(Loan loan, DateTime lastDateTime, int count = 0,bool interestonly=false)
         {
             double interest = (double)((decimal)loan.Interest) / 100;
             double monthly = interest;
             int shares = loan.Shares - count;
+            bool interestOnly = interestonly;
             decimal LoanDebsamortitation = 0;
             decimal interestValue = 0;
             if (loan.Debs != null)
@@ -186,16 +202,18 @@ namespace BusinesLogic.Services.HiLoans
                     EndBalance = balance - monthlyPrincipal,
                     LoanId = loan.Id
                 };
+                if (interestOnly) { deb.AllowPayInterest = interestOnly; interestOnly = false; }
                 balance -= monthlyPrincipal;
                 result.Add(deb);
             }
             return result;
         }
-        private IEnumerable<Deb> CapitalEndDebs(Loan loan, DateTime lastDateTime, int count = 0)
+        private IEnumerable<Deb> CapitalEndDebs(Loan loan, DateTime lastDateTime, int count = 0,bool interestonly=false)
         {
             double interest = (double)((decimal)loan.Interest) / 100;
             double monthly = interest;
             int shares = loan.Shares - count;
+            bool interestOnly = interestonly;
             decimal LoanDebsamortitation = 0;
 
             decimal interestValue = 0;
@@ -238,6 +256,7 @@ namespace BusinesLogic.Services.HiLoans
                     ToPay = (double)payment,
                     LoanId = loan.Id
                 };
+                if (interestOnly) { deb.AllowPayInterest = interestOnly; interestOnly = false; }
                 result.Add(deb);
             }
             return result;
@@ -264,18 +283,18 @@ namespace BusinesLogic.Services.HiLoans
             }
         }
 
-        private async Task AddDebs(Loan model, DateTime lastDateTime, int count = 0)
+        private async Task AddDebs(Loan model, DateTime lastDateTime, int count = 0,bool interestOnly=false)
         {
             IEnumerable<Deb> debs;
             if (model.AmortitationType == AmortitationType.Fixedfee)
             {
-                debs = FixedfeeDebs(model, lastDateTime, count);
+                debs = FixedfeeDebs(model, lastDateTime, count, interestOnly);
             }
             else if (model.AmortitationType == AmortitationType.FixedInterest)
             {
-                debs = FixedInterestDebs(model, lastDateTime, count);
+                debs = FixedInterestDebs(model, lastDateTime, count, interestOnly);
             }
-            else debs = CapitalEndDebs(model, lastDateTime, count);
+            else debs = CapitalEndDebs(model, lastDateTime, count, interestOnly);
 
             _dbContext.Debs.AddRange(debs);
             await _dbContext.SaveChangesAsync();
@@ -287,24 +306,32 @@ namespace BusinesLogic.Services.HiLoans
             return await _dbContext.SaveChangesAsync() > 0;
         }
 
-        private async Task<bool> RecalculateDebs(Guid idLoan, decimal extraMount, bool isDiscount = true)
+        private async Task<bool> RecalculateDebs(Guid idLoan, decimal extraMount, bool isDiscount = true,bool interestOnly=false)
         {
             var result = false;
-            var debs = await _dbContext.Debs.Where(x => x.State == State.Active && x.LoanId == idLoan).ToListAsync();
+            var debs = await _dbContext.Debs.Where(x => x.State == State.Active  && x.LoanId == idLoan).ToListAsync();
             var count = await _dbContext.Debs.CountAsync(x => x.State == State.Payment && x.LoanId == idLoan);
             var lastPayment = await _dbContext.Debs.Where(x => x.State == State.Payment && x.LoanId == idLoan)
                 .OrderByDescending(x => x.Id)
                 .FirstOrDefaultAsync();
+                var actualPayment = await _dbContext.Debs.Where(x => x.State == State.Active && x.AllowPayInterest &&  x.LoanId == idLoan)
+                .OrderByDescending(x => x.Id)
+                .FirstOrDefaultAsync();
+
             if (await RemoveAllDebs(debs))
             {
                 var loan = await GetById(idLoan);
-                loan.ActualCapital = isDiscount ? loan.ActualCapital - extraMount : loan.ActualCapital + extraMount;
+                if (!interestOnly) {
+                    loan.ActualCapital = isDiscount ? loan.ActualCapital - extraMount : loan.ActualCapital + extraMount;
+                }
                 _dbContext.Loans.Update(loan);
+
                 if (await _dbContext.SaveChangesAsync() > 0)
                 {
                     var dateOfPayment = DateTime.Now;
                     if (lastPayment != null) dateOfPayment = lastPayment.DateOfPayment;
-                    await AddDebs(loan, dateOfPayment, count);
+                    if (actualPayment!=null) dateOfPayment = actualPayment.AllowPayInterest? actualPayment.DateOfPayment:dateOfPayment; 
+                    await AddDebs(loan, dateOfPayment, count, interestOnly);
                     result = true;
                 }
             }

@@ -7,8 +7,8 @@
                 <tr>
                     <th>Cuota</th>
                     <th>Fecha</th>
+                    <th>Capital</th>
                     <th>Interés</th>
-                    <th>Abono Capital</th>
                     <th>Total a Pagar</th>
                     <th>Capital Restante</th>
                 </tr>
@@ -31,23 +31,23 @@
                     toPay += (decimal)item.ToPay;
                     amount = (decimal)item.Amount - amount;
 
-                    <tr class="@bgClass">
-                        <td>@item.Share</td>
-                        <td>@item.DateOfPayment.ToString("dd/MM/yyyy")</td>
-                        <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Interest,2)</td>
-                        <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Amortitation, 2)</td>
-                        <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.ToPay, 2)</td>
-                        <td><i class="fa fa-dollar-sign"></i> @Math.Round(item.Amount, 2)</td>
-                    </tr>
-                }
-                <tr class="bg-info text-white">
-                    <td>#</td>
-                    <td>Totales</td>
-                    <td><i class="fa fa-dollar-sign"></i>@Math.Round(interest,2)</td>
-                    <td><i class="fa fa-dollar-sign"></i>@Math.Round(amortitation, 2)</td>
-                    <td><i class="fa fa-dollar-sign"></i>@Math.Round(toPay, 2)</td>
-                    <td>-</td>
+                <tr class="@bgClass">
+                    <td>@item.Share</td>
+                    <td>@item.DateOfPaymentFormated</td>
+                    <td> @item.AmortitationFormated</td>
+                    <td> @item.InterestFormated</td>
+                    <td>@item.ToPayFormated</td>
+                    <td>@item.AmountFormated</td>
                 </tr>
+                }
+            <tr class="bg-info text-white">
+                <td>#</td>
+                <td>Totales</td>
+                <td>@String.Format("{0:C}", amortitation)  </td>
+                <td>@String.Format("{0:C}", interest) </td>
+                <td>@String.Format("{0:C}", toPay)</td>
+                <td>-</td>
+            </tr>
             </tbody>
         </table>
     </div>
