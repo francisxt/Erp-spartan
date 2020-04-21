@@ -32,7 +32,9 @@ namespace ERP_SPARTAN.Controllers
         public async Task<IActionResult> Create()
         {
             var result = await _service.ClientUserService.GetAllWithRelationships(GetUserLoggedId(), null);
-            ViewBag.Clients = result.Select(x => new SelectListItem { Text = x.User.FullName, Value = x.Id.ToString() });
+            ViewBag.Clients = result.Select(x => new SelectListItem { Text = x.User.FullName, 
+                Value = x.Id.ToString(),Group=new SelectListGroup {Name= x.Enterprise.Name }
+            });
             return View();
         }
 
@@ -41,7 +43,12 @@ namespace ERP_SPARTAN.Controllers
         {
             model.UserId = GetUserLoggedId();
             var clients = await _service.ClientUserService.GetAllWithRelationships(GetUserLoggedId(), null);
-            ViewBag.Clients = clients.Select(x => new SelectListItem { Text = x.User.FullName, Value = x.Id.ToString() });
+            ViewBag.Clients = clients.Select(x => new SelectListItem
+            {
+                Text = x.User.FullName,
+                Value = x.Id.ToString(),
+                Group = new SelectListGroup { Name = x.Enterprise.Name }
+            });
             if (!ModelState.IsValid) return View(model);
 
             var result = await _service.LoanService.Add(model);
@@ -94,7 +101,7 @@ namespace ERP_SPARTAN.Controllers
                 BasicNotification("El monto a abonar es mayor que el capital actual, intente abonar un monto menor", NotificationType.warning, "Error");
                 return RedirectToAction(nameof(GetById), new { id = model.IdLoan });
             }
-            var result = await _service.LoanService.PaymentDeb(model.IdDeb, model.IdLoan, model.ExtraMount);
+            var result = await _service.LoanService.PaymentDeb(model.IdDeb, model.IdLoan, model.ExtraMount,model.InterestOnly);
             if (!result) BasicNotification("Error intente de nuevo", NotificationType.error);
             BasicNotification("Acción Realizada", NotificationType.success);
             return RedirectToAction(nameof(GetById), new { id = model.IdLoan });

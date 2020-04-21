@@ -174,7 +174,7 @@
                                         var bgClass = item.State == State.Payment ? "bg-success text-white" : "";
                                         var bgBtn = item.State == State.Payment ? "btn-danger" : "btn-success";
                                         var btnText = item.State == State.Payment ? "Cancelar pago" : "Pagar cuota";
-
+                                        if (item.AllowPayInterest && item.State==State.Active) { bgClass = "bg-warning text-white"; }
                                         interest += item.Interest;
                                         amortitation += (decimal)item.Amortitation;
                                         toPay += (decimal)item.ToPay;
@@ -188,14 +188,27 @@
                                         <td>@item.InterestFormated</td>
                                         <td>@item.ToPayFormated</td>
                                         <td>@item.AmountFormated</td>
-                                        <td>@item.ExtraMountStr</td>
-                                        <td>@item.StateStr</td>
+                                        <td>@item.ExtraMountStr </td>
+                                        @if (item.AllowPayInterest && item.State == State.Active)
+                                        {
+                                            <td>Solo interes</td>
+                                        }
+                                        else
+                                        {
+                                            <td>@item.StateStr</td>
+
+                                        }
                                         <td>
                                             @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
                                             {
                                                 if (item.Id == lastDebPaid || item.Id == NextDebToPay)
                                                 {
-                                                    <button class="btn btn-sm @bgBtn" onclick="showPaymentDeb('@Model.Id', '@item.Id', '@item.State','@item.Amortitation')">@btnText</button>
+                                                    <button class="btn btn-sm @bgBtn"
+                                                            onclick="showPaymentDeb('@Model.Id', '@item.Id', '@item.State',
+                                                    '@item.Amortitation','@item.AmortitationFormated', '@item.InterestFormated', '@item.ToPayFormated',
+                                                    '@item.DateOfPaymentFormated', '@item.Share')">
+                                                        @btnText
+                                                    </button>
 
                                                 }
                                             }

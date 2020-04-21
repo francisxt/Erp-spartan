@@ -363,14 +363,63 @@ function FormatDate(date) {
  * @param {any} amortizacion amortizacion,
  *
  */
-const showPaymentDeb = (idLoan, idDeb, isDeb, amortizacion) => {
+const showPaymentDeb = (idLoan, idDeb, isDeb, amortizacion,capitalFormated,interes,totalPagar,fecha,cuota) => {
 
     let checkbox = '';
     let amortizationTotal = $('#amortizationTotal').val();
+    let html = ``;
     //si es 3 es pago
     //&& Number(restcount) > 2
-    if (isDeb !== 'Payment') checkbox = `<input type="checkbox" name="type" onclick="showOrHideElement('extraMount')"> <label>¿Abono extra?</label></br>`;
-    const html = `<div class="container"><form class="form-group" action="/Loan/PaymentDeb" method='POST'>
+    if (isDeb !== 'Payment') {
+        checkbox = `<input type="checkbox" id="abonoCapital" name="type" onclick="showOrHideElement('extraMount')"> <label for="abonoCapital">¿Abono Capital?</label></br>`
+        html = `
+
+     <div class="container-fluid w-100" >
+         <form class="form-group" action="/Loan/PaymentDeb" method='POST'>
+            <div class="row col-md-12" >
+             <div class="col-md-4 text-left">
+                <h5>Cuota no.<span class="badge badge-pill   badge-primary" smty>${cuota}</span></h5>
+             </div>
+             <div class="col-md-8 text-right">
+                <h5> <i class="far fa-calendar-minus"></i><span style="font-size:15px;"> ${fecha}	<span/></h5>
+             </div>
+            </div>
+<hr/>
+          <div class="row col-md-12" >
+             <div class="col-md-6 text-left">
+             <input type="checkbox" id="InterestCheck"  name="InterestCheck"  > <label for="InterestCheck">¿Solo Interés?</label>
+             </div>
+             <div class="col-md-6 text-right">
+              ${checkbox}
+             </div>
+            </div>
+<hr/>
+          <div class="row col-md-12" >
+             <div class="col-md-6 text-left">
+              <h5>Interés:<span class="text-success"> ${interes}<span/></h5>
+             </div>
+              <div class="col-md-6 text-right">
+                <h5>Capital:<span class="text-success"> ${capitalFormated}<span/></h3>
+             </div>
+              <div class="col-md-12 text-center">
+<br>
+                <h5>Total a pagar:<span class="text-success" id="totalAmount">  ${totalPagar}</span>
+
+                                   <span class="text-success" style="display:none;"  id="textInterest">  ${interes}</span> 
+                </h5>
+             </div>
+            </div>
+            <input name="IdLoan" value=${idLoan} type="hidden" class="form-control" />
+            <input name="AmortizationTotal" value=${amortizationTotal} type="hidden" class="form-control" />
+            <input name="Amortization" value=${amortizacion} type="hidden" class="form-control" />
+           <input id="InterestOnly" name="InterestOnly" type="hidden" class="form-control" />
+            <input name="IdDeb"  value=${idDeb}  type="hidden" class="form-control" /> 
+            <input name="ExtraMount" id="extraMount" style="display:none;" type="number" class="form-control" placeholder="digite el abono capital" />
+            <button class='btn btn-sm btn-primary' id="btnAddPago" style="    margin-bottom: -39px;">Agregar Pago</button>
+          </form>
+       </div>`;
+    } else {
+        html = `<div class="container"><form class="form-group" action="/Loan/PaymentDeb" method='POST'>
             <input name="IdLoan" value=${idLoan} type="hidden" class="form-control" />
             <input name="AmortizationTotal" value=${amortizationTotal} type="hidden" class="form-control" />
             <input name="Amortization" value=${amortizacion} type="hidden" class="form-control" />
@@ -378,10 +427,15 @@ const showPaymentDeb = (idLoan, idDeb, isDeb, amortizacion) => {
             <input name="ExtraMount" id="extraMount" style="display:none;" type="number" class="form-control" placeholder="digite el monto extra" />
             <button class='btn btn-sm btn-primary'>ACEPTAR</button>
             </form></div>`;
+    }
+    let title = isDeb === 'Payment' ? '¿Seguro que desear realizar esta operación?' : 'Agregar pago';
+    let iconv = '';
+    if (isDeb === 'Payment') { iconv = 'warning' };
 
+    console.log(isDeb)
     Swal.fire({
-        title: "¿Seguro que desear realizar esta operación?",
-        icon: 'warning',
+        title: title,
+        icon: iconv,
         showCancelButton: false,
         showConfirmButton: false,
         confirmButtonColor: '#3085d6',
@@ -389,7 +443,41 @@ const showPaymentDeb = (idLoan, idDeb, isDeb, amortizacion) => {
         confirmButtonText: 'Confirmar',
         html: html
     });
+
+    $("#InterestCheck").click(function () {
+        var isChecked = document.getElementById('InterestCheck').checked;
+        if (isChecked) {
+            $("#textInterest").css('display', 'inline-block');
+            $("#totalAmount").css('display', 'none');
+            $("#abonoCapital").prop("disabled", true);
+        } else {
+            $("#textInterest").css('display', 'none');
+            $("#totalAmount").css('display', 'inline-block');
+            $("#abonoCapital").prop("disabled", false);
+        }
+
+    });
+
+    $("#abonoCapital").click(function () {
+        var isChecked = document.getElementById('abonoCapital').checked;
+        if (isChecked) {
+                 $("#InterestCheck").prop("disabled", true);
+        } else { $("#InterestCheck").prop("disabled", false); }
+
+    });
+
+    $("#btnAddPago").click(function () {
+      
+        var isChecked = document.getElementById('InterestCheck').checked;
+        if (isChecked) { $("abonoCapital").prop("disabled", true);}
+        $("#InterestOnly").val(isChecked);
+ 
+    });
 };
+
+
+
+
 
 /*GET AMORTIZATION**/
 
