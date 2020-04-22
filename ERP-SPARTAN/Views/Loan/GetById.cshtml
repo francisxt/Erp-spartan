@@ -215,17 +215,21 @@
                                             </td>
                                         </tr>
                                     }
-                                    <tr class="bg-info text-white">
-                                        <td>#</td>
-                                        <td>Totales</td>
-                                        <td>@string.Format("{0:C}", amortitation)  </td>
-                                        <td>@string.Format("{0:C}", interest) </td>
-                                        <td>@string.Format("{0:C}", toPay)</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                    </tr>
+                                    @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
+                                    {
+                                        <tr class="bg-info text-white">
+                                            <td>#</td>
+                                            <td>Totales</td>
+                                            <td>@string.Format("{0:C}", amortitation)  </td>
+                                            <td>@string.Format("{0:C}", interest) </td>
+                                            <td>@string.Format("{0:C}", toPay)</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                        </tr>
+                                    }
+
                                 </tbody>
                             </table>
                             <input type="hidden" id="amortizationTotal" value="@Math.Round(amortitation, 2)" />
