@@ -365,42 +365,35 @@ namespace BusinesLogic.Services.HiLoans
 
         public async Task<bool> AddReclosing(Loan model)
         {
-
-            var payments = _dbContext.Debs.Where(x => x.LoanId == model.IdLoanForReclosing && x.State == State.Payment);
-            await payments.ForEachAsync((x) =>
-            {
-                x.LoanId = model.Id;
-            });
-
-            _dbContext.Debs.UpdateRange(payments);
+            var loan = await _dbContext.Loans.FirstOrDefaultAsync(x => x.Id == model.IdLoanForReclosing);
+            loan.State = State.Reclosing;
+            _dbContext.Update(loan);
             var result = await _dbContext.SaveChangesAsync() > 0;
+
             if (result)
             {
-
-                var reclosingHistory =  _dbContext.ReclosingHistories.Where(x => x.IdLoan == model.IdLoanForReclosing);
-                await reclosingHistory.ForEachAsync((x) =>
+                var reclosingHistory = _dbContext.ReclosingHistories.Where(x => x.IdLoan == model.IdLoanForReclosing);
+                if (reclosingHistory.Any())
                 {
-                    x.IdLoan = model.Id;
-                });
-                _dbContext.ReclosingHistories.UpdateRange(reclosingHistory);
-                result = await _dbContext.SaveChangesAsync() > 0;
-                if (result)
-                {
-                    _dbContext.ReclosingHistories.Add(new ReclosingHistory { IdLoan = model.Id, Amount = model.ReclosingAmount });
-                    result = await _dbContext.SaveChangesAsync() > 0;
-                    if (result)
+                    await reclosingHistory.ForEachAsync((x) =>
                     {
-                        var loan = await _dbContext.Loans.FirstOrDefaultAsync(x => x.Id == model.IdLoanForReclosing);
-                        _dbContext.Remove(loan);
-                        result = await _dbContext.SaveChangesAsync() > 0;
-                    }
+                        x.IdLoan = model.Id;
+                    });
+
+                    _dbContext.ReclosingHistories.UpdateRange(reclosingHistory);
+                    result = await _dbContext.SaveChangesAsync() > 0;
                 }
 
-            }
+                if (result)
+                { 
+                    _dbContext.ReclosingHistories.Add(new ReclosingHistory { IdLoan = model.Id, Amount = model.ReclosingAmount, IdRenclosingLoan = model.IdLoanForReclosing });
+                    result = await _dbContext.SaveChangesAsync() > 0;
+                }
+            }       
             return result;
         }
 
-        public async Task<IEnumerable<ReclosingHistory>> GetReclosing(Guid id) 
+        public async Task<IEnumerable<ReclosingHistory>> GetReclosing(Guid id)
             => await _dbContext.ReclosingHistories.Where(x => x.IdLoan == id).ToListAsync();
     }
 }

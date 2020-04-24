@@ -6,6 +6,7 @@
                 <tr>
                     <th>Monto</th>
                     <th>Fecha</th>
+                    <th>Opción</th>
                 </tr>
             </thead>
             <tbody>
@@ -14,9 +15,11 @@
                     <tr>
                         <td>@item.Amount</td>
                         <td>@item.CreatedAtStr</td>
+                        <td>
+                            <a asp-controller="Loan" asp-action="GetMyLoan" asp-route-Id="@item.IdRenclosingLoan" asp-route-reclosingId="@ViewBag.reclosingId">Ver prestamo anterior</a>
+                        </td>
                     </tr>
                 }
-
             </tbody>
         </table>
     </div>

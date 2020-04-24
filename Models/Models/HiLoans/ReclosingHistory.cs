@@ -10,6 +10,7 @@ namespace Models.Models.HiLoans
     {
         [Required]
         public decimal Amount { get; set; }
+        public Guid IdRenclosingLoan { get; set; }
         public Guid IdLoan { get; set; }
         public Loan Loan { get; set; }
     }

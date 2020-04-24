@@ -5,6 +5,12 @@
 }
 
 <h1 class="mb-5">DETALLE DEL PRESTAMO</h1>
+@if (Model.State == State.Reclosing)
+{
+    <div class="alert alert-danger" role="alert">
+        Saldado por reenganche
+    </div>
+}
 
 <div class="row">
     <div class="col-12 col-sm-12 col-md-12">
@@ -84,11 +90,21 @@
             </div>
             <div class="form-group">
                 <button type="button" class="btn btn-sm btn-dark text-white" onclick="window.print()">Imprimir</button>
-                @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
+                @if (Model.State != State.Reclosing)
                 {
-                    <button class="btn btn-sm btn-danger" onclick="ShowSweetConfirmRemoveDialog('@Model.Id','/Loan','Remove','Esta operación no puede ser revertida','Esta seguro?','/Loan/Index',)">Cancelar prestamo</button>
-                    <a asp-action="Reclosing" asp-route-Id="@Model.Id" class="btn btn-sm btn-dark" >Refinanciar</a>
-                    <button type="button" class="btn btn-sm btn-dark text-white" onclick="getAccess('@ViewBag.AccessUrl','@Model.Id')"> Conceder Acceso</button>
+                    @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
+                    {
+                        <button class="btn btn-sm btn-danger" onclick="ShowSweetConfirmRemoveDialog('@Model.Id','/Loan','Remove','Esta operación no puede ser revertida','Esta seguro?','/Loan/Index',)">Cancelar prestamo</button>
+                        <a asp-action="Reclosing" asp-route-Id="@Model.Id" class="btn btn-sm btn-dark">Reenganche</a>
+                        <button type="button" class="btn btn-sm btn-dark text-white" onclick="getAccess('@ViewBag.AccessUrl','@Model.Id')"> Conceder Acceso</button>
+                    }
+                }
+                @if (Model.State == State.Reclosing)
+                {
+                    if (ViewBag.ReclosingId != null)
+                    {
+                        <a asp-action="GetMyLoan" asp-route-Id="@ViewBag.ReclosingId" class="btn btn-sm btn-dark">ir a Prestamo actual</a>
+                    }
                 }
             </div>
         </div>
@@ -97,7 +113,10 @@
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="true">DEUDAS</a>
-                <a class="nav-link" id="profile-tab"  onclick="getReclosingHistory('@Model.Id')" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Refinanciamientos</a>
+                @if (Model.State != State.Reclosing)
+                {
+                    <a class="nav-link" id="profile-tab" onclick="getReclosingHistory('@Model.Id')" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Reenganches</a>
+                }
             </div>
 
         </nav>
@@ -108,10 +127,6 @@
                         <form asp-action="@ViewBag.Action" method="get">
                             <input type="hidden" asp-for="Id" />
                             <select name="stateDeb" class="form-control">
-                                @{
-
-
-                                }
                                 @if (ViewBag.Selected == State.Payment)
                                 {
                                     <option value="@State.Payment" selected>Pagados</option>
@@ -201,7 +216,9 @@
                                                 <td>@item.StateStr</td>
 
                                             }
-                                            <td>
+                                        <td>
+                                            @if (Model.State != State.Reclosing)
+                                            {
                                                 @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
                                                 {
                                                     if (item.Id == lastDebPaid || item.Id == NextDebToPay)
@@ -215,7 +232,12 @@
 
                                                     }
                                                 }
-                                            </td>
+                                            }
+                                            else
+                                            {
+                                                <span>N/A</span>
+                                            }
+                                        </td>
                                         </tr>
                                     }
                                     @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))

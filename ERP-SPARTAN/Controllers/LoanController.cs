@@ -77,10 +77,11 @@ namespace ERP_SPARTAN.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> GetMyLoan(Guid id, State stateDeb = State.All)
+        public async Task<IActionResult> GetMyLoan(Guid id, State stateDeb = State.All , Guid? reclosingId = null)
         {
             ViewBag.Selected = stateDeb;
             ViewBag.Action = nameof(GetMyLoan);
+            ViewBag.ReclosingId = reclosingId;
             var result = await _service.LoanService.GetByIdWithRelationships(id, stateDeb);
             if (result == null) new NotFoundView();
             return View(nameof(GetById), result);
@@ -156,14 +157,17 @@ namespace ERP_SPARTAN.Controllers
                 BasicNotification("Lo sentimos, Intente de nuevo", NotificationType.error);
                 return View(model);
             }
-            BasicNotification("Refinado correctamente", NotificationType.success);
+            BasicNotification("Reenganchado correctamente", NotificationType.success);
 
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
         public async Task<IActionResult> GetReclosingHistory(Guid id)
-         => PartialView("_GetReclosingHistoryPartial", await _service.LoanService.GetReclosing(id));
+        {
+            ViewBag.reclosingId = id;
+            return PartialView("_GetReclosingHistoryPartial", await _service.LoanService.GetReclosing(id));
+        }
 
 
 

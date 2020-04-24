@@ -15,8 +15,13 @@ namespace Models.Enums
         Payment,
         All,
         #endregion
+
         #region FOR ALERTS
-        View
+        View,
+        #endregion
+
+        #region FOR LOANS
+        Reclosing
         #endregion
     }
 }

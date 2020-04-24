@@ -27,6 +27,9 @@
             <li class="nav-item">
                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Saldados</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profilex" role="tab" aria-controls="profile" aria-selected="false">Saldados por reenganche</a>
+            </li>
         </ul>
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -45,7 +48,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in Model.Where(x => x.ActualCapital > 0))
+                                @foreach (var item in Model.Where(x => x.ActualCapital > 0 && x.State == State.Active))
                                 {
                                     <tr>
                                         <td>@item.ClientUser.User.FullName</td>
@@ -101,15 +104,41 @@
                     </table>
                 </div>
             </div>
-
+            <div class="tab-pane fade mt-5" id="profilex" role="tabpanel" aria-labelledby="profile-tab">
+                <div class="table-responsive">
+                    <table class="table table-bordered data-table" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Empresa</th>
+                                <th>Tasa de interes %</th>
+                                <th>Capital Inicial</th>
+                                <th>Tipo de amortización</th>
+                                <th>Modalidad de pago</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Where(x => x.State == State.Reclosing))
+                            {
+                                <tr>
+                                    <td>@item.ClientUser.User.FullName</td>
+                                    <td>@item.ClientUser.Enterprise.Name</td>
+                                    <td>@item.Interest%</td>
+                                    <td>@item.InitialCapital</td>
+                                    <td>@item.AmortitationType.GetDisplayName()</td>
+                                    <td>@item.PaymentModality.GetDisplayName()</td>
+                                    <td>
+                                        <div>
+                                            <a asp-action="GetById" asp-route-id="@item.Id" class="btn acent-background"><i class="far fa-eye text-white"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-
     </div>
-
-
-
-
-</div>
-
-
-<partial name="_NotificationPartial" />
+    <partial name="_NotificationPartial" />
