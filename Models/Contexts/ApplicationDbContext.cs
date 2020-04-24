@@ -7,6 +7,7 @@ using Models.Models;
 using Models.Models.Accounting;
 using Models.Models.HiAccounting;
 using Models.Models.HiAccounting.Debs;
+using Models.Models.HiLoans;
 using Models.Models.Shared;
 
 namespace Models.Contexts
@@ -40,6 +41,7 @@ namespace Models.Contexts
         #region HiLoans
         public DbSet<Loan> Loans { get; set; }
         public DbSet<Deb> Debs { get; set; }
+        public DbSet<ReclosingHistory> ReclosingHistories { get; set; }
         #endregion
 
 

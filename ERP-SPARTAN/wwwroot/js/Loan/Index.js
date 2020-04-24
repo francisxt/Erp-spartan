@@ -363,7 +363,7 @@ function FormatDate(date) {
  * @param {any} amortizacion amortizacion,
  *
  */
-const showPaymentDeb = (idLoan, idDeb, isDeb, amortizacion,capitalFormated,interes,totalPagar,fecha,cuota) => {
+const showPaymentDeb = (idLoan, idDeb, isDeb, amortizacion, capitalFormated, interes, totalPagar, fecha, cuota) => {
 
     let checkbox = '';
     let amortizationTotal = $('#amortizationTotal').val();
@@ -461,17 +461,17 @@ const showPaymentDeb = (idLoan, idDeb, isDeb, amortizacion,capitalFormated,inter
     $("#abonoCapital").click(function () {
         var isChecked = document.getElementById('abonoCapital').checked;
         if (isChecked) {
-                 $("#InterestCheck").prop("disabled", true);
+            $("#InterestCheck").prop("disabled", true);
         } else { $("#InterestCheck").prop("disabled", false); }
 
     });
 
     $("#btnAddPago").click(function () {
-      
+
         var isChecked = document.getElementById('InterestCheck').checked;
-        if (isChecked) { $("abonoCapital").prop("disabled", true);}
+        if (isChecked) { $("abonoCapital").prop("disabled", true); }
         $("#InterestOnly").val(isChecked);
- 
+
     });
 };
 
@@ -494,6 +494,25 @@ const GetAmortization = () => {
                         &Shares=${Shares}&RateType=${RateType}&AmortitationType=${AmortitationType}
                          &PaymentModality=${PayM}&`;
     fetch(`/Loan/GetAmortization${querystr}"`).then(result => result.text()).then((response) => {
+        $('#result').html(response);
+    });
+};
+
+
+const GetAmortizationReclosing = () => {
+    const InitialCapital = document.getElementById("amount").value;
+    const Interest = document.getElementById("interest").value;
+    const Shares = document.getElementById("cuotas").value;
+    const RateType = document.getElementById("typeOfTasa").value;
+    const AmortitationType = document.getElementById("amortitationType").value;
+    const PayM = document.getElementById("pay").value;
+    const reclosing = $('#ReclosingAmount').val();
+
+    $('#result').empty();
+    const querystr = `?InitialCapital=${InitialCapital}&ActualCapital=${InitialCapital}&Interest=${Interest}
+                        &Shares=${Shares}&RateType=${RateType}&AmortitationType=${AmortitationType}
+                         &PaymentModality=${PayM}&ReclosingAmount=${reclosing}&`;
+    fetch(`/Loan/GetAmortizationReclosing${querystr}"`).then(result => result.text()).then((response) => {
         $('#result').html(response);
     });
 };
@@ -523,5 +542,31 @@ const getAccess = (accesslink, id) => {
         cancelButtonColor: '#d33',
         confirmButtonText: 'Confirmar',
         html: html
+    });
+};
+
+const reenganch = (id) => {
+    const html = `<div> <i class='text-muted'>Digite el monto:</i>
+<form action="/Loan/reclosing" method="post">
+<input style='font-size:13px;' class='form-control mt-2 mb-2' type="hidden" value='${id}' name="Id" />
+<input style='font-size:13px;' class='form-control mt-2 mb-2' type="number" step="any" name="Amount" />
+<button class='btn btn-primary' type="submit">Ok</button></form></div>`;
+    Swal.fire({
+        title: "Nuevo Reenganche",
+        icon: 'info',
+        showCancelButton: false,
+        showConfirmButton: false,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Confirmar',
+        html: html
+    });
+};
+
+const getReclosingHistory = (id) => {
+    const div = $('#profile');
+    div.empty();
+    fetch(`/Loan/GetReclosingHistory/${id}`).then(x => x.text()).then(x => {
+        div.append(x);
     });
 };

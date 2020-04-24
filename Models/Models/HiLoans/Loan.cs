@@ -2,6 +2,7 @@
 using Models.Enums.HiAccounting;
 using Models.Enums.HiLoans;
 using Models.Models.HiAccounting.Debs;
+using Models.Models.HiLoans;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -40,12 +41,23 @@ namespace Models.Models.HiAccounting
         public int Shares { get; set; }
 
         [Required(ErrorMessage = "Este campo es requerido")]
-        public int Interest { get; set; }
+        public decimal Interest { get; set; }
         public Guid ClientUserId { get; set; }
         public ClientUser ClientUser { get; set; }
         public virtual IEnumerable<Deb> Debs { get; set; }
+        public virtual IEnumerable<ReclosingHistory> ReclosingHistories { get; set; }
 
         [NotMapped]
         public string SharesStr { get; set; }
+
+        [NotMapped]
+        public decimal ReclosingAmount { get; set; }
+        [NotMapped]
+        public decimal ReclosingInitialAmount { get; set; }
+
+
+
+        [NotMapped]
+        public Guid IdLoanForReclosing { get; set; }
     }
 }

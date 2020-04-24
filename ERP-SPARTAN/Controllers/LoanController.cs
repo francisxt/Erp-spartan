@@ -25,15 +25,18 @@ namespace ERP_SPARTAN.Controllers
         {
             var userId = GetUserLoggedId();
             ViewBag.Enterprises = await _service.EnterpriseService.GetListItem(x => x.UserId == userId);
-            return View(await _service.LoanService.GetAllWithRelationShip(userId,idEnterprise));
+            return View(await _service.LoanService.GetAllWithRelationShip(userId, idEnterprise));
         }
 
         [HttpGet]
         public async Task<IActionResult> Create()
         {
             var result = await _service.ClientUserService.GetAllWithRelationships(GetUserLoggedId(), null);
-            ViewBag.Clients = result.Select(x => new SelectListItem { Text = x.User.FullName, 
-                Value = x.Id.ToString(),Group=new SelectListGroup {Name= x.Enterprise.Name }
+            ViewBag.Clients = result.Select(x => new SelectListItem
+            {
+                Text = x.User.FullName,
+                Value = x.Id.ToString(),
+                Group = new SelectListGroup { Name = x.Enterprise.Name }
             });
             return View();
         }
@@ -73,14 +76,14 @@ namespace ERP_SPARTAN.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet]   
+        [HttpGet]
         public async Task<IActionResult> GetMyLoan(Guid id, State stateDeb = State.All)
         {
             ViewBag.Selected = stateDeb;
             ViewBag.Action = nameof(GetMyLoan);
             var result = await _service.LoanService.GetByIdWithRelationships(id, stateDeb);
             if (result == null) new NotFoundView();
-            return View(nameof(GetById),result);
+            return View(nameof(GetById), result);
         }
 
 
@@ -95,13 +98,13 @@ namespace ERP_SPARTAN.Controllers
         [HttpPost]
         public async Task<IActionResult> PaymentDeb(PaymentLoanVM model)
         {
-            var total =Math.Abs( model.AmortizationTotal - model.Amortization);
+            var total = Math.Abs(model.AmortizationTotal - model.Amortization);
             if (model.ExtraMount > total)
             {
                 BasicNotification("El monto a abonar es mayor que el capital actual, intente abonar un monto menor", NotificationType.warning, "Error");
                 return RedirectToAction(nameof(GetById), new { id = model.IdLoan });
             }
-            var result = await _service.LoanService.PaymentDeb(model.IdDeb, model.IdLoan, model.ExtraMount,model.InterestOnly);
+            var result = await _service.LoanService.PaymentDeb(model.IdDeb, model.IdLoan, model.ExtraMount, model.InterestOnly);
             if (!result) BasicNotification("Error intente de nuevo", NotificationType.error);
             BasicNotification("Acción Realizada", NotificationType.success);
             return RedirectToAction(nameof(GetById), new { id = model.IdLoan });
@@ -110,6 +113,67 @@ namespace ERP_SPARTAN.Controllers
         [HttpGet]
         public IActionResult GetAmortization(Loan model)
             => PartialView("_GetAmortizationPartial", _service.LoanService.GetAmortization(model));
-        
+
+
+        [HttpGet]
+        public async Task<IActionResult> Reclosing(Guid id, State stateDeb = State.All)
+        {
+
+            ViewBag.Selected = stateDeb;
+            ViewBag.Action = nameof(GetById);
+            var result = await _service.LoanService.GetByIdWithRelationships(id, stateDeb);
+            if (result == null) new NotFoundView();
+            return View(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Reclosing(Loan model)
+        {
+            model.Id = Guid.Empty;
+            model.UserId = GetUserLoggedId();
+            model.InitialCapital = model.ActualCapital + model.ReclosingAmount;
+            var clients = await _service.ClientUserService.GetAllWithRelationships(GetUserLoggedId(), null);
+            ViewBag.Clients = clients.Select(x => new SelectListItem
+            {
+                Text = x.User.FullName,
+                Value = x.Id.ToString(),
+                Group = new SelectListGroup { Name = x.Enterprise.Name }
+            });
+            if (!ModelState.IsValid) return View(model);
+
+            var result = await _service.LoanService.Add(model);
+            if (!result)
+            {
+
+                BasicNotification("Lo sentimos, Intente de nuevo", NotificationType.error);
+                return View(model);
+
+            }
+
+            result = await _service.LoanService.AddReclosing(model);
+            if (!result)
+            {
+                BasicNotification("Lo sentimos, Intente de nuevo", NotificationType.error);
+                return View(model);
+            }
+            BasicNotification("Refinado correctamente", NotificationType.success);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetReclosingHistory(Guid id)
+         => PartialView("_GetReclosingHistoryPartial", await _service.LoanService.GetReclosing(id));
+
+
+
+        [HttpGet]
+        public IActionResult GetAmortizationReclosing(Loan model)
+        {
+            model.ActualCapital += model.ReclosingAmount;
+            return PartialView("_GetAmortizationPartial", _service.LoanService.GetAmortization(model));
+        }
+
+
     }
 }

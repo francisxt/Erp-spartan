@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Models.Contexts;
 
 namespace ERP_SPARTAN.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200423203631_FixDecimal")]
+    partial class FixDecimal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -445,37 +447,6 @@ namespace ERP_SPARTAN.Data.Migrations
                     b.ToTable("Loans");
                 });
 
-            modelBuilder.Entity("Models.Models.HiLoans.ReclosingHistory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("IdLoan")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("LoanId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("State")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdateAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LoanId");
-
-                    b.ToTable("ReclosingHistories");
-                });
-
             modelBuilder.Entity("Models.Models.Movement", b =>
                 {
                     b.Property<Guid>("Id")
@@ -666,13 +637,6 @@ namespace ERP_SPARTAN.Data.Migrations
                     b.HasOne("Models.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("Models.Models.HiLoans.ReclosingHistory", b =>
-                {
-                    b.HasOne("Models.Models.HiAccounting.Loan", "Loan")
-                        .WithMany("ReclosingHistories")
-                        .HasForeignKey("LoanId");
                 });
 
             modelBuilder.Entity("Models.Models.Movement", b =>

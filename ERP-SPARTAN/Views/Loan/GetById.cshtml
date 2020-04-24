@@ -87,6 +87,7 @@
                 @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
                 {
                     <button class="btn btn-sm btn-danger" onclick="ShowSweetConfirmRemoveDialog('@Model.Id','/Loan','Remove','Esta operación no puede ser revertida','Esta seguro?','/Loan/Index',)">Cancelar prestamo</button>
+                    <a asp-action="Reclosing" asp-route-Id="@Model.Id" class="btn btn-sm btn-dark" >Refinanciar</a>
                     <button type="button" class="btn btn-sm btn-dark text-white" onclick="getAccess('@ViewBag.AccessUrl','@Model.Id')"> Conceder Acceso</button>
                 }
             </div>
@@ -96,7 +97,9 @@
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="true">DEUDAS</a>
+                <a class="nav-link" id="profile-tab"  onclick="getReclosingHistory('@Model.Id')" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Refinanciamientos</a>
             </div>
+
         </nav>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
@@ -236,6 +239,9 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <h1>Espere un momento...</h1>
             </div>
         </div>
     </div>
