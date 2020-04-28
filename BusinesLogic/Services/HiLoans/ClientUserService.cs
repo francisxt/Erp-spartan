@@ -57,5 +57,16 @@ namespace BusinesLogic.Services
             if (filter != null) result = result.Where(filter);
             return await result.Select(x => new SelectListItem { Text = $"{x.User.FullName} {x.User.UserName}", Value = x.User.Id }).ToListAsync();
         }
+
+
+        public override async Task<bool> Update(ClientUser entity)
+        {
+            var model = await GetById(entity.Id);
+            model.IdentificationCard = entity.IdentificationCard;
+            model.State = entity.State;
+            model.Address = entity.Address;
+            _dbContext.Update(model);
+            return await _dbContext.SaveChangesAsync() > 0;
+        }
     }
 }

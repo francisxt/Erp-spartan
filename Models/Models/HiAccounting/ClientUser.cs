@@ -19,5 +19,6 @@ namespace Models.Models
         public Guid EnterpriseId { get; set; }
         public Enterprise Enterprise { get; set; }
         public string IdentificationCard { get; set; }
+        public string Address { get; set; }
     }
 }

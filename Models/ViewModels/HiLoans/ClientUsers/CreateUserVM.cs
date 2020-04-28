@@ -4,7 +4,6 @@ using Models.Models.Accounting;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace Models.ViewModels.ClientUsers
 {
@@ -16,5 +15,7 @@ namespace Models.ViewModels.ClientUsers
         public Guid EnterpriseId { get; set; }
         public IEnumerable<Enterprise> Enterprises { get; set; }
         public string IdentificationCard { get; set; }
+        [Display(Name = "Dirrección")]
+        public string Address { get; set; }
     }
 }

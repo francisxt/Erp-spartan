@@ -73,7 +73,9 @@ namespace ERP_SPARTAN.Controllers
                     {
                         UserId = user.Id,
                         CreatedBy = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value,
-                        EnterpriseId = client.EnterpriseId
+                        IdentificationCard = client.IdentificationCard,
+                        EnterpriseId = client.EnterpriseId,
+                        Address = client.Address
                     }))
                     {
                         var resultRol = await _userManager.AddToRoleAsync(user, client.Rol.ToString());
@@ -113,8 +115,11 @@ namespace ERP_SPARTAN.Controllers
             {
                 if (await _service.UserService.Update(model.User))
                 {
-                    BasicNotification("Cliente actualizado", NotificationType.success);
-                    return RedirectToAction(nameof(Index));
+                    if(await _service.ClientUserService.Update(model))
+                    {
+                        BasicNotification("Cliente actualizado", NotificationType.success);
+                        return RedirectToAction(nameof(Index));
+                    }
                 }
                 BasicNotification("Intente de nuevo, una de las causas es que ya exista alguien con este correo intente con otro",
                          NotificationType.error, "Lo sentimos no se pudo actualizar");

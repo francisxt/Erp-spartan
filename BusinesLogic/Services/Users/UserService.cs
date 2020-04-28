@@ -50,7 +50,6 @@ namespace BusinesLogic.Services
         {
             var result = await _dbContext.ApplicationUsers.FirstOrDefaultAsync(x => x.Id == model.Id);
             if (result == null) return false;
-            result.Email = model.Email;
             result.PhoneNumber = model.PhoneNumber;
             result.Name = model.Name;
             result.LastName = model.LastName;
