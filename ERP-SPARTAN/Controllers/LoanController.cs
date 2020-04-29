@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Models.Enums;
+using Models.Enums.HiAccounting;
 using Models.Models.HiAccounting;
 using Models.ViewModels.HiLoans.Loans;
 using System;
@@ -44,7 +45,13 @@ namespace ERP_SPARTAN.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Loan model)
         {
+
             model.UserId = GetUserLoggedId();
+            if (model.AmortitationType == AmortitationType.Open_o_Personalfee)
+            {
+                model.Shares = _service.LoanService.getShares(model);
+            }
+
             var clients = await _service.ClientUserService.GetAllWithRelationships(GetUserLoggedId(), null);
             ViewBag.Clients = clients.Select(x => new SelectListItem
             {
@@ -53,6 +60,7 @@ namespace ERP_SPARTAN.Controllers
                 Group = new SelectListGroup { Name = x.Enterprise.Name }
             });
             if (!ModelState.IsValid) return View(model);
+
 
             var result = await _service.LoanService.Add(model);
             if (!result)

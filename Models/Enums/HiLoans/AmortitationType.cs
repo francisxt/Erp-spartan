@@ -7,6 +7,8 @@ namespace Models.Enums.HiAccounting
 {
     public enum AmortitationType
     {
+        [Display(Name = "CUOTA PERSONAL O ABIERTA")]
+        Open_o_Personalfee,
         [Display(Name = "CUOTA FIJA")]
         Fixedfee,
         [Display(Name = "INTERES FIJO")]

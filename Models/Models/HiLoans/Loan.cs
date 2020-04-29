@@ -46,6 +46,8 @@ namespace Models.Models.HiAccounting
         public ClientUser ClientUser { get; set; }
         public virtual IEnumerable<Deb> Debs { get; set; }
         public virtual IEnumerable<ReclosingHistory> ReclosingHistories { get; set; }
+        [Required]
+        public decimal AmountDeb { get; set; }
 
         [NotMapped]
         public string SharesStr { get; set; }
@@ -54,7 +56,6 @@ namespace Models.Models.HiAccounting
         public decimal ReclosingAmount { get; set; }
         [NotMapped]
         public decimal ReclosingInitialAmount { get; set; }
-
 
 
         [NotMapped]

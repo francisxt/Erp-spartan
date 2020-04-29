@@ -2,6 +2,20 @@
     await fetch("/ClientUser/GetAllOptionsClients").then(response => response.text()).then((result) => { console.log(result); });
 };
 
+$('#amortitationType').on('change', function () {
+    if (this.value === '0') {
+        $("#messageAmortizacion").css('display', 'inline-block');
+        $("#ContainerAmountDeb").css('display', 'block');
+        $("#Containercuotas").css('display', 'none');
+
+    } else {
+        console.log(this.value)
+        $("#messageAmortizacion").css('display', 'none');
+        $("#ContainerAmountDeb").css('display', 'none');
+        $("#Containercuotas").css('display', 'block');
+    }   
+});
+
 
 Date.prototype.addDays = function (days) {
     var date = new Date(this.valueOf());
@@ -485,6 +499,7 @@ const GetAmortization = () => {
     const InitialCapital = document.getElementById("amount").value;
     const Interest = document.getElementById("interest").value;
     const Shares = document.getElementById("cuotas").value;
+    const AmountDeb = document.getElementById("AmountDeb").value;
     const RateType = document.getElementById("typeOfTasa").value;
     const AmortitationType = document.getElementById("amortitationType").value;
     const PayM = document.getElementById("pay").value;
@@ -492,7 +507,7 @@ const GetAmortization = () => {
     $('#result').empty();
     const querystr = `?InitialCapital=${InitialCapital}&ActualCapital=${InitialCapital}&Interest=${Interest}
                         &Shares=${Shares}&RateType=${RateType}&AmortitationType=${AmortitationType}
-                         &PaymentModality=${PayM}&`;
+                         &PaymentModality=${PayM}&AmountDeb=${AmountDeb}&`;
     fetch(`/Loan/GetAmortization${querystr}"`).then(result => result.text()).then((response) => {
         $('#result').html(response);
     });
