@@ -518,6 +518,7 @@ const GetAmortizationReclosing = () => {
     const InitialCapital = document.getElementById("amount").value;
     const Interest = document.getElementById("interest").value;
     const Shares = document.getElementById("cuotas").value;
+    const AmountDeb = document.getElementById("AmountDeb").value;
     const RateType = document.getElementById("typeOfTasa").value;
     const AmortitationType = document.getElementById("amortitationType").value;
     const PayM = document.getElementById("pay").value;
@@ -526,7 +527,7 @@ const GetAmortizationReclosing = () => {
     $('#result').empty();
     const querystr = `?InitialCapital=${InitialCapital}&ActualCapital=${InitialCapital}&Interest=${Interest}
                         &Shares=${Shares}&RateType=${RateType}&AmortitationType=${AmortitationType}
-                         &PaymentModality=${PayM}&ReclosingAmount=${reclosing}&`;
+                         &PaymentModality=${PayM}&AmountDeb=${AmountDeb}&ReclosingAmount=${reclosing}&`;
     fetch(`/Loan/GetAmortizationReclosing${querystr}"`).then(result => result.text()).then((response) => {
         $('#result').html(response);
     });
