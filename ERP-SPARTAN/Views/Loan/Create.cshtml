@@ -16,8 +16,10 @@
                         <label asp-for="AmortitationType" class="control-label">Tipo de amortización</label>
                         <select asp-for="AmortitationType" id="amortitationType" asp-items="Html.GetEnumSelectList<Models.Enums.HiAccounting.AmortitationType>()" class="form-control"></select>
                         <span asp-validation-for="AmortitationType" class="text-danger"></span>
+                        <span id="messageAmortizacion" class=" p-0 text-warning" style="font-size:15px;">En este tipo de amortización usted no necesita asignar el numero de cuotas.</span>
+
                     </div>
-                </div>
+                </div> 
                 <div class="col-12 col-md-6  mt-1 ">
                     <div class="form-group">
                         <label asp-for="ClientUserId" class="control-label">Cliente</label><br />
@@ -57,15 +59,20 @@
                 </div>
             </div>
             <div class="row mt-2">
-                <div class="col-12 col-md-4 mt-1 ">
-                    <label>Cuotas</label>
-                    <input asp-for="Shares" class="form-control" id="cuotas" type="number" />
+                <div class="col-12 col-md-4 mt-1" id="ContainerAmountDeb">
+                    <label  asp-for="AmountDeb">Monto cuota</label>
+                    <input asp-for="AmountDeb" class="form-control" id="AmountDeb" type="number" />
+                    <span asp-validation-for="AmountDeb" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-4 mt-1 " id="Containercuotas" style="display:none;">
+                    <label>No. Cuotas</label>
+                    <input asp-for="Shares" class="form-control" id="cuotas" min="0" value="0" type="number" />
                     <span asp-validation-for="Shares" class="text-danger"></span>
                 </div>
                 <div class="col-12 col-md-4 mt-1 ">
                     <div class="form-group">
                         <label asp-for="PaymentModality" class="control-label">Modalidad de pago</label>
-                        <select  asp-for="PaymentModality" id="pay" asp-items="Html.GetEnumSelectList<PaymentModality>()" class="form-control"></select>
+                        <select asp-for="PaymentModality" id="pay" asp-items="Html.GetEnumSelectList<PaymentModality>()" class="form-control"></select>
                         <span asp-validation-for="PaymentModality" class="text-danger"></span>
                     </div>
                 </div>

@@ -20,6 +20,7 @@ namespace BusinesLogic.Interfaces.HiLoans
         Task<bool> PaymentDeb(Guid id, Guid idLoan, decimal extraMount,bool InterestOnly);
         IEnumerable<Deb> GetAmortization(Loan model);
         Task<bool> AddReclosing(Loan model);
+        int getShares(Loan model);
         Task<IEnumerable<ReclosingHistory>> GetReclosing(Guid id);
 
 
