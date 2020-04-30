@@ -53,9 +53,14 @@
                 </div>
             </div>
             <div class="row mt-2">
-                <div class="col-12 col-md-4 mt-1 ">
-                    <label>Cuotas</label>
-                    <input asp-for="Shares" value="0" class="form-control" id="cuotas" type="number" />
+                <div class="col-12 col-md-4 mt-1" id="ContainerAmountDeb">
+                    <label asp-for="AmountDeb">Monto cuota</label>
+                    <input asp-for="AmountDeb" class="form-control" id="AmountDeb" type="number" />
+                    <span asp-validation-for="AmountDeb" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-4 mt-1 " id="Containercuotas" style="display:none;">
+                    <label>No. Cuotas</label>
+                    <input asp-for="Shares" class="form-control" id="cuotas" min="0" value="0" type="number" />
                     <span asp-validation-for="Shares" class="text-danger"></span>
                 </div>
                 <div class="col-12 col-md-4 mt-1 ">

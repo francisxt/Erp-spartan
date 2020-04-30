@@ -135,7 +135,7 @@ namespace BusinesLogic.Services.HiLoans
             double monthly = interest;
 
            // double shares = (loan.Shares - count);
-            decimal cuotasInformal = loan.InitialCapital / loan.AmountDeb;
+            decimal cuotasInformal = loan.ActualCapital / loan.AmountDeb;
        
 
             bool interestOnly = interestonly;
@@ -155,16 +155,22 @@ namespace BusinesLogic.Services.HiLoans
             var result = new List<Deb>();
             var nextPayment = lastDateTime;
             int debNumber = count;
+            int debNumberLogic = debNumber;
 
-            for (int i = debNumber; i < shares; i++)
+            for (int i = 0; i < shares; i++)
             {
                 debNumber++;
 
-                if (debNumber == shares)
-                {
-                    payment = (double)decimas * (double)loan.AmountDeb;
+               // int tesst = !interestonly?debNumberLogic+1:debNumberLogic;
+                if (debNumber > 1) {
+                   
+                    if ((i == (shares - 1)) && decimas > 0)
+                    {
+                        payment = (double)decimas * (double)loan.AmountDeb;
+                    }
                 }
-
+             
+                debNumberLogic = debNumber;
                 var interestDeb = (double)balance *  monthly;
     
                 var deb = new Deb { };
