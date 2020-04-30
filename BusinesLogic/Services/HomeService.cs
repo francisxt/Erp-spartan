@@ -19,10 +19,10 @@ namespace BusinesLogic.Services
         public async Task<HomeVM> Get(string id)
         {
             var clients = await _dbContext.ClientUsers.Include(x => x.Movements)
-                .Where(x => x.CreatedBy == id).ToListAsync();
+                .Where(x => x.CreatedBy == id && x.State == Models.Enums.State.Active).ToListAsync();
 
             var loans = await _dbContext.Loans.Include(x => x.Debs)
-                .Where(x => x.UserId == id).ToListAsync();
+                .Where(x => x.UserId == id && x.State == Models.Enums.State.Active).ToListAsync();
           
             decimal totalOfDebs = 0;
             decimal totalLoansDebs = 0;
