@@ -8,16 +8,17 @@ $(document).ready(() => {
     $('.data-table').DataTable({
         pageLength: 50,
         "language": {
-            "info":"Mostrando _START_ de _TOTAL_ resultados",
+            "info": "Mostrando _START_ de _TOTAL_ resultados",
             "zeroRecords": "No encontramos resultados",
-            "infoEmpty":"No hay datos",
+            "infoEmpty": "No hay datos",
             "search": "Buscar",
-            "lengthMenu":"Mostrar _MENU_ resultados",
+            "lengthMenu": "Mostrar _MENU_ resultados",
             "paginate": {
                 "next": "Siguiente",
                 "previous": "Anterior"
             }
-        }
+        },
+        responsive: true
     });
 
     //Get all actives alerts

@@ -129,24 +129,19 @@ namespace BusinesLogic.Services.HiLoans
             var result = await Update(model);
             if (result)
             {
-                var reenclosingHistory = _dbContext.ReclosingHistories.Where(x => x.IdLoan == id).AsNoTracking();
-                if(reenclosingHistory.Any())
+                var reenclosingHistory = await _dbContext.ReclosingHistories.Where(x => x.IdLoan == id).ToListAsync();
+                if (reenclosingHistory.Any())
                 {
                     foreach (var item in reenclosingHistory)
                     {
-                        try
-                        {///resolver
-                            var loan = await _dbContext.Loans.FirstOrDefaultAsync(x => x.Id == item.IdLoan);
-                            if(loan != null)
-                            {
-                                _dbContext.Remove(loan);
-                                result = await _dbContext.SaveChangesAsync() > 0;
-                            }
-                        }
-                        catch (Exception ex)
-                        {
 
+                        var loan = await _dbContext.Loans.FirstOrDefaultAsync(x => x.Id == item.IdRenclosingLoan);
+                        if (loan != null)
+                        {
+                            _dbContext.Remove(loan);
+                            result = await _dbContext.SaveChangesAsync() > 0;
                         }
+
                     }
                 }
             }

@@ -3,7 +3,8 @@
 @{
     ViewData["Title"] = "GetById";
 }
-
+<link href="~/lib/stacktable.js/stacktable.css" rel="stylesheet" />
+<script src="~/lib/stacktable.js/stacktable.js"></script>
 <h1 class="mb-5">DETALLE DEL PRESTAMO</h1>
 @if (Model.State == State.Reclosing)
 {
@@ -11,7 +12,7 @@
         Saldado por reenganche
     </div>
 }
-
+<link href="~/css/table.css" rel="stylesheet" asp-append-version="true" />
 <div class="row">
     <div class="col-12 col-sm-12 col-md-12">
         <div>
@@ -154,7 +155,7 @@
                     </div>
                     <div class="col-12">
                         <div class="table-responsive">
-                            <table class="table table-bordered mt-4" width="100%" cellspacing="0">
+                            <table class="table table-bordered mt-4 " width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
                                         <th>Cuota</th>
@@ -216,28 +217,28 @@
                                                 <td>@item.StateStr</td>
 
                                             }
-                                        <td>
-                                            @if (Model.State != State.Reclosing)
-                                            {
-                                                @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
+                                            <td>
+                                                @if (Model.State != State.Reclosing)
                                                 {
-                                                    if (item.Id == lastDebPaid || item.Id == NextDebToPay)
+                                                    @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
                                                     {
-                                                        <button class="btn btn-sm @bgBtn"
-                                                                onclick="showPaymentDeb('@Model.Id', '@item.Id', '@item.State',
+                                                        if (item.Id == lastDebPaid || item.Id == NextDebToPay)
+                                                        {
+                                                            <button class="btn btn-sm @bgBtn"
+                                                                    onclick="showPaymentDeb('@Model.Id', '@item.Id', '@item.State',
                                                     '@item.Amortitation','@item.AmortitationFormated', '@item.InterestFormated', '@item.ToPayFormated',
                                                     '@item.DateOfPaymentFormated', '@item.Share')">
-                                                            @btnText
-                                                        </button>
+                                                                @btnText
+                                                            </button>
 
+                                                        }
                                                     }
                                                 }
-                                            }
-                                            else
-                                            {
-                                                <span>N/A</span>
-                                            }
-                                        </td>
+                                                else
+                                                {
+                                                    <span>N/A</span>
+                                                }
+                                            </td>
                                         </tr>
                                     }
                                     @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
@@ -271,3 +272,6 @@
 <script src="~/js/Loan/Index.js" asp-append-version="true"></script>
 <script src="~/js/Shared/httpRequest.js" asp-append-version="true"></script>
 <partial name="_NotificationPartial" />
+<script>
+    $('.table').stacktable();
+</script>
