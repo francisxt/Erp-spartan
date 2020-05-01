@@ -67,9 +67,9 @@
                             </td>
                             <td>
                                 <div>
-                                    <a asp-action="GetById" asp-route-id="@client.Id" class="btn acent-background"><i class="far fa-eye text-white"></i></a>
-                                    <button class="btn acent-background" onclick="ShowSweetConfirmRemoveDialog('@client.Id','ClientUser','Remove')"><i class="far fa-trash-alt text-white"></i></button>
-                                    <button class="btn acent-background" onclick="ShowSweetConfirmEnableOrDisableUser('@client.UserId','ClientUser','LockOrUnlockUser')"><i class="@icon text-white"></i></button>
+                                    <a asp-action="GetById" asp-route-id="@client.Id" class="btn btn-success"><i class="far fa-eye text-white"></i></a>
+                                    <button class="btn btn-danger" onclick="ShowSweetConfirmRemoveDialog('@client.Id','ClientUser','Remove')"><i class="far fa-trash-alt text-white"></i></button>
+                                    <button class="btn btn-secondary" onclick="ShowSweetConfirmEnableOrDisableUser('@client.UserId','ClientUser','LockOrUnlockUser')"><i class="@icon "></i></button>
                                     @if (User.IsInRole(nameof(RolsAuthorization.ClientsUser)))
                                     {
                                         <a asp-action="GetByClientUser" asp-controller="Movement" asp-route-id="@client.Id" class="btn acent-background text-white"><i class="fas fa-money-bill-alt"></i></a>

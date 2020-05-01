@@ -61,8 +61,8 @@
                                 @Html.DisplayFor(modelItem => item.CreatedAtStr)
                             </td>
                             <td>
-                                <a asp-action="Update" class="btn btn-primary" asp-route-id="@item.Id"><i class="fa fa-edit"></i></a>
-                                <a asp-action="Remove" class="btn btn-primary" asp-route-id="@item.Id"><i class="fa fa-trash"></i></a>
+                                <a asp-action="Update" class="btn btn-warning text-white" asp-route-id="@item.Id"><i class="fa fa-edit"></i></a>
+                                <a asp-action="Remove" class="btn btn-danger text-white" asp-route-id="@item.Id"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
                     }

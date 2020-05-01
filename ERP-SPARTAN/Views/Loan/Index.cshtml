@@ -1,7 +1,22 @@
 ﻿@model IEnumerable<Models.Models.HiAccounting.Loan>
-<h1><i class="fa fa-hand-holding-usd"></i> Prestamos</h1>
-<a asp-action="Create" class="btn btn-primary btn-sm">Nuevo</a>
+
+<div class="container-fluid">
+
+    <div class="row justify-content-between">
+        <div class="col-xs-11 ">
+            <h1><i class="fa fa-hand-holding-usd"></i> Prestamos</h1>
+        </div>
+
+        <div class="col-xs-1">
+            <a asp-action="Create" class="btn btn-primary btn-radius">Nuevo</a>
+        </div>
+        <div class="col-12">
+        </div>
+    </div>
+
+</div>
 <hr />
+
 
 <div class="row">
     <div class="col-12">
@@ -59,7 +74,7 @@
                                         <td>@item.PaymentModality.GetDisplayName()</td>
                                         <td>
                                             <div>
-                                                <a asp-action="GetById" asp-route-id="@item.Id" class="btn acent-background"><i class="far fa-eye text-white"></i></a>
+                                                <a asp-action="GetById" asp-route-id="@item.Id" class="btn btn-success"><i class="far fa-eye text-white"></i></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -95,7 +110,7 @@
                                     <td>@item.PaymentModality.GetDisplayName()</td>
                                     <td>
                                         <div>
-                                            <a asp-action="GetById" asp-route-id="@item.Id" class="btn acent-background"><i class="far fa-eye text-white"></i></a>
+                                            <a asp-action="GetById" asp-route-id="@item.Id" class="btn btn-success"><i class="far fa-eye text-white"></i></a>
                                         </div>
                                     </td>
                                 </tr>
@@ -130,7 +145,7 @@
                                     <td>@item.PaymentModality.GetDisplayName()</td>
                                     <td>
                                         <div>
-                                            <a asp-action="GetById" asp-route-id="@item.Id" class="btn acent-background"><i class="far fa-eye text-white"></i></a>
+                                            <a asp-action="GetById" asp-route-id="@item.Id" class="btn btn-success"><i class="far fa-eye text-white"></i></a>
                                         </div>
                                     </td>
                                 </tr>
@@ -141,4 +156,6 @@
             </div>
         </div>
     </div>
+</div>
+
     <partial name="_NotificationPartial" />
