@@ -126,7 +126,31 @@ namespace BusinesLogic.Services.HiLoans
             var model = await GetById(id);
             model.State = State.Removed;
             model.UpdateAt = DateTime.Now;
-            return await Update(model);
+            var result = await Update(model);
+            if (result)
+            {
+                var reenclosingHistory = _dbContext.ReclosingHistories.Where(x => x.IdLoan == id).AsNoTracking();
+                if(reenclosingHistory.Any())
+                {
+                    foreach (var item in reenclosingHistory)
+                    {
+                        try
+                        {///resolver
+                            var loan = await _dbContext.Loans.FirstOrDefaultAsync(x => x.Id == item.IdLoan);
+                            if(loan != null)
+                            {
+                                _dbContext.Remove(loan);
+                                result = await _dbContext.SaveChangesAsync() > 0;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                    }
+                }
+            }
+            return result;
         }
 
         private IEnumerable<Deb> OpenfeeDebs(Loan loan, DateTime lastDateTime, int count = 0, bool interestonly = false)
@@ -134,9 +158,9 @@ namespace BusinesLogic.Services.HiLoans
             double interest = (double)((decimal)loan.Interest) / 100;
             double monthly = interest;
 
-           // double shares = (loan.Shares - count);
+            // double shares = (loan.Shares - count);
             decimal cuotasInformal = loan.ActualCapital / loan.AmountDeb;
-       
+
 
             bool interestOnly = interestonly;
             //decimal LoanDebsamortitation = 0;
@@ -161,21 +185,22 @@ namespace BusinesLogic.Services.HiLoans
             {
                 debNumber++;
 
-               // int tesst = !interestonly?debNumberLogic+1:debNumberLogic;
-                if (debNumber > 1) {
-                   
+                // int tesst = !interestonly?debNumberLogic+1:debNumberLogic;
+                if (debNumber > 1)
+                {
+
                     if ((i == (shares - 1)) && decimas > 0)
                     {
                         payment = (double)decimas * (double)loan.AmountDeb;
                     }
                 }
-             
+
                 debNumberLogic = debNumber;
-                var interestDeb = (double)balance *  monthly;
-    
+                var interestDeb = (double)balance * monthly;
+
                 var deb = new Deb { };
                 if (interestOnly) { deb.AllowPayInterest = interestOnly; interestOnly = false; }
-                deb.Share = debNumber ;
+                deb.Share = debNumber;
                 nextPayment = GetDateOfPayment(loan.PaymentModality, nextPayment);
                 deb.DateOfPayment = nextPayment;
                 deb.Amount = balance;
@@ -360,11 +385,11 @@ namespace BusinesLogic.Services.HiLoans
         private async Task AddDebs(Loan model, DateTime lastDateTime, int count = 0, bool interestOnly = false)
         {
             IEnumerable<Deb> debs;
-            if (model.AmortitationType==AmortitationType.Open_o_Personalfee)
+            if (model.AmortitationType == AmortitationType.Open_o_Personalfee)
             {
                 debs = OpenfeeDebs(model, lastDateTime, count, interestOnly);
             }
-           else if (model.AmortitationType == AmortitationType.Fixedfee)
+            else if (model.AmortitationType == AmortitationType.Fixedfee)
             {
                 debs = FixedfeeDebs(model, lastDateTime, count, interestOnly);
             }
@@ -420,11 +445,11 @@ namespace BusinesLogic.Services.HiLoans
         public IEnumerable<Deb> GetAmortization(Loan model)
         {
             IEnumerable<Deb> debs;
-             if (model.AmortitationType == AmortitationType.Open_o_Personalfee)
+            if (model.AmortitationType == AmortitationType.Open_o_Personalfee)
             {
                 debs = OpenfeeDebs(model, DateTime.Now);
             }
-            else  if (model.AmortitationType == AmortitationType.Fixedfee)
+            else if (model.AmortitationType == AmortitationType.Fixedfee)
             {
                 debs = FixedfeeDebs(model, DateTime.Now);
             }
@@ -458,11 +483,11 @@ namespace BusinesLogic.Services.HiLoans
                 }
 
                 if (result)
-                { 
+                {
                     _dbContext.ReclosingHistories.Add(new ReclosingHistory { IdLoan = model.Id, Amount = model.ReclosingAmount, IdRenclosingLoan = model.IdLoanForReclosing });
                     result = await _dbContext.SaveChangesAsync() > 0;
                 }
-            }       
+            }
             return result;
         }
         public int getShares(Loan model)
