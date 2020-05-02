@@ -170,6 +170,7 @@ namespace ERP_SPARTAN.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetReclosingHistory(Guid id)
         {
