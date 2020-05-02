@@ -41,7 +41,7 @@
                 <div class="col-12 col-md-4 mt-1 ">
                     <div class="form-group">
                         <label asp-for="InitialCapital" class="control-label">Monto</label>
-                        <input id="amount" asp-for="InitialCapital" type="number" class="form-control" />
+                        <input id="amount" asp-for="InitialCapital" type="number" min="1" class="form-control" />
                         <span asp-validation-for="InitialCapital" class="text-danger"></span>
                     </div>
                 </div>
@@ -61,12 +61,12 @@
             <div class="row mt-2">
                 <div class="col-12 col-md-4 mt-1" id="ContainerAmountDeb">
                     <label  asp-for="AmountDeb">Monto cuota</label>
-                    <input asp-for="AmountDeb" class="form-control" id="AmountDeb" type="number" />
+                    <input asp-for="AmountDeb" class="form-control" id="AmountDeb" min="0" value="0" type="number" />
                     <span asp-validation-for="AmountDeb" class="text-danger"></span>
                 </div>
                 <div class="col-12 col-md-4 mt-1 " id="Containercuotas" style="display:none;">
                     <label>No. Cuotas</label>
-                    <input asp-for="Shares" class="form-control" id="cuotas" min="0" value="0" type="number" />
+                    <input asp-for="Shares" class="form-control" id="cuotas" min="0" value="0"  type="number" />
                     <span asp-validation-for="Shares" class="text-danger"></span>
                 </div>
                 <div class="col-12 col-md-4 mt-1 ">

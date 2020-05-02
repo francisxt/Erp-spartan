@@ -37,7 +37,7 @@ namespace Models.Models.HiAccounting
         public AmortitationType AmortitationType { get; set; }
         public PaymentModality PaymentModality { get; set; }
         public RateType RateType { get; set; }
-        [Required]
+
         public int Shares { get; set; }
 
         [Required(ErrorMessage = "Este campo es requerido")]
@@ -46,7 +46,6 @@ namespace Models.Models.HiAccounting
         public ClientUser ClientUser { get; set; }
         public virtual IEnumerable<Deb> Debs { get; set; }
         public virtual IEnumerable<ReclosingHistory> ReclosingHistories { get; set; }
-        [Required]
         public decimal AmountDeb { get; set; }
 
         [NotMapped]
@@ -60,5 +59,8 @@ namespace Models.Models.HiAccounting
 
         [NotMapped]
         public Guid IdLoanForReclosing { get; set; }
+
+    
     }
-}
+ 
+    }

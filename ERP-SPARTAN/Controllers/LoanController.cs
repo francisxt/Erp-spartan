@@ -47,10 +47,7 @@ namespace ERP_SPARTAN.Controllers
         {
 
             model.UserId = GetUserLoggedId();
-            if (model.AmortitationType == AmortitationType.Open_o_Personalfee)
-            {
-                model.Shares = _service.LoanService.getShares(model);
-            }
+           
 
             var clients = await _service.ClientUserService.GetAllWithRelationships(GetUserLoggedId(), null);
             ViewBag.Clients = clients.Select(x => new SelectListItem
@@ -59,8 +56,24 @@ namespace ERP_SPARTAN.Controllers
                 Value = x.Id.ToString(),
                 Group = new SelectListGroup { Name = x.Enterprise.Name }
             });
+
+
+          
             if (!ModelState.IsValid) return View(model);
 
+            if (model.AmortitationType == AmortitationType.Open_o_Personalfee)
+            {
+                model.Shares = 1;
+            }
+            if (model.Shares <= 0 || model.AmountDeb <= 0 || model.InitialCapital <= 0)
+            {
+                BasicNotification("Lo sentimos, hay campos en el formulario que deben ser mayor a cero", NotificationType.error);
+                return View(model);
+            }
+            if (model.AmortitationType == AmortitationType.Open_o_Personalfee)
+            {
+                model.Shares = _service.LoanService.getShares(model);
+            }
 
             var result = await _service.LoanService.Add(model);
             if (!result)
