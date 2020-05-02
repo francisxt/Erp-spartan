@@ -9,7 +9,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
-using System.Web.Mvc;
 
 namespace Models.Models.HiAccounting
 {
@@ -39,7 +38,6 @@ namespace Models.Models.HiAccounting
         public PaymentModality PaymentModality { get; set; }
         public RateType RateType { get; set; }
 
-        [RequiredIfNot("AmortitationType", 0)]
         public int Shares { get; set; }
 
         [Required(ErrorMessage = "Este campo es requerido")]
@@ -64,44 +62,5 @@ namespace Models.Models.HiAccounting
 
     
     }
-    public class RequiredIfNotAttribute : ValidationAttribute, IClientValidatable
-    {
-        private String PropertyName { get; set; }
-        private Object InvalidValue { get; set; }
-        private readonly RequiredAttribute _innerAttribute;
-
-        public RequiredIfNotAttribute(String propertyName, Object invalidValue)
-        {
-            PropertyName = propertyName;
-            InvalidValue = invalidValue;
-            _innerAttribute = new RequiredAttribute();
-        }
-
-        protected override ValidationResult IsValid(object value, ValidationContext context)
-        {
-            var dependentValue = context.ObjectInstance.GetType().GetProperty(PropertyName).GetValue(context.ObjectInstance, null);
-
-            if (dependentValue.ToString() != InvalidValue.ToString())
-            {
-                if (!_innerAttribute.IsValid(value))
-                {
-                    return new ValidationResult(FormatErrorMessage(context.DisplayName), new[] { context.MemberName });
-                }
-            }
-            return ValidationResult.Success;
-        }
-
-        public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
-        {
-            var rule = new ModelClientValidationRule
-            {
-                ErrorMessage = ErrorMessageString,
-                ValidationType = "requiredifnot",
-            };
-            rule.ValidationParameters["dependentproperty"] = (context as ViewContext).ViewData.TemplateInfo.GetFullHtmlFieldId(PropertyName);
-            rule.ValidationParameters["invalidvalue"] = InvalidValue is bool ? InvalidValue.ToString().ToLower() : InvalidValue;
-
-            yield return rule;
-        }
-    }
+ 
     }
