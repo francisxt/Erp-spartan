@@ -2,20 +2,6 @@
     await fetch("/ClientUser/GetAllOptionsClients").then(response => response.text()).then((result) => { console.log(result); });
 };
 
-$('#amortitationType').on('change', function () {
-    if (this.value === '0') {
-        $("#messageAmortizacion").css('display', 'inline-block');
-        $("#ContainerAmountDeb").css('display', 'block');
-        $("#Containercuotas").css('display', 'none');
-
-    } else {
-        console.log(this.value)
-        $("#messageAmortizacion").css('display', 'none');
-        $("#ContainerAmountDeb").css('display', 'none');
-        $("#Containercuotas").css('display', 'block');
-    }   
-});
-
 
 Date.prototype.addDays = function (days) {
     var date = new Date(this.valueOf());
@@ -586,3 +572,30 @@ const getReclosingHistory = (id) => {
         div.append(x);
     });
 };
+
+
+const amortitationTypevalue = document.getElementById("amortitationType");
+ 
+showOrHideField(amortitationTypevalue);
+$('#amortitationType').on('change', function () {
+    showOrHideField(amortitationTypevalue);
+});
+
+function showOrHideField(elemento) {
+    const amountDeb = document.getElementById("AmountDeb");
+    if (elemento === null || elemento === undefined) {
+        return;
+    }
+    if (elemento.value === '0') {
+        amountDeb.value = 0;
+        $("#messageAmortizacion").css('display', 'inline-block');
+        $("#ContainerAmountDeb").css('display', 'block');
+        $("#Containercuotas").css('display', 'none');
+
+    } else {
+        amountDeb.value = 1;
+        $("#messageAmortizacion").css('display', 'none');
+        $("#ContainerAmountDeb").css('display', 'none');
+        $("#Containercuotas").css('display', 'block');
+    }
+}
