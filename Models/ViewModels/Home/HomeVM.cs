@@ -13,5 +13,9 @@ namespace Models.ViewModels.Home
         public decimal TotalOfDebs { get; set; }
         #endregion
 
+        #region HILOANS
+        public decimal TotalOfLoansDebs { get; set; }
+        public decimal TotalOfLoans { get; set; }
+        #endregion
     }
 }

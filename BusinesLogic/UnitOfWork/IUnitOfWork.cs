@@ -1,5 +1,7 @@
 ﻿using BusinesLogic.Interfaces;
+using BusinesLogic.Interfaces.Alerts;
 using BusinesLogic.Interfaces.HiAccouting;
+using BusinesLogic.Interfaces.HiLoans;
 using BusinesLogic.Repository.Interfaces;
 using Models.Models;
 using System;
@@ -17,6 +19,10 @@ namespace BusinesLogic.UnitOfWork
         IHomeService HomeService { get; }
         IInventaryService InventaryService { get; }
         IEnterpriseService EnterpriseService { get; }
+        ILoanService LoanService { get; }
+        IAlertService AlertService { get; }
+        IRoleService RoleService { get; }
+
         Task Commit();
     }
 }

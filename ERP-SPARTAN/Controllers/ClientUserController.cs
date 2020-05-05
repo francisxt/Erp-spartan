@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using BusinesLogic.Interfaces;
 using BusinesLogic.UnitOfWork;
+using Commons.Others;
 using ERP_SPARTAN.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -31,7 +32,7 @@ namespace ERP_SPARTAN.Controllers
             _settings = options.Value;
         }
 
-        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
+        [Authorize(Roles = ControllersRol.ClientUser)]
         public async Task<IActionResult> Index(Guid? enterpriseId)
         {
             var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
@@ -40,7 +41,7 @@ namespace ERP_SPARTAN.Controllers
             return View(new AllClientUsersVM { Clients = clients , Enterprises = enterprises });
         }
 
-        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
+        [Authorize(Roles = ControllersRol.ClientUser)]
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -48,11 +49,13 @@ namespace ERP_SPARTAN.Controllers
             return View(new CreateUserViewModel { Enterprises = await _service.EnterpriseService.GetList(userId) });
         }
 
-        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
+        [Authorize(Roles = ControllersRol.ClientUser)]
         [HttpPost]
         public async Task<IActionResult> Create(CreateUserViewModel client)
         {
-            client.Rol = User.IsInRole(nameof(RolsAuthorization.ClientsUser)) ? RolsAuthorization.Client : client.Rol;
+            client.Rol = (User.IsInRole(nameof(RolsAuthorization.ClientsUser)) || 
+                User.IsInRole(nameof(RolsAuthorization.HILoans))) ? RolsAuthorization.Client : client.Rol;
+            client.Enterprises = await _service.EnterpriseService.GetList(GetUserLoggedId());
             if (ModelState.IsValid)
             {
                 var result = await _userManager.CreateAsync(new User
@@ -70,7 +73,9 @@ namespace ERP_SPARTAN.Controllers
                     {
                         UserId = user.Id,
                         CreatedBy = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value,
-                        EnterpriseId = client.EnterpriseId
+                        IdentificationCard = client.IdentificationCard,
+                        EnterpriseId = client.EnterpriseId,
+                        Address = client.Address
                     }))
                     {
                         var resultRol = await _userManager.AddToRoleAsync(user, client.Rol.ToString());
@@ -92,7 +97,7 @@ namespace ERP_SPARTAN.Controllers
             return View(client);
         }
 
-        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser) + "," + nameof(RolsAuthorization.Client))]
+        [Authorize(Roles = ControllersRol.ClientUser + "," + nameof(RolsAuthorization.Client))]
 
         [HttpGet]
         public async Task<IActionResult> GetById(Guid id)
@@ -101,7 +106,7 @@ namespace ERP_SPARTAN.Controllers
             if (model != null) return View(model);
             return new NotFoundView();
         }
-        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
+        [Authorize(Roles = ControllersRol.ClientUser)]
 
         [HttpPost]
         public async Task<IActionResult> Update(ClientUser model)
@@ -110,8 +115,11 @@ namespace ERP_SPARTAN.Controllers
             {
                 if (await _service.UserService.Update(model.User))
                 {
-                    BasicNotification("Cliente actualizado", NotificationType.success);
-                    return RedirectToAction(nameof(Index));
+                    if(await _service.ClientUserService.Update(model))
+                    {
+                        BasicNotification("Cliente actualizado", NotificationType.success);
+                        return RedirectToAction(nameof(Index));
+                    }
                 }
                 BasicNotification("Intente de nuevo, una de las causas es que ya exista alguien con este correo intente con otro",
                          NotificationType.error, "Lo sentimos no se pudo actualizar");
@@ -119,7 +127,7 @@ namespace ERP_SPARTAN.Controllers
             }
             return View(nameof(GetById), model);
         }
-        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
+        [Authorize(Roles = ControllersRol.ClientUser)]
 
         [HttpPost]
         public async Task<IActionResult> Remove(Guid id)
@@ -132,7 +140,7 @@ namespace ERP_SPARTAN.Controllers
             }
             return BadRequest();
         }
-        [Authorize(Roles = nameof(RolsAuthorization.Admin) + "," + nameof(RolsAuthorization.ClientsUser))]
+        [Authorize(Roles = ControllersRol.ClientUser)]
 
         [HttpPost]
         public async Task<IActionResult> LockOrUnlockUser(string id)
@@ -151,5 +159,10 @@ namespace ERP_SPARTAN.Controllers
             if (client == null) return NotFound();
             return RedirectToAction(nameof(MovementController.GetByClientUser), "Movement", new { Id = client.Id });
         }
+
+        [HttpGet]
+        public async Task<PartialViewResult> GetAllOptionsClients() 
+            => PartialView("_ClientOptionsPartial", await _service.ClientUserService.GetAllWithRelationships(GetUserLoggedId(), null));
+        
     }
 }

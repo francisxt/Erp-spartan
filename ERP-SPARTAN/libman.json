@@ -1,0 +1,10 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "stacktable.js@1.0.3",
+      "destination": "wwwroot/lib/stacktable.js/"
+    }
+  ]
+}

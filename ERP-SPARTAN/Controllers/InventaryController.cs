@@ -12,7 +12,7 @@ using Models.Models;
 
 namespace ERP_SPARTAN.Controllers
 {
-    [Authorize(Roles = nameof(RolsAuthorization.ClientsUser))]
+    [Authorize(Roles = nameof(RolsAuthorization.HiInventory))]
     public class InventaryController : BaseController
     {
         private readonly IUnitOfWork _service;

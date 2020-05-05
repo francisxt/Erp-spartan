@@ -14,7 +14,7 @@ namespace BusinesLogic.Repository.Services
     {
         private readonly ApplicationDbContext _dbContext;
         public BaseRepository(ApplicationDbContext dbContext) => _dbContext = dbContext;
-        public async Task<bool> Add(TEntity entity)
+        public virtual async Task<bool> Add(TEntity entity)
         {
             _dbContext.Set<TEntity>().Add(entity);
             return await _dbContext.SaveChangesAsync() > 0;
@@ -32,7 +32,7 @@ namespace BusinesLogic.Repository.Services
             return await _dbContext.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> Update(TEntity entity)
+        public virtual async Task<bool> Update(TEntity entity)
         {
             _dbContext.Set<TEntity>().Update(entity);
             return await _dbContext.SaveChangesAsync() > 0;

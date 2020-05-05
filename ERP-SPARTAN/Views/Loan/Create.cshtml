@@ -1,0 +1,151 @@
+﻿@model Models.Models.HiAccounting.Loan
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Nuevo prestamo</h1>
+<hr />
+<div class="row">
+    <div class="col-sm-12">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row mt-2 ">
+                <div class="col-12 col-md-6 mt-1">
+                    <div class="form-group">
+                        <label asp-for="AmortitationType" class="control-label">Tipo de amortización</label>
+                        <select asp-for="AmortitationType" id="amortitationType" asp-items="Html.GetEnumSelectList<Models.Enums.HiAccounting.AmortitationType>()" class="form-control"></select>
+                        <span asp-validation-for="AmortitationType" class="text-danger"></span>
+                        <span id="messageAmortizacion" class=" p-0 text-warning" style="font-size:15px;">En este tipo de amortización usted no necesita asignar el numero de cuotas.</span>
+
+                    </div>
+                </div> 
+                <div class="col-12 col-md-6  mt-1 ">
+                    <div class="form-group">
+                        <label asp-for="ClientUserId" class="control-label">Cliente</label><br />
+                        <select data-width="100%" style="border: 1px solid red !important" asp-for="ClientUserId" class="selectpicker"  data-live-search="true"   >
+                            <option selected   value="">SELECCIONE EL CLIENTE</option>
+                            @foreach(var item in ViewBag.Clients)
+                            {
+                                <option data-subtext="@item.Group.Name" value="@item.Value">@item.Text</option>
+                             }
+                        </select>
+                        <span asp-validation-for="ClientUserId" class="text-danger"></span>
+                    </div>
+                </div>
+         
+
+            </div>
+            <hr />
+            <div class="row mt-2">
+                <div class="col-12 col-md-4 mt-1 ">
+                    <div class="form-group">
+                        <label asp-for="InitialCapital" class="control-label">Monto</label>
+                        <input id="amount" asp-for="InitialCapital" type="number" min="1" class="form-control" />
+                        <span asp-validation-for="InitialCapital" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 mt-1 ">
+                    <div class="form-group">
+                        <label asp-for="Interest" class="control-label">Tasa de interes %</label>
+                        <input id="interest" asp-for="Interest" type="number" class="form-control" step="any" />
+                        <span asp-validation-for="Interest" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 mt-1 ">
+                    <label>Tipo de tasa</label>
+                    <select class="custom-select" asp-for="RateType" id="typeOfTasa" asp-items="Html.GetEnumSelectList<RateType>()"></select>
+                    <span asp-validation-for="RateType" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-12 col-md-4 mt-1" id="ContainerAmountDeb">
+                    <label  asp-for="AmountDeb">Monto cuota</label>
+                    <input asp-for="AmountDeb" class="form-control" id="AmountDeb" min="0" value="0" type="number" />
+                    <span asp-validation-for="AmountDeb" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-4 mt-1 " id="Containercuotas" style="display:none;">
+                    <label>No. Cuotas</label>
+                    <input asp-for="Shares" class="form-control" id="cuotas" min="0" value="0"  type="number" />
+                    <span asp-validation-for="Shares" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-4 mt-1 ">
+                    <div class="form-group">
+                        <label asp-for="PaymentModality" class="control-label">Modalidad de pago</label>
+                        <select asp-for="PaymentModality" id="pay" asp-items="Html.GetEnumSelectList<PaymentModality>()" class="form-control"></select>
+                        <span asp-validation-for="PaymentModality" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 mt-1 ">
+                    <label class="control-label">Fecha Contrato</label>
+                    <input value="@DateTime.Now.ToShortDateString()" class="form-control" disabled />
+                </div>
+            </div>
+            <hr />
+            <br />
+            <div class="form-group row">
+                <div class="main_buttons col-6">
+
+                    <button type="submit" class="btn  btn-primary">
+                        <i class="fa fa-hand-holding-usd"></i>  Crear prestamo
+                    </button>
+                    <a asp-action="Index" class="btn btn btn-danger">Cancelar</a>
+                </div>
+                <div class="secondary_buttons text-right col-6">
+                    <button onclick="GetAmortization()" type="button" class="btn btn btn-success">
+                        <i class="fas fa-table"></i>
+                        Mostrar tabla de amortización
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="el-cliente col-12 flex-wrap mt-1  text-center ">
+        <div id="result" class="table-wrapper-scroll-y my-custom-scrollbar">
+        </div>
+    </div>
+</div>
+
+<script src="~/js/Loan/Index.js" asp-append-version="true"></script>
+<script>
+    //let enumPaymentModality = {
+    //    DIARIO: 0,
+    //    SEMANAL: 1,
+    //    QUINCENAL: 2,
+    //    MENSUAL: 3,
+    //    ANUAL: 4
+    //}
+    //let amortitationType = {
+    //    CUOTAFIJA: 0,
+    //    INTERESFIJO: 1,
+    //    CAPITALFINAL: 2
+    //}
+
+    //let enumTypeOfTasa = {
+    //    MENSUAL: 0,
+    //    ANUAL: 1
+
+    //}
+
+
+</script>
+<partial name="_NotificationPartial" />
+
+
+<style>
+    .my-custom-scrollbar {
+        position: relative;
+        height: 500px;
+        overflow: auto;
+    }
+
+    .table-wrapper-scroll-y {
+        display: block;
+    }
+    .dropdown-toggle {
+    border:solid 1px gainsboro !important;
+    background-color:white;
+    }
+</style>

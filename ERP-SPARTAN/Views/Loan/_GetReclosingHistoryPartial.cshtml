@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Models.Models.HiLoans.ReclosingHistory>
+<div class="col-12">
+    <div class="table-responsive">
+        <table class="table table-bordered mt-4" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Monto</th>
+                    <th>Fecha</th>
+                    <th>Opción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Amount</td>
+                        <td>@item.CreatedAtStr</td>
+                        <td>
+                            <a asp-controller="Loan" asp-action="GetMyLoan" asp-route-Id="@item.IdRenclosingLoan" asp-route-reclosingId="@ViewBag.reclosingId">Ver prestamo anterior</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

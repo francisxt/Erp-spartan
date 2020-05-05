@@ -283,6 +283,9 @@ namespace ERP_SPARTAN.Data.Migrations
                     b.Property<decimal?>("PriceForShop")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
                     b.Property<int>("State")
                         .HasColumnType("int");
 
@@ -305,6 +308,9 @@ namespace ERP_SPARTAN.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
 
@@ -314,6 +320,9 @@ namespace ERP_SPARTAN.Data.Migrations
 
                     b.Property<Guid>("EnterpriseId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("IdentificationCard")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("State")
                         .HasColumnType("int");
@@ -331,6 +340,149 @@ namespace ERP_SPARTAN.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ClientUsers");
+                });
+
+            modelBuilder.Entity("Models.Models.HiAccounting.Debs.Deb", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("AllowPayInterest")
+                        .HasColumnType("bit");
+
+                    b.Property<double>("Amortitation")
+                        .HasColumnType("float");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOfPayment")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("EndBalance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ExtraMount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Interest")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsExtraMount")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("LoanId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Share")
+                        .HasColumnType("int");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.Property<double>("ToPay")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("UpdateAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LoanId");
+
+                    b.ToTable("Debs");
+                });
+
+            modelBuilder.Entity("Models.Models.HiAccounting.Loan", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("ActualCapital")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("AmortitationType")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("AmountDeb")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("ClientUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("InitialCapital")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Interest")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("PaymentModality")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RateType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Shares")
+                        .HasColumnType("int");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientUserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Loans");
+                });
+
+            modelBuilder.Entity("Models.Models.HiLoans.ReclosingHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("IdLoan")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("IdRenclosingLoan")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("LoanId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdateAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LoanId");
+
+                    b.ToTable("ReclosingHistories");
                 });
 
             modelBuilder.Entity("Models.Models.Movement", b =>
@@ -365,6 +517,40 @@ namespace ERP_SPARTAN.Data.Migrations
                     b.HasIndex("ClientUserId");
 
                     b.ToTable("Movements");
+                });
+
+            modelBuilder.Entity("Models.Models.Shared.Alert", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Alerts");
                 });
 
             modelBuilder.Entity("Models.Models.User", b =>
@@ -469,11 +655,49 @@ namespace ERP_SPARTAN.Data.Migrations
                         .HasForeignKey("UserId");
                 });
 
+            modelBuilder.Entity("Models.Models.HiAccounting.Debs.Deb", b =>
+                {
+                    b.HasOne("Models.Models.HiAccounting.Loan", "Loan")
+                        .WithMany("Debs")
+                        .HasForeignKey("LoanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.Models.HiAccounting.Loan", b =>
+                {
+                    b.HasOne("Models.Models.ClientUser", "ClientUser")
+                        .WithMany()
+                        .HasForeignKey("ClientUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Models.Models.HiLoans.ReclosingHistory", b =>
+                {
+                    b.HasOne("Models.Models.HiAccounting.Loan", "Loan")
+                        .WithMany("ReclosingHistories")
+                        .HasForeignKey("LoanId");
+                });
+
             modelBuilder.Entity("Models.Models.Movement", b =>
                 {
                     b.HasOne("Models.Models.ClientUser", "Client")
                         .WithMany("Movements")
                         .HasForeignKey("ClientUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.Models.Shared.Alert", b =>
+                {
+                    b.HasOne("Models.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

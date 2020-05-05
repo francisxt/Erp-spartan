@@ -1,0 +1,36 @@
+﻿@model Models.Models.Shared.Alert
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Nueva Alerta</h1>
+
+<hr />
+<div class="row">
+    <div class="col-12 col-sm-12 col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <select asp-for="UserId" class="form-control" asp-items="ViewBag.Clients"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Text" class="control-label"></label>
+                <textarea asp-for="Text" rows="10" class="form-control"> </textarea>
+                <span asp-validation-for="Text" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Crear" class="btn btn-primary btn-sm" />
+                <a asp-action="Index" class="btn btn-sm btn-dark">Volver</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<partial name="_NotificationPartial" />

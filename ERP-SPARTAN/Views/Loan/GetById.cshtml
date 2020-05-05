@@ -1,0 +1,277 @@
+﻿@model Models.Models.HiAccounting.Loan
+
+@{
+    ViewData["Title"] = "GetById";
+}
+<link href="~/lib/stacktable.js/stacktable.css" rel="stylesheet" />
+<script src="~/lib/stacktable.js/stacktable.js"></script>
+<h1 class="mb-5">DETALLE DEL PRESTAMO</h1>
+@if (Model.State == State.Reclosing)
+{
+    <div class="alert alert-danger" role="alert">
+        Saldado por reenganche
+    </div>
+}
+<link href="~/css/table.css" rel="stylesheet" asp-append-version="true" />
+<div class="row">
+    <div class="col-12 col-sm-12 col-md-12">
+        <div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-3 col-xl-3 col-lg-3">
+                    <div class="form-group">
+                        <label asp-for="InitialCapital" class="control-label">Capital Inicial</label>
+                        <input asp-for="InitialCapitalFormated" disabled class="form-control" />
+                        <span asp-validation-for="InitialCapital" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-3 col-xl-3 col-lg-3">
+                    <div class="form-group">
+                        <label asp-for="ActualCapital" class="control-label">Capital Actual</label>
+                        <input asp-for="ActualCapitalFormated" disabled class="form-control" />
+                        <span asp-validation-for="ActualCapital" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-3 col-xl-3 col-lg-3">
+                    <div class="form-group">
+                        <label asp-for="AmortitationType" class="control-label">Tipo de Amortización</label>
+                        <select asp-for="AmortitationType" disabled asp-items="Html.GetEnumSelectList<Models.Enums.HiAccounting.AmortitationType>()" class="form-control"></select>
+                        <span asp-validation-for="AmortitationType" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-3 col-xl-3 col-lg-3">
+                    <div class="form-group">
+                        <label asp-for="PaymentModality" class="control-label">Modalidad de pago</label>
+                        <select asp-for="PaymentModality" disabled asp-items="Html.GetEnumSelectList<Models.Enums.HiAccounting.PaymentModality>()" class="form-control"></select>
+                        <span asp-validation-for="PaymentModality" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                    <div class="form-group">
+                        <label asp-for="Interest" class="control-label">Tasa de interes %</label>
+                        <input asp-for="Interest" disabled class="form-control" />
+                        <span asp-validation-for="Interest" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                    <div class="form-group">
+                        <label asp-for="ClientUserId" class="control-label">Cliente</label>
+                        <input value="@Model.ClientUser.User.FullName" class="form-control" disabled name="name" />
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                    <div class="form-group">
+                        <label asp-for="ClientUserId" class="control-label">Numero</label>
+                        <input value="@Model.ClientUser.User.PhoneNumber" class="form-control" disabled name="name" />
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                    <div class="form-group">
+                        <label asp-for="SharesStr" class="control-label">Cuotas Restantes</label>
+                        <input value="@Model.SharesStr" class="form-control" disabled name="name" />
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                    <div class="form-group">
+                        <label asp-for="RateType" class="control-label">Tipo de Tasa</label>
+                        <select asp-for="RateType" class="form-control" disabled asp-items="@Html.GetEnumSelectList<RateType>()">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-xl-4 col-lg-4">
+                    <div class="form-group">
+                        <label class="control-label">Fecha del contrato</label>
+                        <input asp-for="CreatedAtStr" class="form-control" disabled />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-sm btn-dark text-white" onclick="window.print()">Imprimir</button>
+                @if (Model.State != State.Reclosing)
+                {
+                    @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
+                    {
+                        <button class="btn btn-sm btn-danger" onclick="ShowSweetConfirmRemoveDialog('@Model.Id','/Loan','Remove','Esta operación no puede ser revertida','Esta seguro?','/Loan/Index',)">Cancelar prestamo</button>
+                        <a asp-action="Reclosing" asp-route-Id="@Model.Id" class="btn btn-sm btn-dark">Reenganche</a>
+                        <button type="button" class="btn btn-sm btn-dark text-white" onclick="getAccess('@ViewBag.AccessUrl','@Model.Id')"> Conceder Acceso</button>
+                    }
+                }
+                @if (Model.State == State.Reclosing)
+                {
+                    if (ViewBag.ReclosingId != null)
+                    {
+                        <a asp-action="GetMyLoan" asp-route-Id="@ViewBag.ReclosingId" class="btn btn-sm btn-dark">ir a Prestamo actual</a>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-12 col-md-12">
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="true">DEUDAS</a>
+                @if (Model.State != State.Reclosing)
+                {
+                    <a class="nav-link" id="profile-tab" onclick="getReclosingHistory('@Model.Id')" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Reenganches</a>
+                }
+            </div>
+
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <div class="row container">
+                    <div class="col-md-4 mt-3">
+                        <form asp-action="@ViewBag.Action" method="get">
+                            <input type="hidden" asp-for="Id" />
+                            <select name="stateDeb" class="form-control">
+                                @if (ViewBag.Selected == State.Payment)
+                                {
+                                    <option value="@State.Payment" selected>Pagados</option>
+                                    <option value="@State.Active">Pendiente</option>
+                                    <option value="@State.All">Todo</option>
+
+                                }
+                                else if (ViewBag.Selected == State.Active)
+                                {
+                                    <option value="@State.Payment">Pagados</option>
+                                    <option value="@State.Active" selected>Pendiente</option>
+                                    <option value="@State.All">Todo</option>
+
+                                }
+                                else
+                                {
+                                    <option value="@State.Payment">Pagados</option>
+                                    <option value="@State.Active">Pendiente</option>
+                                    <option value="@State.All" selected>Todo</option>
+
+                                }
+                            </select>
+                            <button class="btn btn-sm btn-success mt-1">Filtrar</button>
+                        </form>
+                    </div>
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered mt-4 " width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Cuota</th>
+                                        <th>Fecha</th>
+                                        <th>Capital</th>
+                                        <th>Interés</th>
+                                        <th>Total a Pagar</th>
+                                        <th>Capital Restante</th>
+                                        <th>Abono capital</th>
+                                        <th>Estado</th>
+                                        <th>Opciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        decimal interest = 0;
+                                        decimal amortitation = 0;
+                                        decimal toPay = 0;
+                                        decimal amount = 0;
+                                        Guid lastDebPaid = new Guid();
+                                        Guid NextDebToPay = new Guid();
+                                        if (Model.Debs.Any())
+                                        {
+
+                                            var debsToPay = Model.Debs.Where(x => x.State == State.Active).ToList();
+                                            NextDebToPay = debsToPay.Any() == true ? debsToPay.FirstOrDefault().Id : new Guid();
+
+                                            var debsPaid = Model.Debs.Where(x => x.State == State.Payment).ToList();
+                                            lastDebPaid = debsPaid.Any() == true ? debsPaid.LastOrDefault().Id : new Guid();
+                                        }
+
+                                    }
+                                    @foreach (var item in Model.Debs)
+                                    {
+                                        var bgClass = item.State == State.Payment ? "bg-success text-white" : "";
+                                        var bgBtn = item.State == State.Payment ? "btn-danger" : "btn-success";
+                                        var btnText = item.State == State.Payment ? "Cancelar pago" : "Pagar cuota";
+                                        if (item.AllowPayInterest && item.State == State.Active) { bgClass = "bg-warning text-white"; }
+                                        interest += item.Interest;
+                                        amortitation += (decimal)item.Amortitation;
+                                        toPay += (decimal)item.ToPay;
+                                        amount = (decimal)item.Amount - amount;
+
+
+                                        <tr class="@bgClass">
+                                            <td>@item.Share</td>
+                                            <td>@item.DateOfPaymentFormated</td>
+                                            <td>@item.AmortitationFormated</td>
+                                            <td>@item.InterestFormated</td>
+                                            <td>@item.ToPayFormated</td>
+                                            <td>@item.AmountFormated</td>
+                                            <td>@item.ExtraMountStr </td>
+                                            @if (item.AllowPayInterest && item.State == State.Active)
+                                            {
+                                                <td>Solo interes</td>
+                                            }
+                                            else
+                                            {
+                                                <td>@item.StateStr</td>
+
+                                            }
+                                            <td>
+                                                @if (Model.State != State.Reclosing)
+                                                {
+                                                    @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
+                                                    {
+                                                        if (item.Id == lastDebPaid || item.Id == NextDebToPay)
+                                                        {
+                                                            <button class="btn btn-sm @bgBtn"
+                                                                    onclick="showPaymentDeb('@Model.Id', '@item.Id', '@item.State',
+                                                    '@item.Amortitation','@item.AmortitationFormated', '@item.InterestFormated', '@item.ToPayFormated',
+                                                    '@item.DateOfPaymentFormated', '@item.Share')">
+                                                                @btnText
+                                                            </button>
+
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <span>N/A</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
+                                    {
+                                        <tr class="bg-info text-white">
+                                            <td>#</td>
+                                            <td>Totales</td>
+                                            <td>@string.Format("{0:C}", amortitation)  </td>
+                                            <td>@string.Format("{0:C}", interest) </td>
+                                            <td>@string.Format("{0:C}", toPay)</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                            <input type="hidden" id="amortizationTotal" value="@Math.Round(amortitation, 2)" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <h1>Espere un momento...</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/Loan/Index.js" asp-append-version="true"></script>
+<script src="~/js/Shared/httpRequest.js" asp-append-version="true"></script>
+<partial name="_NotificationPartial" />
+<script>
+    $('.table').stacktable();
+</script>

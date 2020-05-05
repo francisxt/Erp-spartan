@@ -3,13 +3,15 @@
 @inject UserManager<User> UserManager
 @inject IOptions<Models.Settings.DefaultValue> options
 
+
 <ul class="navbar-nav">
+
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
             <a class="nav-link text-light" asp-action="Profile" asp-controller="User" title="Manage">
                 <img width="30" src="@options.Value.Avatar@User.Identity.Name" alt="@User.Identity.Name .png" class=" text-center">
-            Mi cuenta
+                Mi cuenta
             </a>
         </li>
         <li class="nav-item">
@@ -28,3 +30,4 @@
         </li>
     }
 </ul>
+

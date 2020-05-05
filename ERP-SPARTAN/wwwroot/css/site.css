@@ -2,6 +2,39 @@
 for details on configuring this project to bundle and minify static web assets. */
 
 
+@font-face {
+    font-family: 'Oswal-bold';
+    src: url(Fonts/Oswald-Bold.ttf)
+}
+
+
+@font-face {
+    font-family: 'Oswal-Medium';
+    src: url(Fonts/Oswald-Medium.ttf)
+}
+
+
+@font-face {
+    font-family: 'Oswal-Regular';
+    src: url(Fonts/Oswald-Regular.ttf)
+}
+
+@font-face {
+    font-family: 'Oswal-ligth';
+    src: url(Fonts/Oswald-Light.ttf)
+}
+
+
+h1 {
+    font-family: Oswal-bold
+}
+
+body {
+    font-family: Oswal-Regular !important;
+    font-size: 14px;
+}
+
+
 .acent-color {
     color: #673AB7 !important;
 }
@@ -17,6 +50,7 @@ for details on configuring this project to bundle and minify static web assets. 
 .btn-primary {
     background: #673AB7 !important;
 }
+
 .btn-radius {
     border-radius: 40px !important;
 }
@@ -26,14 +60,13 @@ div.dataTables_wrapper div.dataTables_filter input {
     border-radius: 32px !important;
     text-align: center;
 }
+
 .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
-    border: 2px solid #673AB7 !important;
-    background: #fff !important;
-    border-radius: 23px !important;
+    margin-left: 3px !important;
+    margin-right: 3px !important;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-
     border-radius: 23px !important;
 }
 
@@ -46,63 +79,81 @@ a.navbar-brand {
 
 /* Provide sufficient contrast against white background */
 a {
-  color: #0366d6;
+    color: #0366d6;
 }
 
 .btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
 }
 
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
+
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .border-top {
-  border-top: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
 }
+
 .border-bottom {
-  border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
 button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+    font-size: 1rem;
+    line-height: inherit;
 }
 
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
 }
+
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
+}
+
+.paginate_button {
+    margin-left: 4px;
+    cursor: pointer;
+}
+
+    .paginate_button .current {
+        border: none !important;
+    }
+
+
+.nav-link-hovered:hover {
+    background: #ffffff;
+    color: black !important;
 }

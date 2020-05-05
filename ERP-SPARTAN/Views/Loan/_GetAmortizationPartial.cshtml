@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Deb>
+
+<div class="col-12">
+    <div class="table-responsive">
+        <table class="table table-bordered mt-4" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Cuota</th>
+                    <th>Fecha</th>
+                    <th>Capital</th>
+                    <th>Interés</th>
+                    <th>Total a Pagar</th>
+                    <th>Capital Restante</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    decimal interest = 0;
+                    decimal amortitation = 0;
+                    decimal toPay = 0;
+                    decimal amount = 0;
+                }
+                @foreach (var item in Model)
+                {
+                    var bgClass = item.State == State.Payment ? "bg-success text-white" : "";
+                    var bgBtn = item.State == State.Payment ? "btn-danger" : "btn-dark";
+                    var btnText = item.State == State.Payment ? "Cancelar pago" : "Pagar";
+
+                    interest += item.Interest;
+                    amortitation += (decimal)item.Amortitation;
+                    toPay += (decimal)item.ToPay;
+                    amount = (decimal)item.Amount - amount;
+
+                <tr class="@bgClass">
+                    <td>@item.Share</td>
+                    <td>@item.DateOfPaymentFormated</td>
+                    <td> @item.AmortitationFormated</td>
+                    <td> @item.InterestFormated</td>
+                    <td>@item.ToPayFormated</td>
+                    <td>@item.AmountFormated</td>
+                </tr>
+                }
+            <tr class="bg-info text-white">
+                <td>#</td>
+                <td>Totales</td>
+                <td>@String.Format("{0:C}", amortitation)  </td>
+                <td>@String.Format("{0:C}", interest) </td>
+                <td>@String.Format("{0:C}", toPay)</td>
+                <td>-</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

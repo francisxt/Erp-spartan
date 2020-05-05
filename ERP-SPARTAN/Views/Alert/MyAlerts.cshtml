@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Models.Models.Shared.Alert>
+
+@{
+    ViewData["Title"] = "MyAlerts";
+}
+
+<div class="row justify-content-center">
+    <div class="col-12">
+        @if (Model.Any())
+        {
+            <h1><i class="fa fa-bell"></i> Mis Alertas</h1>
+            <a class="mb-2 btn btn-primary btn-sm" asp-action="MaskAsRead">Marcar como leidas</a>
+        }
+        else
+        {
+            <h1 class=" text-center text-warning"><i class="fa fa-smile-beam"></i></h1>
+            <h1 class="text-center mt-2" style="color:gray" >No tienes alertas</h1>
+        }
+        <div class="list-group">
+            @foreach (var item in Model)
+            {
+                var state = item.State == State.Active ? "active" : "";
+                var statestr = item.State == State.Active ? "Sin leer" : "Leida";
+
+
+                <a href="#" class="list-group-item list-group-item-action  mb-3 flex-column align-items-start @state">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">@item.Title</h5>
+                        <small>fecha : @item.CreatedAtStr</small>
+                    </div>
+                    <p class="mb-1">@item.Text</p>
+                    <small class="">@statestr</small>
+                </a>
+            }
+        </div>
+    </div>
+</div>

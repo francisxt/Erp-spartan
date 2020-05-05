@@ -1,0 +1,7 @@
+﻿@model IEnumerable<ClientUser>
+
+
+@foreach (var item in Model)
+{
+    <option value="@item.Id">@item.User.FullName</option>
+}

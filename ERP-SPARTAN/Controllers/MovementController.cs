@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BusinesLogic.UnitOfWork;
+using Commons.Others;
 using ERP_SPARTAN.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,7 @@ namespace ERP_SPARTAN.Controllers
             return View();
         }
 
+        [Authorize(Roles =  ControllersRol.ClientUser +","+ nameof(RolsAuthorization.Client))]
         [HttpGet]
         public async Task<IActionResult> GetByClientUser(Guid id)
         {
@@ -39,6 +41,7 @@ namespace ERP_SPARTAN.Controllers
             }
             return new NotFoundView();
         }
+        [Authorize(Roles = nameof(RolsAuthorization.ClientsUser))]
 
         [HttpPost]
         public async Task<IActionResult> Create(Movement moviment)
@@ -61,6 +64,7 @@ namespace ERP_SPARTAN.Controllers
             }
             return RedirectToAction(nameof(GetByClientUser), new { id = moviment.ClientUserId });
         }
+        [Authorize(Roles = nameof(RolsAuthorization.ClientsUser))]
 
         [HttpPost]
         public async Task<IActionResult> Remove(Guid id)
@@ -68,6 +72,7 @@ namespace ERP_SPARTAN.Controllers
             if (await _service.MovementsService.SoftDelete(id)) return Ok(true);
             return BadRequest();
         }
+        [Authorize(Roles = nameof(RolsAuthorization.ClientsUser))]
 
         [HttpPost]
         public async Task<IActionResult> PayAll(Guid id)
