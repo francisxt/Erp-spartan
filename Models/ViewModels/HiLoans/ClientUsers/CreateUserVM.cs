@@ -15,7 +15,7 @@ namespace Models.ViewModels.ClientUsers
         public Guid EnterpriseId { get; set; }
         public IEnumerable<Enterprise> Enterprises { get; set; }
         public string IdentificationCard { get; set; }
-        [Display(Name = "Dirrección")]
+        [Display(Name = "Dirección")]
         public string Address { get; set; }
     }
 }
