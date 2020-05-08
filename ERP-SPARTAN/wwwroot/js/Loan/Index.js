@@ -489,11 +489,11 @@ const GetAmortization = () => {
     const RateType = document.getElementById("typeOfTasa").value;
     const AmortitationType = document.getElementById("amortitationType").value;
     const PayM = document.getElementById("pay").value;
-
+    const contractDate = $('#contractDate').val();
     $('#result').empty();
     const querystr = `?InitialCapital=${InitialCapital}&ActualCapital=${InitialCapital}&Interest=${Interest}
                         &Shares=${Shares}&RateType=${RateType}&AmortitationType=${AmortitationType}
-                         &PaymentModality=${PayM}&AmountDeb=${AmountDeb}&`;
+                         &PaymentModality=${PayM}&AmountDeb=${AmountDeb}&contractDate=${contractDate}&`;
     fetch(`/Loan/GetAmortization${querystr}"`).then(result => result.text()).then((response) => {
         $('#result').html(response);
     });

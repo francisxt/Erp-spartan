@@ -32,7 +32,7 @@ namespace ERP_SPARTAN.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Create()
-        {            
+        {
             ViewBag.Clients = await _services.ClientUserService.GetListItem(x => x.CreatedBy == GetUserLoggedId());
             return View();
         }
@@ -44,7 +44,9 @@ namespace ERP_SPARTAN.Controllers
         public async Task<IActionResult> Create(Alert model)
         {
             if (!ModelState.IsValid) return View(model);
-            var result = await _services.AlertService.Add(model);
+            var result = false;
+            if (model.IsMasive) result = await _services.AlertService.SendMasive(model, GetUserLoggedId());
+            else result = await _services.AlertService.Add(model);
             if (!result)
             {
                 BasicNotification("Intente de nuevo", NotificationType.error, "Error");
@@ -72,6 +74,15 @@ namespace ERP_SPARTAN.Controllers
             if (alert == null) return NotFound();
             if (await _services.AlertService.Remove(alert)) return Ok(true);
             return BadRequest();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Remove()
+        {
+            var result = await _services.AlertService.RemoveAll();
+            if (!result) BasicNotification("Error intente de nuevo", NotificationType.error);
+            BasicNotification("Acción realizada correctamente", NotificationType.success);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

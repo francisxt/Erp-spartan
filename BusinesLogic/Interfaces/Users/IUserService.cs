@@ -16,5 +16,6 @@ namespace BusinesLogic.Interfaces
         Task<IEnumerable<User>> Users();
         Task<bool> AddToRole(string UserId, string RoleId);
         Task<bool> RemoveUserRoleAsync(string userId, string RoleName);
+        Task<User> GetByEmailAsync(string email);
     }
 }

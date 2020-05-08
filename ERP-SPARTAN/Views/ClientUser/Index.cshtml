@@ -67,16 +67,17 @@
                             </td>
                             <td>
                                 <div>
-                                    <a asp-action="GetById" asp-route-id="@client.Id" class="btn btn-success"><i class="far fa-eye text-white"></i></a>
-                                    <button class="btn btn-danger" onclick="ShowSweetConfirmRemoveDialog('@client.Id','ClientUser','Remove')"><i class="far fa-trash-alt text-white"></i></button>
-                                    <button class="btn btn-secondary" onclick="ShowSweetConfirmEnableOrDisableUser('@client.UserId','ClientUser','LockOrUnlockUser')"><i class="@icon "></i></button>
+                                    <a asp-action="GetById" asp-route-id="@client.Id" class="btn btn-sm btn-success"><i class="far fa-eye text-white"></i></a>
+                                    <button class="btn btn-danger btn-sm" onclick="ShowSweetConfirmRemoveDialog('@client.Id','ClientUser','Remove')"><i class="far fa-trash-alt text-white"></i></button>
+                                    <button class="btn btn-secondary btn-sm" onclick="ShowSweetConfirmEnableOrDisableUser('@client.UserId','ClientUser','LockOrUnlockUser')"><i class="@icon "></i></button>
                                     @if (User.IsInRole(nameof(RolsAuthorization.ClientsUser)))
                                     {
-                                        <a asp-action="GetByClientUser" asp-controller="Movement" asp-route-id="@client.Id" class="btn acent-background text-white"><i class="fas fa-money-bill-alt"></i></a>
+                                        <a asp-action="GetByClientUser" asp-controller="Movement" asp-route-id="@client.Id" class="btn btn-sm acent-background text-white"><i class="fas fa-money-bill-alt"></i></a>
                                     }
                                     @if (User.IsInRole(nameof(RolsAuthorization.Admin)))
                                     {
-                                        <a asp-action="AddToRole" asp-controller="User" asp-route-id="@client.User.Id" class="btn acent-background text-white"><i class="fas fa-user-secret"></i></a>
+                                        <a asp-action="AddToRole" asp-controller="User" asp-route-id="@client.User.Id" class="btn btn-sm acent-background text-white"><i class="fas fa-user-secret"></i></a>
+                                        <a asp-action="ResetPassword" asp-controller="User" asp-route-id="@client.User.Id" class="btn btn-danger btn-sm text-white"><i class="fas fa-key"></i></a>
                                     }
                                 </div>
                             </td>

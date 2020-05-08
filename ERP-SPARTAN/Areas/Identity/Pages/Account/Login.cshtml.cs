@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Models.Models;
+using BusinesLogic.UnitOfWork;
 
 namespace ERP_SPARTAN.Areas.Identity.Pages.Account
 {
@@ -22,16 +23,19 @@ namespace ERP_SPARTAN.Areas.Identity.Pages.Account
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<LoginModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IUnitOfWork _services;
 
         public LoginModel(SignInManager<User> signInManager,
             ILogger<LoginModel> logger,
             UserManager<User> userManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IUnitOfWork services)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
+            _services = services;
         }
 
         [BindProperty]
@@ -84,7 +88,11 @@ namespace ERP_SPARTAN.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByNameAsync(Input.Email);
-                if (user == null) return Page();
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, $"El Usuario {Input.Email} no existe");
+                    return Page();
+                }
                 if (user.State == Models.Enums.State.Blocked)
                 {
                     ModelState.AddModelError(string.Empty, "Usuario desabilitado o eliminado");

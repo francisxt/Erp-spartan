@@ -21,5 +21,7 @@ namespace Models.Models.Shared
         
         [NotMapped]
         public string StateStr => (State == Enums.State.Active) ? "Enviada" : "Vista";
+        [NotMapped]
+        public bool IsMasive { get; set; } = false;
     }
 }

@@ -30,7 +30,7 @@ namespace BusinesLogic.Services.HiLoans
             if (model.ReclosingInitialAmount > 0) model.InitialCapital = model.ReclosingInitialAmount;
             _dbContext.Loans.Add(model);
             var result = await _dbContext.SaveChangesAsync() > 0;
-            if (result) await AddDebs(model, DateTime.Now);
+            if (result) await AddDebs(model, model.CreateAt);
             return result;
         }
 
@@ -150,7 +150,7 @@ namespace BusinesLogic.Services.HiLoans
 
         private IEnumerable<Deb> OpenfeeDebs(Loan loan, DateTime lastDateTime, int count = 0, bool interestonly = false)
         {
-            double interest = (double)((decimal)loan.Interest) / 100;
+            double interest = (double)(loan.Interest) / 100;
             double monthly = interest;
 
             // double shares = (loan.Shares - count);
@@ -219,12 +219,6 @@ namespace BusinesLogic.Services.HiLoans
 
             double shares = (loan.Shares - count);
             bool interestOnly = interestonly;
-            //decimal LoanDebsamortitation = 0;
-            if (loan.Debs != null)
-            {
-                //if (loan.Debs.Any()) LoanDebsamortitation = (decimal)loan.Debs.FirstOrDefault().Amortitation;
-                // if (loan.Debs.Any()) interestOnly = loan.Debs.FirstOrDefault().AllowPayInterest;
-            }
 
             decimal balance = loan.ActualCapital;
             if (loan.RateType == RateType.Anual) monthly = interest / 12;
@@ -442,17 +436,17 @@ namespace BusinesLogic.Services.HiLoans
             IEnumerable<Deb> debs;
             if (model.AmortitationType == AmortitationType.Open_o_Personalfee)
             {
-                debs = OpenfeeDebs(model, DateTime.Now);
+                debs = OpenfeeDebs(model, model.CreateAt);
             }
             else if (model.AmortitationType == AmortitationType.Fixedfee)
             {
-                debs = FixedfeeDebs(model, DateTime.Now);
+                debs = FixedfeeDebs(model, model.CreateAt);
             }
             else if (model.AmortitationType == AmortitationType.FixedInterest)
             {
-                debs = FixedInterestDebs(model, DateTime.Now);
+                debs = FixedInterestDebs(model, model.CreateAt);
             }
-            else debs = CapitalEndDebs(model, DateTime.Now);
+            else debs = CapitalEndDebs(model, model.CreateAt);
             return debs;
         }
 

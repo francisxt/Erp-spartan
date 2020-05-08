@@ -7,10 +7,13 @@ using System.Threading.Tasks;
 
 namespace BusinesLogic.Interfaces.Alerts
 {
-    public interface IAlertService : IBaseRepository<Alert> , IHelperRepository<Alert>
+    public interface IAlertService : IBaseRepository<Alert>, IHelperRepository<Alert>
     {
         Task<int> Quantity(string userId);
         Task<bool> MaskAsRead(string userId);
-        
+
+        Task<bool> SendMasive(Alert alert, string id);
+        Task<bool> RemoveAll();
+
     }
 }

@@ -5,6 +5,10 @@
     {
       "library": "stacktable.js@1.0.3",
       "destination": "wwwroot/lib/stacktable.js/"
+    },
+    {
+      "library": "bootstrap-datepicker@1.9.0",
+      "destination": "wwwroot/lib/bootstrap-datepicker/"
     }
   ]
 }

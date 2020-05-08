@@ -53,9 +53,6 @@ namespace BusinesLogic.Services
             result.PhoneNumber = model.PhoneNumber;
             result.Name = model.Name;
             result.LastName = model.LastName;
-            result.UserName = model.Email;
-            result.NormalizedEmail = model.Email;
-            result.NormalizedUserName = model.Email;
             model.UpdateAt = DateTime.Now;
             try
             {
@@ -82,5 +79,7 @@ namespace BusinesLogic.Services
             _dbContext.UserRoles.Remove(new IdentityUserRole<string> { UserId = userId, RoleId = role.Id });
             return await _dbContext.SaveChangesAsync() > 0;
         }
+
+        public async Task<User> GetByEmailAsync(string email) => await _dbContext.ApplicationUsers.FirstOrDefaultAsync(x => x.UserName == email);
     }
 }
