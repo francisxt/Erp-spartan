@@ -60,7 +60,6 @@ namespace Models.Models.HiAccounting
         [NotMapped]
         public Guid IdLoanForReclosing { get; set; }
 
-    
     }
- 
-    }
+
+}

@@ -1,4 +1,5 @@
 ﻿using BusinesLogic.UnitOfWork;
+using Commons.Extensions;
 using ERP_SPARTAN.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -43,12 +44,12 @@ namespace ERP_SPARTAN.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Loan model)
+        public async Task<IActionResult> Create(Loan model , string contractDate = null)
         {
+            //for change the contract day
+            if (!string.IsNullOrEmpty(contractDate)) model.CreateAt = contractDate.ToDateTime();
 
             model.UserId = GetUserLoggedId();
-           
-
             var clients = await _service.ClientUserService.GetAllWithRelationships(GetUserLoggedId(), null);
             ViewBag.Clients = clients.Select(x => new SelectListItem
             {
@@ -58,7 +59,7 @@ namespace ERP_SPARTAN.Controllers
             });
 
 
-          
+
             if (!ModelState.IsValid) return View(model);
 
             if (model.AmortitationType == AmortitationType.Open_o_Personalfee)
@@ -98,7 +99,7 @@ namespace ERP_SPARTAN.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> GetMyLoan(Guid id, State stateDeb = State.All , Guid? reclosingId = null)
+        public async Task<IActionResult> GetMyLoan(Guid id, State stateDeb = State.All, Guid? reclosingId = null)
         {
             ViewBag.Selected = stateDeb;
             ViewBag.Action = nameof(GetMyLoan);
@@ -133,8 +134,12 @@ namespace ERP_SPARTAN.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAmortization(Loan model)
-            => PartialView("_GetAmortizationPartial", _service.LoanService.GetAmortization(model));
+        public IActionResult GetAmortization(Loan model, string contractDate = null)
+        {
+            if (!string.IsNullOrEmpty(contractDate)) model.CreateAt = contractDate.ToDateTime();
+            
+            return PartialView("_GetAmortizationPartial", _service.LoanService.GetAmortization(model));
+        }
 
 
         [HttpGet]

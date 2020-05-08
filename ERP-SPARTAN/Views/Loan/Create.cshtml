@@ -19,21 +19,21 @@
                         <span id="messageAmortizacion" class=" p-0 text-warning" style="font-size:15px;">En este tipo de amortización usted no necesita asignar el numero de cuotas.</span>
 
                     </div>
-                </div> 
+                </div>
                 <div class="col-12 col-md-6  mt-1 ">
                     <div class="form-group">
                         <label asp-for="ClientUserId" class="control-label">Cliente</label><br />
-                        <select data-width="100%" style="border: 1px solid red !important" asp-for="ClientUserId" class="selectpicker"  data-live-search="true"   >
-                            <option selected   value="">SELECCIONE EL CLIENTE</option>
-                            @foreach(var item in ViewBag.Clients)
+                        <select data-width="100%" style="border: 1px solid red !important" asp-for="ClientUserId" class="selectpicker" data-live-search="true">
+                            <option selected value="">SELECCIONE EL CLIENTE</option>
+                            @foreach (var item in ViewBag.Clients)
                             {
                                 <option data-subtext="@item.Group.Name" value="@item.Value">@item.Text</option>
-                             }
+                            }
                         </select>
                         <span asp-validation-for="ClientUserId" class="text-danger"></span>
                     </div>
                 </div>
-         
+
 
             </div>
             <hr />
@@ -41,7 +41,7 @@
                 <div class="col-12 col-md-4 mt-1 ">
                     <div class="form-group">
                         <label asp-for="InitialCapital" class="control-label">Monto</label>
-                        <input id="amount" asp-for="InitialCapital" type="number" min="1" class="form-control" />
+                        <input id="amount" asp-for="InitialCapital" min="1" class="form-control decimal" />
                         <span asp-validation-for="InitialCapital" class="text-danger"></span>
                     </div>
                 </div>
@@ -60,13 +60,13 @@
             </div>
             <div class="row mt-2">
                 <div class="col-12 col-md-4 mt-1" id="ContainerAmountDeb">
-                    <label  asp-for="AmountDeb">Monto cuota</label>
+                    <label asp-for="AmountDeb">Monto cuota</label>
                     <input asp-for="AmountDeb" class="form-control" id="AmountDeb" min="0" value="0" type="number" />
                     <span asp-validation-for="AmountDeb" class="text-danger"></span>
                 </div>
                 <div class="col-12 col-md-4 mt-1 " id="Containercuotas" style="display:none;">
                     <label>No. Cuotas</label>
-                    <input asp-for="Shares" class="form-control" id="cuotas" min="0" value="0"  type="number" />
+                    <input asp-for="Shares" class="form-control" id="cuotas" min="0" value="0" type="number" />
                     <span asp-validation-for="Shares" class="text-danger"></span>
                 </div>
                 <div class="col-12 col-md-4 mt-1 ">
@@ -78,7 +78,7 @@
                 </div>
                 <div class="col-12 col-md-4 mt-1 ">
                     <label class="control-label">Fecha Contrato</label>
-                    <input value="@DateTime.Now.ToShortDateString()" class="form-control" disabled />
+                    <input class="form-control input-date" id="contractDate" name="contractDate" type="datetime" />
                 </div>
             </div>
             <hr />
@@ -144,8 +144,9 @@
     .table-wrapper-scroll-y {
         display: block;
     }
+
     .dropdown-toggle {
-    border:solid 1px gainsboro !important;
-    background-color:white;
+        border: solid 1px gainsboro !important;
+        background-color: white;
     }
 </style>

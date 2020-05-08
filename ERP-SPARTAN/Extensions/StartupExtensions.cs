@@ -16,8 +16,8 @@ namespace ERP_SPARTAN.Extensions
 {
     public static class StartupExtensions
     {
-        public static void ConfigureDbContexts(this IServiceCollection services , IConfiguration configuration)
-         => services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")),ServiceLifetime.Transient);
+        public static void ConfigureDbContexts(this IServiceCollection services, IConfiguration configuration)
+         => services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient);
 
         public static void AddSettingsModels(this IServiceCollection services, IConfiguration configuration)
         {
@@ -32,11 +32,12 @@ namespace ERP_SPARTAN.Extensions
                 options.Password.RequireUppercase = false;
                 options.User.RequireUniqueEmail = true;
                 options.Password.RequireNonAlphanumeric = false;
-            }).AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+            }).AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>()
+             .AddDefaultTokenProviders();
 
         public static void ImplementServices(this IServiceCollection services)
         {
             services.AddTransient<IUnitOfWork, UnitOfWork>();
-        } 
+        }
     }
 }

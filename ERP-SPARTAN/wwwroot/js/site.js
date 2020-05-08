@@ -24,6 +24,15 @@ $(document).ready(() => {
     //Get all actives alerts
     fetch('/Alert/Quantity').then((result) => result.json()).then((response) => $('#qyt-alert').text(response));
 
+
+    $('.input-date').datepicker({
+        format: "dd/mm/yyyy",
+        orientation: "bottom auto",
+        autoclose: true
+    });
+
+    $('.input-date').datepicker('setDate', new Date());
+
 });
 
 

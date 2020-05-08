@@ -53,6 +53,7 @@
                         <table class="table table-bordered data-table" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
+                                    <th>Fecha del contrato</th>
                                     <th>Cliente</th>
                                     <th>Empresa</th>
                                     <th>Tasa de interes %</th>
@@ -66,6 +67,7 @@
                                 @foreach (var item in Model.Where(x => x.ActualCapital > 0 && x.State == State.Active))
                                 {
                                     <tr>
+                                        <td>@item.CreatedAtStr</td>
                                         <td>@item.ClientUser.User.FullName</td>
                                         <td>@item.ClientUser.Enterprise.Name</td>
                                         <td>@item.Interest%</td>
@@ -158,4 +160,4 @@
     </div>
 </div>
 
-    <partial name="_NotificationPartial" />
+<partial name="_NotificationPartial" />
