@@ -54,3 +54,11 @@ const showOrHideElement = (elementId) => {
     }
 };
 
+const printElement = (id) => {
+    const element = $(`#${id}`);
+    const newWind = window.open('', 'Print-Window');
+    newWind.document.open();
+    newWind.document.write(`<html><body onload='window.print()'>${element.html()}</body></html>`);
+    newWind.document.close();
+    setTimeout(() => { newWind.close(); }, 1);
+};
