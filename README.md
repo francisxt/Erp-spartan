@@ -13,7 +13,7 @@ Web app type of ERP
 <h1>FEATURES</h1>
 
 1 - <strong>ACCOUNTS RECEIVABLE</strong> <br/>
-2 - <strong>LOAS</strong> <br/>
+2 - <strong>LOANS</strong> <br/>
 3 - <strong>INVENTARY</strong> <br/>
 
 
