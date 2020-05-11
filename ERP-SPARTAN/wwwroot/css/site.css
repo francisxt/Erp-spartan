@@ -157,3 +157,8 @@ body {
     background: #ffffff;
     color: black !important;
 }
+
+
+.ct-bg-success {
+    background: #43a259;
+}

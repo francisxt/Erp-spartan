@@ -190,7 +190,7 @@
                                     }
                                     @foreach (var item in Model.Debs)
                                     {
-                                        var bgClass = item.State == State.Payment ? "bg-success text-white" : "";
+                                        var bgClass = item.State == State.Payment ? "ct-bg-success" : "";
                                         var bgBtn = item.State == State.Payment ? "btn-danger" : "btn-success";
                                         var btnText = item.State == State.Payment ? "Cancelar pago" : "Pagar cuota";
                                         if (item.AllowPayInterest && item.State == State.Active) { bgClass = "bg-warning text-white"; }
