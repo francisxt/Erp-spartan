@@ -23,6 +23,7 @@ namespace Models.Models.HiAccounting.Debs
         public double Amortitation { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal EndBalance { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
 
         public decimal ExtraMount { get; set; }
         public bool IsExtraMount { get; set; } = false;
@@ -31,7 +32,7 @@ namespace Models.Models.HiAccounting.Debs
         public Loan Loan { get; set; }
 
         [NotMapped]
-        public string StateStr => State == Enums.State.Payment ? "Pagado" : "Pendiente";
+        public string StateStr => State == Enums.State.Payment ? "Pagado" : (State == Enums.State.Active && DateOfPayment < DateTime.Now) ? "Atrasada"  : "Pendiente";
         [NotMapped]
         public string ExtraMountStr => ExtraMount == 0 ? "N/A" : ExtraMount.ToString();
         //Formated property

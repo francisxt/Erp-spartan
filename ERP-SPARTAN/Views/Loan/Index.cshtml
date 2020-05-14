@@ -67,7 +67,10 @@
                                 @foreach (var item in Model.Where(x => x.ActualCapital > 0 && x.State == State.Active))
                                 {
                                     <tr>
-                                        <td>@item.CreatedAtStr</td>
+                                        <td>
+                                            @item.CreatedAtStr
+                                            <i class="ml-5 col-smd d-inline d-sm-inline d-md-inline d-lg-none text-danger " style="font-weight:bold">(pulsame para ver mas información)</i>
+                                        </td>
                                         <td>@item.ClientUser.User.FullName</td>
                                         <td>@item.ClientUser.Enterprise.Name</td>
                                         <td>@item.Interest%</td>
@@ -87,7 +90,7 @@
                 </div>
             </div>
             <div class="tab-pane fade mt-5" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                <div class="table-responsive">
+                <div class="">
                     <table class="table table-bordered data-table" width="100%" cellspacing="0">
                         <thead>
                             <tr>
@@ -104,7 +107,10 @@
                             @foreach (var item in Model.Where(x => x.ActualCapital <= 0))
                             {
                                 <tr>
-                                    <td>@item.ClientUser.User.FullName</td>
+                                    <td>
+                                        @item.ClientUser.User.FullName
+                                        <i class="ml-5 col-smd d-inline d-sm-inline d-md-inline d-lg-none text-danger " style="font-weight:bold">(pulsame para ver mas información)</i>
+                                    </td>
                                     <td>@item.ClientUser.Enterprise.Name</td>
                                     <td>@item.Interest%</td>
                                     <td>@item.InitialCapital</td>
@@ -122,7 +128,7 @@
                 </div>
             </div>
             <div class="tab-pane fade mt-5" id="profilex" role="tabpanel" aria-labelledby="profile-tab">
-                <div class="table-responsive">
+                <div class="">
                     <table class="table table-bordered data-table" width="100%" cellspacing="0">
                         <thead>
                             <tr>
@@ -139,7 +145,10 @@
                             @foreach (var item in Model.Where(x => x.State == State.Reclosing))
                             {
                                 <tr>
-                                    <td>@item.ClientUser.User.FullName</td>
+                                    <td>
+                                        @item.ClientUser.User.FullName
+                                        <i class="ml-5 col-smd d-inline d-sm-inline d-md-inline d-lg-none text-danger " style="font-weight:bold">(pulsame para ver mas información)</i>
+                                    </td>
                                     <td>@item.ClientUser.Enterprise.Name</td>
                                     <td>@item.Interest%</td>
                                     <td>@item.InitialCapital</td>

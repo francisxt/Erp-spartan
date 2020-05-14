@@ -5,6 +5,7 @@ using Models.Contexts;
 using Models.Enums;
 using Models.Enums.HiAccounting;
 using Models.Enums.HiLoans;
+using Models.Models;
 using Models.Models.HiAccounting;
 using Models.Models.HiAccounting.Debs;
 using Models.Models.HiLoans;
@@ -490,5 +491,29 @@ namespace BusinesLogic.Services.HiLoans
         }
         public async Task<IEnumerable<ReclosingHistory>> GetReclosing(Guid id)
             => await _dbContext.ReclosingHistories.Where(x => x.IdLoan == id).ToListAsync();
+
+        public async Task<ICollection<PendingClientVM>> GetPaymentPendingClients(string createdBy)
+        {
+            var result = _dbContext.Loans.AsNoTracking()
+                .Include(x => x.User)
+                .Include(x => x.Debs)
+                .Include(x => x.ClientUser)
+                .ThenInclude(x => x.User)
+                .Where(x => x.UserId == createdBy
+                && x.State == State.Active
+                && x.ClientUser.State == State.Active
+                && x.Debs.Any(x => x.State == State.Active && x.DateOfPayment < DateTime.Now))
+                .Select(x => new PendingClientVM
+                {
+                    Name = x.ClientUser.User.Name,
+                    LastName = x.ClientUser.User.LastName,
+                    LoanId = x.Id,
+                    UserId = x.ClientUser.User.Id,
+                    UserName = x.ClientUser.User.UserName,
+                    AmountLoan = x.ActualCapitalFormated,
+                    TotalRate = x.Debs.Count(x => x.State == State.Active && x.DateOfPayment < DateTime.Now)
+                }); ;
+            return await result.ToListAsync();
+        }
     }
 }

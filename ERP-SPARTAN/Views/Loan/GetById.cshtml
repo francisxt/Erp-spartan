@@ -3,8 +3,6 @@
 @{
     ViewData["Title"] = "GetById";
 }
-<link href="~/lib/stacktable.js/stacktable.css" rel="stylesheet" />
-<script src="~/lib/stacktable.js/stacktable.js"></script>
 <h1 class="mb-5">DETALLE DEL PRESTAMO</h1>
 @if (Model.State == State.Reclosing)
 {
@@ -155,7 +153,7 @@
                     </div>
                     <div class="col-12">
                         <div class="table-responsive">
-                            <table class="table table-bordered mt-4 " width="100%" cellspacing="0">
+                            <table class="table table-bordered mt-4 stack" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
                                         <th>Cuota</th>
@@ -190,7 +188,7 @@
                                     }
                                     @foreach (var item in Model.Debs)
                                     {
-                                        var bgClass = item.State == State.Payment ? "ct-bg-success" : "";
+                                        var bgClass = ((item.State == State.Payment) ? "ct-bg-success" : (item.State == State.Active && item.DateOfPayment < DateTime.Now ? "ct-bg-danger" : string.Empty));
                                         var bgBtn = item.State == State.Payment ? "btn-danger" : "btn-success";
                                         var btnText = item.State == State.Payment ? "Cancelar pago" : "Pagar cuota";
                                         if (item.AllowPayInterest && item.State == State.Active) { bgClass = "bg-warning text-white"; }
@@ -272,6 +270,3 @@
 <script src="~/js/Loan/Index.js" asp-append-version="true"></script>
 <script src="~/js/Shared/httpRequest.js" asp-append-version="true"></script>
 <partial name="_NotificationPartial" />
-<script>
-    $('.table').stacktable();
-</script>

@@ -54,7 +54,10 @@
                     @foreach (var client in Model.Clients)
                     {
                         <tr>
-                            <td>@client.User.Name @client.User.LastName</td>
+                            <td>
+                                @client.User.Name @client.User.LastName
+                                <i class="ml-5 col-smd d-inline d-sm-inline d-md-inline d-lg-none text-danger "style="font-weight:bold" >(pulsame para ver mas información)</i>
+                            </td>
                             <td>@client.User.PhoneNumber</td>
                             <td>@client.User.Email</td>
                             <td>@client.Enterprise.Name</td>

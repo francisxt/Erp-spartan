@@ -18,16 +18,32 @@ namespace BusinesLogic.Services
 
         public async Task<HomeVM> Get(string id)
         {
+
+            #region HiAccount 
             var clients = await _dbContext.ClientUsers.Include(x => x.Movements)
-                .Where(x => x.CreatedBy == id && x.State == Models.Enums.State.Active).ToListAsync();
+             .Where(x => x.CreatedBy == id && x.State == Models.Enums.State.Active).ToListAsync();
+
+            decimal totalOfDebs = 0;
+            foreach (var item in clients) totalOfDebs += item.Movements.Sum(x => x.Amount);
+            #endregion
+
+            #region HiLoans 
+
+            decimal totalLoansDebs = 0;
 
             var loans = await _dbContext.Loans.Include(x => x.Debs)
-                .Where(x => x.UserId == id && x.State == Models.Enums.State.Active).ToListAsync();
-          
-            decimal totalOfDebs = 0;
-            decimal totalLoansDebs = 0;
-            foreach (var item in clients) totalOfDebs += item.Movements.Sum(x => x.Amount);
+                .Where(x => x.UserId == id && x.State == Models.Enums.State.Active && x.ActualCapital > 0).ToListAsync();
             foreach (var item in loans) totalLoansDebs += item.ActualCapital;
+
+            decimal averageRate = 0;
+            decimal interestTotal = 0;
+            if (loans.Any())
+            {
+                averageRate = loans.Average(x => x.Interest);
+                var t = loans.Select(x => x.Debs);
+                foreach (var item in loans) interestTotal += item.Debs.Sum(x => x.Interest);
+            }
+            #endregion
 
 
             return new HomeVM
@@ -36,8 +52,10 @@ namespace BusinesLogic.Services
                 Articles = _dbContext.Articles.Count(x => x.UserId == id),
                 Enterprices = _dbContext.Enterprises.Count(x => x.UserId == id),
                 TotalOfDebs = totalOfDebs,
-                TotalOfLoansDebs = Math.Round(totalLoansDebs,2),
-                TotalOfLoans = loans.Count()
+                TotalOfLoansDebs = Math.Round(totalLoansDebs, 2),
+                TotalOfLoans = loans.Count(),
+                AverageRate = averageRate,
+                InterestTotal = interestTotal
             };
         }
     }

@@ -114,6 +114,38 @@
                     </a>
                 </div>
             </div>
+            <div class="col-xl-3 col-sm-6 mb-3">
+                <div class="card text-white bg-primary o-hidden h-100">
+                    <div class="card-body">
+                        <div class="card-body-icon">
+                            <i class="fas fa-fw fa-hand-holding-usd"></i>
+                        </div>
+                        <div class="mr-5">@Model.AverageRate% Tasa Promedio</div>
+                    </div>
+                    <a class="card-footer text-white clearfix small z-1" asp-action="Index" asp-controller="Loan">
+                        <span class="float-left">Detalle</span>
+                        <span class="float-right">
+                            <i class="fas fa-angle-right"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 mb-3">
+                <div class="card text-white bg-primary o-hidden h-100">
+                    <div class="card-body">
+                        <div class="card-body-icon">
+                            <i class="fas fa-fw fa-hand-holding-usd"></i>
+                        </div>
+                        <div class="mr-5"><span class="decimal">@Model.InterestTotal</span> Interes total</div>
+                    </div>
+                    <a class="card-footer text-white clearfix small z-1" asp-action="Index" asp-controller="Loan">
+                        <span class="float-left">Detalle</span>
+                        <span class="float-right">
+                            <i class="fas fa-angle-right"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
 
         }
 
@@ -172,4 +204,30 @@
             </div>
         </div>
     }
-</div>                                  
+
+    @if (User.IsInRole(nameof(RolsAuthorization.HILoans)))
+    {
+        <div class="col-12">
+            <script>
+                fetch('/Loan/OverdueInstallments').then(response => response.text()).then((result) => {
+                    $('#pendingPay').empty();
+                    $('#pendingPay').append(result);
+                    $('#loadingInfo').hide()
+                });
+            </script>
+
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                    <div class="card">
+                        <div class="card-header text-white bg-danger">
+                            Clientes Atrasados  <br /> <i id="loadingInfo">Espere un momento estamos cargando información...</i>
+                        </div>
+                        <div id="pendingPay">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>

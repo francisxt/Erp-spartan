@@ -5,7 +5,7 @@
     <div class="col">
         <div class="row justify-content-center">
             <div class="col-sm-12 text-center">
-                <img style="" src="@options.Value.Avatar@Model.User.UserName" alt="@Model.User.UserName .png" class="img-thumbnail text-center">
+                <img  src="@options.Value.Avatar@Model.User.Name+@Model.User.LastName&size=250" alt="@Model.User.UserName .png" class="img-thumbnail text-center">
                 <p class="font-weight-light">@Model.User.FullName <br /> @Model.Enterprise?.Name <br />Creado el : @Model.CreateAt.ToShortDateString()</p>
             </div>
             <div class="col-xs-12 col-sm-6">

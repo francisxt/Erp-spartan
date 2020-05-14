@@ -1,5 +1,6 @@
 ﻿using BusinesLogic.Repository.Interfaces;
 using Models.Enums;
+using Models.Models;
 using Models.Models.HiAccounting;
 using Models.Models.HiAccounting.Debs;
 using Models.Models.HiLoans;
@@ -22,7 +23,6 @@ namespace BusinesLogic.Interfaces.HiLoans
         Task<bool> AddReclosing(Loan model);
         int getShares(Loan model);
         Task<IEnumerable<ReclosingHistory>> GetReclosing(Guid id);
-
-
+        Task<ICollection<PendingClientVM>> GetPaymentPendingClients(string createdBy);
     }
 }

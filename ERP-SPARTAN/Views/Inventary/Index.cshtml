@@ -30,6 +30,7 @@
                         <th>Precio</th>
                         <th>Cantidad</th>
                         <th>Precio de compra</th>
+                        <th>Descripción</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
@@ -37,11 +38,12 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>@item.Description</td>
+                            <td>@item.Name</td>
                             <td>@item.Code</td>
                             <td>@item.Price</td>
                             <td>@item.Quantity</td>
                             <td>@item.PriceForShop</td>
+                            <th>@item.Description</th>
                             <td>
                                 <div>
                                     <a asp-action="Update" class="btn btn-sm btn-primary text-white" asp-route-Id="@item.Id"><i class="far fa-eye text-white"></i></a>

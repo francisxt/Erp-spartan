@@ -162,3 +162,21 @@ body {
 .ct-bg-success {
     background: #43a259;
 }
+.ct-bg-danger {
+    background: #e2824a !important;
+}
+
+/*show or hide element nav*/
+
+@media (max-width: 750px) {
+    #nav-side {
+        display: none;
+    }
+}
+
+.pendingToPay {
+    overflow: hidden;
+    overflow-y: scroll;
+    height: 400px;
+    font-size:14px;
+}

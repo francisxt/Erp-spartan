@@ -18,6 +18,9 @@ $(document).ready(() => {
                 "previous": "Anterior"
             }
         },
+        rowReorder: {
+            selector: 'td:nth-child(2)'
+        },
         responsive: true
     });
 
@@ -40,6 +43,9 @@ $(document).ready(() => {
 $('#phoneNumber').mask('000-000-0000');
 $('.decimal').mask("#,##0.00", { reverse: true });
 
+
+//for responsible tables
+$('.stack').stacktable();
 
 /**
  * Muestra o oculta un elemento 

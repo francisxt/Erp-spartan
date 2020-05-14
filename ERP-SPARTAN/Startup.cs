@@ -34,7 +34,8 @@ namespace ERP_SPARTAN
             services.AddNewIdentityConfiguration();
             services.AddControllersWithViews();
             services.ImplementServices();
-            services.AddRazorPages().AddRazorRuntimeCompilation().AddSessionStateTempDataProvider();
+            services.AddRazorPages().AddRazorRuntimeCompilation().AddSessionStateTempDataProvider()
+                   .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddSession();
 
         }

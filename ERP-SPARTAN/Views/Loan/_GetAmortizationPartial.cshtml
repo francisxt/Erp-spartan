@@ -2,7 +2,7 @@
 
 <div class="col-12">
     <div class="table-responsive">
-        <table class="table table-bordered mt-4" width="100%" cellspacing="0">
+        <table class="table table-bordered mt-4 stack" width="100%" cellspacing="0">
             <thead>
                 <tr>
                     <th>Cuota</th>
@@ -31,23 +31,23 @@
                     toPay += (decimal)item.ToPay;
                     amount = (decimal)item.Amount - amount;
 
-                <tr class="@bgClass">
-                    <td>@item.Share</td>
-                    <td>@item.DateOfPaymentFormated</td>
-                    <td> @item.AmortitationFormated</td>
-                    <td> @item.InterestFormated</td>
-                    <td>@item.ToPayFormated</td>
-                    <td>@item.AmountFormated</td>
-                </tr>
+                    <tr class="@bgClass">
+                        <td>@item.Share</td>
+                        <td>@item.DateOfPaymentFormated</td>
+                        <td> @item.AmortitationFormated</td>
+                        <td> @item.InterestFormated</td>
+                        <td>@item.ToPayFormated</td>
+                        <td>@item.AmountFormated</td>
+                    </tr>
                 }
-            <tr class="bg-info text-white">
-                <td>#</td>
-                <td>Totales</td>
-                <td>@String.Format("{0:C}", amortitation)  </td>
-                <td>@String.Format("{0:C}", interest) </td>
-                <td>@String.Format("{0:C}", toPay)</td>
-                <td>-</td>
-            </tr>
+                <tr class="bg-info text-white">
+                    <td>#</td>
+                    <td>Totales</td>
+                    <td>@String.Format("{0:C}", amortitation)  </td>
+                    <td>@String.Format("{0:C}", interest) </td>
+                    <td>@String.Format("{0:C}", toPay)</td>
+                    <td>-</td>
+                </tr>
             </tbody>
         </table>
     </div>
