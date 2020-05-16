@@ -24,5 +24,6 @@ namespace BusinesLogic.Interfaces.HiLoans
         int getShares(Loan model);
         Task<IEnumerable<ReclosingHistory>> GetReclosing(Guid id);
         Task<ICollection<PendingClientVM>> GetPaymentPendingClients(string createdBy);
+        Task<List<MonthLoanVm>> GetLoanByMonth(string userId);
     }
 }

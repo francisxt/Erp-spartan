@@ -1,0 +1,11 @@
+﻿
+@{
+    var title = string.Empty;
+    if (User.IsInRole(nameof(RolsAuthorization.Admin))) title = "ADMINISTRACION";
+    else if (User.IsInRole(nameof(RolsAuthorization.HILoans))) title = "HIPRESTAMOS";
+    else if (User.IsInRole(nameof(RolsAuthorization.ClientsUser))) title = "HI CUENTAS";
+    else title = string.Empty;
+
+}
+
+<a class="navbar-brand mr-1" asp-action="Index" asp-controller="Home">@title</a>

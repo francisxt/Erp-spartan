@@ -207,6 +207,8 @@ namespace ERP_SPARTAN.Controllers
 
         [HttpGet]
         public async Task<IActionResult> OverdueInstallments() => PartialView("_OverdueInstallmentsPartial", await _service.LoanService.GetPaymentPendingClients(GetUserLoggedId()));
-        
+
+        [HttpGet]
+        public async Task<IActionResult> GetLoanByMonth() => Ok(await _service.LoanService.GetLoanByMonth(GetUserLoggedId()));
     }
 }

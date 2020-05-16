@@ -24,6 +24,9 @@ for details on configuring this project to bundle and minify static web assets. 
     src: url(Fonts/Oswald-Light.ttf)
 }
 
+:root {
+    --primary-color: #0f3e6d;
+}
 
 h1 {
     font-family: Oswal-bold
@@ -32,7 +35,27 @@ h1 {
 body {
     font-family: Oswal-Regular !important;
     font-size: 14px;
+    background: #ececec !important;
 }
+
+/**colors**/
+.ct-bg-primary {
+    background: var(--primary-color) !important;
+}
+
+.ct-bg-secundary {
+    background: #0d355d !important;
+}
+
+.ct-color-primary {
+    color: #0f3e6d !important;
+}
+
+.btn-red {
+    background: #ca3636 !important;
+}
+
+/**end color*/
 
 
 .acent-color {
@@ -48,7 +71,7 @@ body {
 }
 
 .btn-primary {
-    background: #673AB7 !important;
+    background: #0f3e6d !important;
 }
 
 .btn-radius {
@@ -56,8 +79,7 @@ body {
 }
 
 div.dataTables_wrapper div.dataTables_filter input {
-    border: solid 1px #673AB7 !important;
-    border-radius: 32px !important;
+    border: solid 1px var(--primary-color) !important;
     text-align: center;
 }
 
@@ -158,10 +180,15 @@ body {
     color: black !important;
 }
 
+.text-hovered:hover {
+    color: black !important;
+}
+
 
 .ct-bg-success {
     background: #43a259;
 }
+
 .ct-bg-danger {
     background: #e2824a !important;
 }
@@ -178,5 +205,44 @@ body {
     overflow: hidden;
     overflow-y: scroll;
     height: 400px;
-    font-size:14px;
+    font-size: 14px;
 }
+
+/**navbar*/
+.navbar {
+    background: #0f3e6d;
+    color: #fff !important;
+}
+/**end navbar*/
+
+/**sidebar*/
+.sidebar {
+    background: #0d355d !important;
+}
+/*end sidebar*/
+
+/**profile*/
+
+
+.userName {
+    font-size: 13px;
+    color: white;
+    cursor: pointer;
+}
+
+    .userName:hover {
+        font-size: 14px;
+    }
+
+.img-profile {
+    border-radius: 50px;
+    border: 3px solid #ea3b3b;
+}
+/*end profile**/
+
+/**table*/
+.table > thead {
+    background: var(--primary-color) !important;
+    color:#fff;
+}
+/**end table*/

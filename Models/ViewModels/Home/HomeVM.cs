@@ -18,6 +18,7 @@ namespace Models.ViewModels.Home
         public decimal TotalOfLoans { get; set; }
         public decimal AverageRate { get; set; }
         public decimal InterestTotal { get; set; }
+        public decimal AverageAmount { get; set; }
         #endregion
 
 

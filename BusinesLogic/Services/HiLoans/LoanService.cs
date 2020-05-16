@@ -12,6 +12,7 @@ using Models.Models.HiLoans;
 using Models.ViewModels.HiLoans.Loans;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -515,5 +516,19 @@ namespace BusinesLogic.Services.HiLoans
                 }); ;
             return await result.ToListAsync();
         }
+
+        public async Task<List<MonthLoanVm>> GetLoanByMonth(string userId)
+        {
+            CultureInfo culture = new CultureInfo("es");
+            return await GetAll().Where(x => x.UserId == userId && x.State == State.Active)
+                .GroupBy(x => x.CreateAt.Month)
+                .Select(x =>
+                new MonthLoanVm
+                {
+                    Month = culture.DateTimeFormat.GetMonthName(x.Key),
+                    Quantity = x.Count()
+                }).ToListAsync();
+        }
+
     }
 }

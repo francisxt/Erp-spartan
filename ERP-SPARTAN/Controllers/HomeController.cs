@@ -14,8 +14,9 @@ namespace ERP_SPARTAN.Controllers
         public HomeController(IUnitOfWork service) => _service = service;
         public async Task<IActionResult> Index()
         {
-            var user = User.Claims.SingleOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
-            return View(await _service.HomeService.Get(user));
+            var user = await _service.UserService.GetByEmailAsync(User.Identity.Name);
+            ViewBag.UserFullName = user.FullName;
+            return View(await _service.HomeService.Get(user.Id));
         }
 
     }

@@ -68,3 +68,4 @@ const printElement = (id) => {
     newWind.document.close();
     setTimeout(() => { newWind.close(); }, 1);
 };
+

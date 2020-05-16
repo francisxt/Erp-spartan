@@ -37,10 +37,11 @@ namespace BusinesLogic.Services
 
             decimal averageRate = 0;
             decimal interestTotal = 0;
+            decimal averageAmount = 0;
             if (loans.Any())
             {
                 averageRate = loans.Average(x => x.Interest);
-                var t = loans.Select(x => x.Debs);
+                averageAmount = loans.Average(x => x.ActualCapital);
                 foreach (var item in loans) interestTotal += item.Debs.Sum(x => x.Interest);
             }
             #endregion
@@ -54,8 +55,9 @@ namespace BusinesLogic.Services
                 TotalOfDebs = totalOfDebs,
                 TotalOfLoansDebs = Math.Round(totalLoansDebs, 2),
                 TotalOfLoans = loans.Count(),
-                AverageRate = averageRate,
-                InterestTotal = interestTotal
+                AverageRate = Math.Round(averageRate, 2),
+                InterestTotal = interestTotal,
+                AverageAmount = Math.Round(averageAmount, 2)
             };
         }
     }

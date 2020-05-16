@@ -23,14 +23,13 @@
 </head>
 <body id="page-top">
     <header>
-        <nav  class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <i class="fa fa-bars text-white" style="margin:20px; cursor:pointer;" onclick="showOrHideElement('nav-side')"></i><a class="navbar-brand mr-1" asp-action="Index" asp-controller="Home">  Inicio</a>
+        <nav  class="navbar navbar-expand-lg ">
+            <i class="fa fa-bars text-white" style="margin:20px; cursor:pointer;" onclick="showOrHideElement('nav-side')"></i><partial name="_TitlePartial" />
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav ml-auto">
-                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
@@ -38,8 +37,13 @@
 
     <div id="wrapper">
         <!-- Sidebar -->
-        <ul id="nav-side" class="sidebar navbar-nav">
+        <ul id="nav-side" class="sidebar navbar-nav ct-bg-secundary">
             <partial name="_NavItems" />
+            <li class="nav-item nav-link-hovered ">
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button type="submit" class="nav-link btn btn-link text-li text-hovered"><i class="fa fa-sign-out-alt"></i> Salir</button>
+                </form>
+            </li>
         </ul>
         <div id="content-wrapper">
 
