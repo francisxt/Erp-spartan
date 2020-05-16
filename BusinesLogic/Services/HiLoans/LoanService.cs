@@ -5,12 +5,14 @@ using Models.Contexts;
 using Models.Enums;
 using Models.Enums.HiAccounting;
 using Models.Enums.HiLoans;
+using Models.Models;
 using Models.Models.HiAccounting;
 using Models.Models.HiAccounting.Debs;
 using Models.Models.HiLoans;
 using Models.ViewModels.HiLoans.Loans;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -325,6 +327,7 @@ namespace BusinesLogic.Services.HiLoans
                 var interestdeb = interestValue == 0 ? (balance * (decimal)monthly) : interestValue;
                 var payment = interestdeb;
                 decimal monthlyPrincipal = 0;
+                nextPayment = GetDateOfPayment(loan.PaymentModality, nextPayment);
 
 
                 if (i == (shares - 1))
@@ -367,7 +370,7 @@ namespace BusinesLogic.Services.HiLoans
                     date = date.AddMonths(1);
                     return date;
 
-                default: return DateTime.Now.AddYears(1);
+                default: return date.AddYears(1);
             }
         }
 
@@ -490,5 +493,43 @@ namespace BusinesLogic.Services.HiLoans
         }
         public async Task<IEnumerable<ReclosingHistory>> GetReclosing(Guid id)
             => await _dbContext.ReclosingHistories.Where(x => x.IdLoan == id).ToListAsync();
+
+        public async Task<ICollection<PendingClientVM>> GetPaymentPendingClients(string createdBy)
+        {
+            var result = _dbContext.Loans.AsNoTracking()
+                .Include(x => x.User)
+                .Include(x => x.Debs)
+                .Include(x => x.ClientUser)
+                .ThenInclude(x => x.User)
+                .Where(x => x.UserId == createdBy
+                && x.State == State.Active
+                && x.ClientUser.State == State.Active
+                && x.Debs.Any(x => x.State == State.Active && x.DateOfPayment < DateTime.Now))
+                .Select(x => new PendingClientVM
+                {
+                    Name = x.ClientUser.User.Name,
+                    LastName = x.ClientUser.User.LastName,
+                    LoanId = x.Id,
+                    UserId = x.ClientUser.User.Id,
+                    UserName = x.ClientUser.User.UserName,
+                    AmountLoan = x.ActualCapitalFormated,
+                    TotalRate = x.Debs.Count(x => x.State == State.Active && x.DateOfPayment < DateTime.Now)
+                }); ;
+            return await result.ToListAsync();
+        }
+
+        public async Task<List<MonthLoanVm>> GetLoanByMonth(string userId)
+        {
+            CultureInfo culture = new CultureInfo("es");
+            return await GetAll().Where(x => x.UserId == userId && x.State == State.Active)
+                .GroupBy(x => x.CreateAt.Month)
+                .Select(x =>
+                new MonthLoanVm
+                {
+                    Month = culture.DateTimeFormat.GetMonthName(x.Key),
+                    Quantity = x.Count()
+                }).ToListAsync();
+        }
+
     }
 }

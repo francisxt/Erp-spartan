@@ -1,50 +1,54 @@
 ﻿@model User
 @inject IOptions<Models.Settings.DefaultValue> options
 
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <div class="row justify-content-center">
+                    <div class="col-sm-12 text-center">
+                        <img style="border-radius:50px;" src="@options.Value.Avatar@Model.UserName&size=200" alt="@Model.UserName .png" class="img-thumbnail text-center">
+                        <p class="font-weight-light">@Model.FullName <br />Creado el : @Model.CreateAt.ToShortDateString()</p>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <form class="form-group" asp-controller="User" asp-action="Update" method="post">
+                            <div asp-validation-summary="All"></div>
+                            <input asp-for="UserName" type="hidden" />
+                            <input asp-for="Id" type="hidden" />
+                            <input asp-for="CreateAt" type="hidden" />
 
-<div class="row">
-    <div class="col">
-        <div class="row justify-content-center">
-            <div class="col-sm-12 text-center">
-                <img style="" src="@options.Value.Avatar@Model.UserName" alt="@Model.UserName .png" class="img-thumbnail text-center">
-                <p class="font-weight-light">@Model.FullName <br />Creado el : @Model.CreateAt.ToShortDateString()</p>
-            </div>
-            <div class="col-xs-12 col-sm-6">
-                <form class="form-group" asp-controller="User" asp-action="Update" method="post">
-                    <div asp-validation-summary="All"></div>
-                    <input asp-for="UserName" type="hidden" />
-                    <input asp-for="Id" type="hidden" />
-                    <input asp-for="CreateAt" type="hidden" />
-
-                    <div class="form-group">
-                        <label asp-for="Name">Nombre</label>
-                        <input asp-for="Name" class="form-control" />
-                        <span asp-validation-for="Name" class="text-danger"></span>
+                            <div class="form-group">
+                                <label asp-for="Name">Nombre</label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="LastName">Apellidos</label>
+                                <input asp-for="LastName" class="form-control" />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="PhoneNumber">Numero</label>
+                                <input asp-for="PhoneNumber" id="phoneNumber" class="form-control" />
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Email">Correo</label>
+                                <input asp-for="Email" disabled class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary">Editar</button>
+                                <a asp-action="Index" asp-controller="Home" class="btn btn-dark">Cancelar</a>
+                                <a href="/Identity/Account/Manage/ChangePassword" class="btn btn-dark">Cambiar contraseña</a>
+                            </div>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="LastName">Apellidos</label>
-                        <input asp-for="LastName" class="form-control" />
-                        <span asp-validation-for="LastName" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="PhoneNumber">Numero</label>
-                        <input asp-for="PhoneNumber" id="phoneNumber" class="form-control" />
-                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Email">Correo</label>
-                        <input asp-for="Email" disabled class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <button class="btn btn-primary">Editar</button>
-                        <a asp-action="Index" asp-controller="Home" class="btn btn-dark">Cancelar</a>
-                        <a href="/Identity/Account/Manage/ChangePassword" class="btn btn-dark">Cambiar contraseña</a>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<partial name="_NotificationPartial"/>
+
+<partial name="_NotificationPartial" />

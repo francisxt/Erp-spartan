@@ -10,8 +10,8 @@ namespace Models.Models
     public class Article : CommonsProperty
     {
         [Required(ErrorMessage = "EL CAMPO {0} ES REQUERIDO")]
-        [Display(Name = "Nombre o Descripción")]
-        public string Description { get; set; }
+        [Display(Name = "Nombre o Titulo")]
+        public string Name { get; set; }
         public string UserId { get; set; }
         public virtual User User { get; set; }
         [Required]
@@ -24,5 +24,7 @@ namespace Models.Models
         [Required(ErrorMessage = "La cantidad es requerida")]
         [Display(Name = "Cantidad")]
         public int Quantity { get; set; }
+        [Display(Name = "Comentario o Descripción")]
+        public string Description { get; set; }
     }
 }

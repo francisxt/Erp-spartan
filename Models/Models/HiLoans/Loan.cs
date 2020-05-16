@@ -41,18 +41,21 @@ namespace Models.Models.HiAccounting
         public int Shares { get; set; }
 
         [Required(ErrorMessage = "Este campo es requerido")]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Interest { get; set; }
         public Guid ClientUserId { get; set; }
         public ClientUser ClientUser { get; set; }
         public virtual IEnumerable<Deb> Debs { get; set; }
         public virtual IEnumerable<ReclosingHistory> ReclosingHistories { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
         public decimal AmountDeb { get; set; }
 
         [NotMapped]
         public string SharesStr { get; set; }
-
+        [Column(TypeName = "decimal(18,2)")]
         [NotMapped]
         public decimal ReclosingAmount { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
         [NotMapped]
         public decimal ReclosingInitialAmount { get; set; }
 

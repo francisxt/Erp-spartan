@@ -7,10 +7,12 @@
 
 }
 
-<li class="nav-item active">
-    <a class="nav-link" asp-action="Index" asp-controller="Home">
-        <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span>Dashboard</span>
+<partial name="_LoginPartial" />
+
+<li class="nav-item nav-link-hovered active">
+    <a class="nav-link text-hovered" asp-action="Index" asp-controller="Home">
+        <i class="fas fa-fw fa-tachometer-alt text-hovered"></i>
+        <span class="">Inicio</span>
     </a>
 </li>
 <li class="nav-item">

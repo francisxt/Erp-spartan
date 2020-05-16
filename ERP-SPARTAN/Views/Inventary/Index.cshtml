@@ -1,25 +1,32 @@
 ﻿@model IEnumerable<Article>
 
 
-<div class="container-fluid">
 
-    <div class="row justify-content-between">
-        <div class="col-xs-11 ">
+<div class="card">
+    <div class="card-body">
 
-            <h1><i class="fas fa-boxes"></i> Inventario</h1>
-        </div>
+        <div class="container-fluid">
 
-        <div class="col-xs-1">
-            <a asp-action="Create" asp-controller="Inventary" class="btn btn-primary btn-radius">Nuevo</a>
-        </div>
-        <div class="col-12">
+            <div class="row justify-content-between">
+                <div class="col-xs-11 ">
+
+                    <h1><i class="fas fa-boxes"></i> Inventario</h1>
+                </div>
+
+                <div class="col-xs-1">
+                    <a asp-action="Create" asp-controller="Inventary" class="btn btn-primary ">Nuevo</a>
+                </div>
+                <div class="col-12">
+                </div>
+            </div>
+
         </div>
     </div>
-
 </div>
+
 <hr />
 
-<div class="card mb-3">
+<div class="card">
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered data-table" width="100%" cellspacing="0">
@@ -30,6 +37,7 @@
                         <th>Precio</th>
                         <th>Cantidad</th>
                         <th>Precio de compra</th>
+                        <th>Descripción</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
@@ -37,11 +45,12 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>@item.Description</td>
+                            <td>@item.Name</td>
                             <td>@item.Code</td>
                             <td>@item.Price</td>
                             <td>@item.Quantity</td>
                             <td>@item.PriceForShop</td>
+                            <th>@item.Description</th>
                             <td>
                                 <div>
                                     <a asp-action="Update" class="btn btn-sm btn-primary text-white" asp-route-Id="@item.Id"><i class="far fa-eye text-white"></i></a>

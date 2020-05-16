@@ -10,8 +10,8 @@ using Models.Contexts;
 namespace ERP_SPARTAN.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200429202901_lonyBrokerService")]
-    partial class lonyBrokerService
+    [Migration("20200514211454_v2.0")]
+    partial class v20
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -276,6 +276,9 @@ namespace ERP_SPARTAN.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

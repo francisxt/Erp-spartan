@@ -3,167 +3,172 @@
 
 
 
-<div class="">
-    <div class="row">
-        <div class="col-12">
-            <div class="row ">
-                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 text-center">
-                    <img src="@options.Value.Avatar@Model.Client.User.UserName" alt="@Model.Client.User.UserName .png" class="img-thumbnail text-center">
-                    <p class="font-weight-light text-center">@Model.Client.User.FullName <br />Creado el : @Model.Client.CreateAt.ToShortDateString()</p>
-                </div>
-                <div class="col-sm-12 col-lg-4 col-xl-4 col-sm-4">
-                    <h2>Cliente</h2>
-                    <form class="form-group" action="#" method="post">
-                        <div asp-validation-summary="All"></div>
-                        <input asp-for="Client.User.UserName" type="hidden" />
-                        <input asp-for="Client.CreatedBy" type="hidden" />
-                        <input asp-for="Client.User.Id" type="hidden" />
-                        <div class="form-group">
-                            <label asp-for="Client.User.Name">Nombre Completo</label>
-                            <input disabled value="@Model.Client.User.FullName" class="form-control" />
-                            <span asp-validation-for="Client.User.Name" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Client.User.PhoneNumber">Numero</label>
-                            <input disabled asp-for="Client.User.PhoneNumber" id="phoneNumber" class="form-control" />
-                            <span asp-validation-for="Client.User.PhoneNumber" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Client.User.Email">Correo</label>
-                            <input disabled asp-for="Client.User.Email" class="form-control" />
-                            <span asp-validation-for="Client.User.Email" class="text-danger"></span>
-                        </div>
-                    </form>
-                </div>
-                <div class="col-sm-12 col-lg-4 col-xl-4 col-sm-4 mt-2">
-                    <h2>Resumen</h2>
-                    <div class="form-group">
-                        <div class="form-group">
-                            <label>Total</label>
-                            <input disabled name="" asp-for="Total" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <label>Deudas</label>
-                            <input disabled name="" asp-for="Debs" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <label>Pagos</label>
-                            <input disabled name="" asp-for="Payments" class="form-control" />
-                        </div>
-
-                        <div class="form-group">
-                            @if (User.IsInRole(nameof(RolsAuthorization.ClientsUser)))
-                            {
-                                <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal">Nueva Operación</button>
-                                @if (Model.Debs > 0)
-                                {
-                                    <button onclick="PayAll('@Model.Client.Id')" class="btn btn-primary btn-sm">Saldar</button>
-                                }
-                            }
-                            <button onclick="window.print()" class="btn btn-primary btn-sm">Imprimir</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-        <!-- Modal add -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Nueva operación</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form asp-action="Create" asp-controller="Movement" method="post" class="form-group">
-
-                        <div class="modal-body">
-                            <input asp-for="Client.Id" name="ClientUserId" type="hidden" />
-                            @if (Model.Debs > 0)
-                            {
-                                <div class="form-group">
-                                    <label class="">Tipo de Movimiento <span class="text-warning">*</span></label>
-                                    <select name="Type" class="form-control" asp-items="@Html.GetEnumSelectList<TypeOfMovement>()">
-                                    </select>
-                                </div>
-                            }
-                            <div class="form-group">
-                                <label class="">Descripción</label>
-                                <input class="form-control" type="text" name="Description" value="" />
-                            </div>
-                            <div class="form-group">
-                                <label class="">Monto <span class="text-warning">*</span></label>
-                                <input class="form-control decimal" type="text" name="Amount" value="" required />
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            <button type="submit" class="btn btn-primary">Confirmar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- table -->
-
-        <div class="col-12">
+<div class="card">
+    <div class="card-body">
+        <div class="">
             <div class="row">
-                <div class="col">
-                    <h1 class="text-center">Movimientos</h1>
-                    <hr />
-                    <div class="table-responsive">
-                        <table class="table table-bordered data-table" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>Monto</th>
-                                    <th>Descripción</th>
-                                    <th>Fecha</th>
-                                    <th>Tipo</th>
-                                    <th>Opciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.Client.Movements)
-                                {
-                                    var className = item.Type == TypeOfMovement.Payment ? "bg-success" : string.Empty;
-                                    <tr class="@className">
-                                        <td>@item.Amount</td>
-                                        <td>@item.Description</td>
-                                        <td>@item.CreateAt.ToString("dd/MM/yyyy")</td>
-                                        <td>
-                                            @{
-                                                var type = item.Type == TypeOfMovement.Deb ? "Deuda" : "Pago";
-                                            }
-                                            @type
-                                        </td>
-                                        <td>
-                                            @if (User.IsInRole(nameof(RolsAuthorization.ClientsUser)))
-                                            {
-                                                <div>
-                                                    <button class="btn acent-background btn-sm" onclick="ShowSweetConfirmRemoveDialog('@item.Id','/Movement','Remove')"><i class="far fa-trash-alt text-white"></i></button>
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div></div>
-                                            }
+                <div class="col-12">
+                    <div class="row ">
+                        <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 text-center">
+                            <img src="@options.Value.Avatar@Model.Client.User.Name+@Model.Client.User.LastName&size=200" alt="@Model.Client.User.UserName .png" class="img-thumbnail text-center">
+                            <p class="font-weight-light text-center">@Model.Client.User.FullName <br />Creado el : @Model.Client.CreateAt.ToShortDateString()</p>
+                        </div>
+                        <div class="col-sm-12 col-lg-4 col-xl-4 col-sm-4">
+                            <h2>Cliente</h2>
+                            <form class="form-group" action="#" method="post">
+                                <div asp-validation-summary="All"></div>
+                                <input asp-for="Client.User.UserName" type="hidden" />
+                                <input asp-for="Client.CreatedBy" type="hidden" />
+                                <input asp-for="Client.User.Id" type="hidden" />
+                                <div class="form-group">
+                                    <label asp-for="Client.User.Name">Nombre Completo</label>
+                                    <input disabled value="@Model.Client.User.FullName" class="form-control" />
+                                    <span asp-validation-for="Client.User.Name" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Client.User.PhoneNumber">Numero</label>
+                                    <input disabled asp-for="Client.User.PhoneNumber" id="phoneNumber" class="form-control" />
+                                    <span asp-validation-for="Client.User.PhoneNumber" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Client.User.Email">Correo</label>
+                                    <input disabled asp-for="Client.User.Email" class="form-control" />
+                                    <span asp-validation-for="Client.User.Email" class="text-danger"></span>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-12 col-lg-4 col-xl-4 col-sm-4 mt-2">
+                            <h2>Resumen</h2>
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label>Total</label>
+                                    <input disabled name="" asp-for="Total" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Deudas</label>
+                                    <input disabled name="" asp-for="Debs" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Pagos</label>
+                                    <input disabled name="" asp-for="Payments" class="form-control" />
+                                </div>
 
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
+                                <div class="form-group">
+                                    @if (User.IsInRole(nameof(RolsAuthorization.ClientsUser)))
+                                    {
+                                        <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal">Nueva Operación</button>
+                                        @if (Model.Debs > 0)
+                                        {
+                                            <button onclick="PayAll('@Model.Client.Id')" class="btn btn-primary btn-sm">Saldar</button>
+                                        }
+                                    }
+                                    <button onclick="window.print()" class="btn btn-primary btn-sm">Imprimir</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Modal add -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Nueva operación</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form asp-action="Create" asp-controller="Movement" method="post" class="form-group">
+
+                                <div class="modal-body">
+                                    <input asp-for="Client.Id" name="ClientUserId" type="hidden" />
+                                    @if (Model.Debs > 0)
+                                    {
+                                        <div class="form-group">
+                                            <label class="">Tipo de Movimiento <span class="text-warning">*</span></label>
+                                            <select name="Type" class="form-control" asp-items="@Html.GetEnumSelectList<TypeOfMovement>()">
+                                            </select>
+                                        </div>
+                                    }
+                                    <div class="form-group">
+                                        <label class="">Descripción</label>
+                                        <input class="form-control" type="text" name="Description" value="" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="">Monto <span class="text-warning">*</span></label>
+                                        <input class="form-control decimal" type="text" name="Amount" value="" required />
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    <button type="submit" class="btn btn-primary">Confirmar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- table -->
+
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col">
+                            <h1 class="text-center">Movimientos</h1>
+                            <hr />
+                            <div class="table-responsive">
+                                <table class="table table-bordered data-table" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Monto</th>
+                                            <th>Descripción</th>
+                                            <th>Fecha</th>
+                                            <th>Tipo</th>
+                                            <th>Opciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Client.Movements)
+                                        {
+                                            var className = item.Type == TypeOfMovement.Payment ? "bg-success" : string.Empty;
+                                            <tr class="@className">
+                                                <td>@item.Amount</td>
+                                                <td>@item.Description</td>
+                                                <td>@item.CreateAt.ToString("dd/MM/yyyy")</td>
+                                                <td>
+                                                    @{
+                                                        var type = item.Type == TypeOfMovement.Deb ? "Deuda" : "Pago";
+                                                    }
+                                                    @type
+                                                </td>
+                                                <td>
+                                                    @if (User.IsInRole(nameof(RolsAuthorization.ClientsUser)))
+                                                    {
+                                                        <div>
+                                                            <button class="btn acent-background btn-sm" onclick="ShowSweetConfirmRemoveDialog('@item.Id','/Movement','Remove')"><i class="far fa-trash-alt text-white"></i></button>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div></div>
+                                                    }
+
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <partial name="_NotificationPartial" />
 <script src="~/js/Shared/httpRequest.js" asp-append-version="true"></script>
 <script src="~/js/Movement/index.js" asp-append-version="true"></script>

@@ -205,6 +205,10 @@ namespace ERP_SPARTAN.Controllers
             return PartialView("_GetAmortizationPartial", _service.LoanService.GetAmortization(model));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> OverdueInstallments() => PartialView("_OverdueInstallmentsPartial", await _service.LoanService.GetPaymentPendingClients(GetUserLoggedId()));
 
+        [HttpGet]
+        public async Task<IActionResult> GetLoanByMonth() => Ok(await _service.LoanService.GetLoanByMonth(GetUserLoggedId()));
     }
 }

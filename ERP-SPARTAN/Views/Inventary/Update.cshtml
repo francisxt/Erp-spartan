@@ -13,9 +13,9 @@
                 <input asp-for="CreateAt" type="hidden" class="form-control" />
 
 
-                <label asp-for="Description">Nombre O Descripción</label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label asp-for="Name">Nombre O Descripción</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Price">Precio</label>
@@ -31,6 +31,10 @@
                 <label asp-for="PriceForShop">Precio de compra</label>
                 <input asp-for="PriceForShop" class="form-control decimal" />
                 <span asp-validation-for="PriceForShop" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <textarea class="form-control" asp-for="Description"></textarea>
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Editar</button>
