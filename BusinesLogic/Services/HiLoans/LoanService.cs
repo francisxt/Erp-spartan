@@ -327,6 +327,7 @@ namespace BusinesLogic.Services.HiLoans
                 var interestdeb = interestValue == 0 ? (balance * (decimal)monthly) : interestValue;
                 var payment = interestdeb;
                 decimal monthlyPrincipal = 0;
+                nextPayment = GetDateOfPayment(loan.PaymentModality, nextPayment);
 
 
                 if (i == (shares - 1))
@@ -369,7 +370,7 @@ namespace BusinesLogic.Services.HiLoans
                     date = date.AddMonths(1);
                     return date;
 
-                default: return DateTime.Now.AddYears(1);
+                default: return date.AddYears(1);
             }
         }
 
